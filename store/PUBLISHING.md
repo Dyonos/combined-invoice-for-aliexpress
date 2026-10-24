@@ -30,7 +30,7 @@ Copy from `store/listing.md`:
 - the description (English, used for all languages),
 - category **Productivity > Tools**,
 - icon `store/icon-store-128.png`,
-- screenshots `store/screenshots/*.png` (1280 x 800),
+- screenshots `store/screenshots/*.png` (1280 x 800) in file name order,
 - small promo tile `store/promo-440x280.png`,
 - homepage and support URLs (the GitHub repository).
 

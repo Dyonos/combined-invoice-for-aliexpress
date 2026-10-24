@@ -6,7 +6,7 @@ description come from the extension itself (`_locales`), in 10 languages.
 - **Category:** Productivity > Tools
 - **Default language:** English
 - **Icon:** `store/icon-store-128.png`
-- **Screenshots (1280x800):** `store/screenshots/*.png`
+- **Screenshots (1280x800):** `store/screenshots/*.png`, uploaded in file name order (the first one is the main image)
 - **Small promo tile (440x280):** `store/promo-440x280.png`
 - **Homepage URL:** https://github.com/Dyonos/combined-invoice-for-aliexpress
 - **Support URL:** https://github.com/Dyonos/combined-invoice-for-aliexpress/issues

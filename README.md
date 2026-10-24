@@ -2,7 +2,9 @@
 
 Chrome extension that puts AliExpress orders paid with one bank payment on one invoice, with a total that matches the amount charged to your card to the cent.
 
-![Invoice created by the extension](store/screenshots/1-invoice-en.png)
+![Three orders of one payment ticked on My orders](store/screenshots/1-orders-en.png)
+
+![Invoice created by the extension](store/screenshots/2-invoice-en.png)
 
 ## Why
 
