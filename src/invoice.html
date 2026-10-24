@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ali Invoice</title>
+  <link rel="stylesheet" href="invoice.css">
+</head>
+<body>
+  <header class="toolbar no-print">
+    <div class="tb-row">
+      <label><span data-i18n="inv.invoiceTo"></span>
+        <select id="profile"></select>
+      </label>
+      <label class="grow"><span data-i18n="inv.title"></span>
+        <input id="title" type="text">
+      </label>
+      <label><span data-i18n="inv.number"></span>
+        <input id="number" type="text">
+      </label>
+      <label><span data-i18n="inv.bank"></span>
+        <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> €</span>
+      </label>
+      <label><span data-i18n="panel.language"></span>
+        <select id="lang"></select>
+      </label>
+    </div>
+    <div class="tb-row">
+      <fieldset class="mode">
+        <label><input type="radio" name="mode" value="detail"> <span data-i18n="inv.modeDetail"></span></label>
+        <label><input type="radio" name="mode" value="allocated"> <span data-i18n="inv.modeAllocated"></span></label>
+        <label class="eu"><input type="checkbox" id="eu"> <span data-i18n="inv.eu"></span> <span id="euHint"></span></label>
+        <label class="eu"><input type="checkbox" id="ship"> <span data-i18n="inv.ship"></span> <span id="shipHint"></span></label>
+      </fieldset>
+      <span class="spacer"></span>
+      <span id="version" class="version" data-i18n-title="versionTitle"></span>
+      <button id="settings" type="button" class="btn" data-i18n="inv.settings"></button>
+      <button id="print" type="button" class="btn primary" data-i18n="inv.print"></button>
+    </div>
+    <div id="check" class="check"></div>
+    <ul id="warnings" class="warnings"></ul>
+    <p class="hint" data-i18n="inv.hint"></p>
+  </header>
+
+  <main id="doc" class="doc"></main>
+
+  <script src="core.js"></script>
+  <script src="settings.js"></script>
+  <script src="i18n.js"></script>
+  <script src="invoice.js"></script>
+</body>
+</html>

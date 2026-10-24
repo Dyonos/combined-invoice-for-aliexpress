@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Összesítő számla AliExpresshez"
+  },
+  "extDescription": {
+    "message": "A kiválasztott AliExpress-rendeléseket egy számlába egyesíti, amelynek összege egyezik a banki fizetéssel."
+  },
+  "actionTitle": {
+    "message": "Összesítő számla AliExpresshez - Rendeléseim megnyitása"
+  }
+}

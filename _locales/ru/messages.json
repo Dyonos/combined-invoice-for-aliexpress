@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Сводный счёт для AliExpress"
+  },
+  "extDescription": {
+    "message": "Объединяет выбранные заказы AliExpress в один счёт, сумма которого совпадает с банковским платежом."
+  },
+  "actionTitle": {
+    "message": "Сводный счёт для AliExpress - открыть «Мои заказы»"
+  }
+}

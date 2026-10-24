@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Facture groupée pour AliExpress"
+  },
+  "extDescription": {
+    "message": "Regroupe les commandes AliExpress sélectionnées en une facture dont le total correspond au paiement bancaire."
+  },
+  "actionTitle": {
+    "message": "Facture groupée pour AliExpress - ouvrir Mes commandes"
+  }
+}

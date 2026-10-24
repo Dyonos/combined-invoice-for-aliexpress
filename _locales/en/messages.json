@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Combined Invoice for AliExpress"
+  },
+  "extDescription": {
+    "message": "Combines selected AliExpress orders into one invoice whose total matches the bank payment."
+  },
+  "actionTitle": {
+    "message": "Combined Invoice for AliExpress - open My orders"
+  }
+}

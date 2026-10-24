@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Súhrnná faktúra pre AliExpress"
+  },
+  "extDescription": {
+    "message": "Spojí vybrané objednávky z AliExpressu do jednej faktúry, ktorej suma sedí s platbou z banky."
+  },
+  "actionTitle": {
+    "message": "Súhrnná faktúra pre AliExpress - otvoriť Moje objednávky"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Sammelrechnung für AliExpress"
+  },
+  "extDescription": {
+    "message": "Fasst ausgewählte AliExpress-Bestellungen zu einer Rechnung zusammen, deren Betrag mit der Bankzahlung übereinstimmt."
+  },
+  "actionTitle": {
+    "message": "Sammelrechnung für AliExpress - Meine Bestellungen öffnen"
+  }
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ali Invoice - settings</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f2f2f5; color: #1d1d1f; font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+    main { max-width: 820px; margin: 24px auto 60px; padding: 0 20px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    h2 { font-size: 16px; margin: 28px 0 10px; }
+    p.lead { color: #6b6b70; margin: 0 0 18px; }
+    .card { background: #fff; border: 1px solid #e0e0e5; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    label { display: grid; gap: 3px; font-size: 12px; font-weight: 600; color: #6b6b70; }
+    .c6 { grid-column: span 6; } .c3 { grid-column: span 3; } .c2 { grid-column: span 2; }
+    input, textarea, select { width: 100%; padding: 7px 9px; border: 1px solid #c9c9ce; border-radius: 7px; font: inherit; color: #1d1d1f; background: #fff; }
+    .check-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 400; color: #1d1d1f; }
+    .check-row input { width: auto; margin: 0; }
+    textarea { min-height: 70px; resize: vertical; }
+    .row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .spacer { flex: 1; }
+    .btn { height: 34px; padding: 0 14px; border: 1px solid #c9c9ce; border-radius: 8px; background: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+    .btn.primary { background: #e62e04; border-color: #e62e04; color: #fff; }
+    .btn.danger { color: #c4320a; }
+    .default { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1d1d1f; font-weight: 400; }
+    .default input { width: auto; margin: 0; }
+    .saved { color: #1a7f37; font-weight: 600; }
+    h1 .ver { font-size: 13px; font-weight: 400; color: #6b6b70; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .file-btn { display: inline-flex; align-items: center; font-size: 14px; color: #1d1d1f; }
+    .bar { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 12px 0; background: linear-gradient(transparent, #f2f2f5 30%); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><span data-i18n="brand"></span> - <span data-i18n="opt.title"></span> <span id="version" class="ver"></span></h1>
+    <p class="lead" data-i18n="opt.lead"></p>
+
+    <div class="card grid">
+      <label class="c2"><span data-i18n="opt.language"></span>
+        <select id="lang"></select>
+      </label>
+    </div>
+
+    <h2 data-i18n="opt.customers"></h2>
+    <div id="profiles"></div>
+    <button type="button" class="btn" id="add" data-i18n="opt.add"></button>
+
+    <h2 data-i18n="opt.invoice"></h2>
+    <div class="card grid">
+      <label class="c6"><span data-i18n="opt.docTitle"></span>
+        <input id="title" type="text">
+      </label>
+      <label class="c2"><span data-i18n="opt.prefix"></span>
+        <input id="prefix" type="text">
+      </label>
+      <label class="c6"><span data-i18n="opt.euNote"></span>
+        <input id="euNote" type="text">
+      </label>
+      <label class="c6 check-row"><input id="euDefault" type="checkbox"> <span data-i18n="opt.euOn"></span></label>
+      <label class="c6"><span data-i18n="opt.shipNote"></span>
+        <input id="shipNote" type="text">
+      </label>
+      <label class="c6 check-row"><input id="shipNoteOn" type="checkbox"> <span data-i18n="opt.shipOn"></span></label>
+      <label class="c6"><span data-i18n="opt.supplier"></span>
+        <textarea id="supplier"></textarea>
+      </label>
+      <label class="c6"><span data-i18n="opt.invoiceNote"></span>
+        <input id="invoiceNote" type="text">
+      </label>
+    </div>
+
+    <h2 data-i18n="opt.backup"></h2>
+    <div class="card actions">
+      <button type="button" class="btn" id="export" data-i18n="opt.export"></button>
+      <label class="btn file-btn"><span data-i18n="opt.import"></span><input id="import" type="file" accept="application/json,.json" hidden></label>
+    </div>
+
+    <div class="bar">
+      <button type="button" class="btn primary" id="save" data-i18n="opt.save"></button>
+      <button type="button" class="btn" id="reset" data-i18n="opt.reset"></button>
+      <span id="status" class="saved"></span>
+    </div>
+  </main>
+  <script src="settings.js"></script>
+  <script src="i18n.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

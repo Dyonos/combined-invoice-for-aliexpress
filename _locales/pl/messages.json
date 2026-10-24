@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Zbiorcza faktura dla AliExpress"
+  },
+  "extDescription": {
+    "message": "Łączy wybrane zamówienia z AliExpress w jedną fakturę, której kwota zgadza się z płatnością z banku."
+  },
+  "actionTitle": {
+    "message": "Zbiorcza faktura dla AliExpress - otwórz Moje zamówienia"
+  }
+}

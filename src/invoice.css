@@ -1,0 +1,167 @@
+/* Combined Invoice for AliExpress - the invoice (screen and A4 print) */
+
+:root {
+  --accent: #e62e04;
+  --ink: #1d1d1f;
+  --muted: #6b6b70;
+  --line: #d9d9de;
+  --soft: #f5f5f7;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #e9e9ec;
+  color: var(--ink);
+  font: 13px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------------- panel above the invoice */
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 12px 20px 10px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.tb-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 8px; }
+.toolbar label { display: grid; gap: 3px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.toolbar .grow { flex: 1; min-width: 260px; }
+.toolbar input[type="text"], .toolbar select {
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid #c9c9ce;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+}
+.toolbar .grow input { width: 100%; }
+.money-input { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 400; }
+.money-input input { width: 110px; text-align: right; }
+.mode { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; border: 0; }
+.mode label { display: flex; align-items: center; gap: 6px; font-weight: 400; color: var(--ink); font-size: 13px; }
+.mode .eu { padding-left: 14px; border-left: 1px solid var(--line); }
+.mode .eu + .eu { padding-left: 0; border-left: 0; }
+.spacer { flex: 1; }
+.version { align-self: center; color: var(--muted); font-size: 12px; }
+.btn {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid #c9c9ce;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: #c4320a; }
+.check { font-size: 14px; font-weight: 600; }
+.check.ok { color: #1a7f37; }
+.check.bad { color: #c4320a; }
+.warnings { margin: 6px 0 0; padding: 0 0 0 18px; color: #8a5a00; }
+.warnings:empty { display: none; }
+.hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+
+/* ---------------------------------------------------------------- invoice */
+
+.doc {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 18px auto 40px;
+  padding: 16mm 14mm;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  font-size: 10pt;
+}
+.doc .empty { color: var(--muted); font-size: 12pt; }
+
+.doc-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.doc-head h1 { margin: 0 0 3px; font-size: 22pt; line-height: 1.1; letter-spacing: 0.02em; text-transform: uppercase; }
+.doc-head .doc-no { font-size: 11.5pt; font-weight: 700; }
+.meta { min-width: 64mm; border-collapse: collapse; font-size: 9.5pt; }
+.meta td { padding: 1px 0; }
+.meta td:first-child { color: var(--muted); padding-right: 10px; }
+.meta td:last-child { text-align: right; font-weight: 600; }
+
+.parties { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin: 8mm 0 6mm; }
+.party h2 { margin: 0 0 4px; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.party .name { font-weight: 700; font-size: 11pt; }
+.party p { margin: 0; white-space: pre-line; }
+
+
+table.items { width: 100%; border-collapse: collapse; }
+table.items th {
+  padding: 2mm 1.5mm;
+  border-bottom: 1.5px solid var(--ink);
+  font-size: 8.5pt;
+  text-align: left;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+table.items td { padding: 1.6mm 1.5mm; vertical-align: top; border-bottom: 1px solid #ececf0; }
+table.items .num { width: 7mm; color: var(--muted); }
+table.items .qty { width: 17mm; text-align: right; white-space: nowrap; }
+table.items .unit { width: 26mm; text-align: right; white-space: nowrap; }
+table.items .sum { width: 26mm; text-align: right; white-space: nowrap; }
+table.items th.qty, table.items th.unit, table.items th.sum { text-align: right; }
+table.items tbody { break-inside: avoid; }
+tr.order-head td {
+  padding-top: 4mm;
+  border-bottom: 1px solid var(--line);
+  font-size: 9pt;
+  color: var(--muted);
+}
+tr.order-head b { color: var(--ink); }
+td .title { font-weight: 600; }
+td .title[contenteditable]:hover { background: #fff6dd; }
+td .title[contenteditable]:focus { outline: 1px dashed var(--accent); background: #fffaf0; }
+td .sku { color: var(--muted); font-size: 8.5pt; }
+tr.charge td, tr.diff td { color: #333; }
+tr.diff td { color: #9a3412; }
+tr.order-total td { font-weight: 700; border-bottom: 1px solid var(--line); }
+tr.alloc-note td { color: var(--muted); font-size: 8.5pt; border-bottom: 0; padding-top: 0; }
+
+.totals { display: flex; justify-content: flex-end; margin-top: 6mm; }
+.totals table { min-width: 86mm; border-collapse: collapse; font-size: 10pt; }
+.totals td { padding: 1.2mm 0; }
+.totals td:last-child { text-align: right; padding-left: 8mm; white-space: nowrap; }
+.totals .grand td { padding-top: 2.5mm; border-top: 1.5px solid var(--ink); font-size: 13pt; font-weight: 800; }
+.totals .muted td { color: var(--muted); font-size: 9pt; }
+.totals .bank td { font-weight: 600; }
+.totals .bank.bad td { color: #c4320a; }
+.doc-foot { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); color: var(--muted); font-size: 8pt; }
+
+
+/* ---------------------------------------------------------------- print */
+
+/* Own page margin content: Chrome then does not print its header and footer (date, title, URL).
+   Only the page number at the bottom right remains. */
+@page {
+  size: A4;
+  margin: 12mm 12mm 14mm;
+  @top-left { content: ""; }
+  @top-center { content: ""; }
+  @top-right { content: ""; }
+  @bottom-left { content: ""; }
+  @bottom-center { content: ""; }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font: 8pt -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: #6b6b70;
+  }
+}
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .doc { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+  td .title[contenteditable]:hover { background: none; }
+}

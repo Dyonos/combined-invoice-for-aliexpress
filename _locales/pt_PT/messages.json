@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Fatura conjunta para AliExpress"
+  },
+  "extDescription": {
+    "message": "Junta as encomendas selecionadas do AliExpress numa fatura cujo total corresponde ao pagamento bancário."
+  },
+  "actionTitle": {
+    "message": "Fatura conjunta para AliExpress - abrir As minhas encomendas"
+  }
+}

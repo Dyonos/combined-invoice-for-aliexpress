@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.zip
+# temporary pages from the screenshot script
+src/_shot-*.html
+src/_promo.html
