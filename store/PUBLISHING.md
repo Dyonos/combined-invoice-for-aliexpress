@@ -27,7 +27,7 @@ In the Developer Dashboard click **Add new item** and upload the ZIP from step 1
 
 Copy from `store/listing.md`:
 
-- the description (English, used for all languages),
+- the descriptions: English for the default language, plus Slovak, Czech, Hungarian, Polish, German and Romanian, each pasted under its language in "Current editing language",
 - category **Productivity > Tools**,
 - icon `store/icon-store-128.png`,
 - screenshots `store/screenshots/*.png` (1280 x 800) in file name order,
@@ -57,6 +57,7 @@ the store link to the README (section Install).
 
 1. Raise the version in `manifest.json` and `package.json` and add the change to `CHANGELOG.md`.
 2. Run `npm test` and `node tools/build-store.js`.
-3. In the Dashboard open the item, **Package > Upload new package**, then **Submit for review** again.
+3. Push to GitHub. The pre-push hook first runs `npm run check` (personal data from the denylist) and stops the push if it finds any.
+4. In the Dashboard open the item, **Package > Upload new package**, then **Submit for review** again.
 
 When the look changes, regenerate the screenshots with `node tools/make-store-images.js`.

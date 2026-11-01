@@ -1,6 +1,6 @@
 {
   "name": "combined-invoice-for-aliexpress",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "private": true,
   "description": "Chrome extension that puts AliExpress orders paid with one bank payment on one invoice that matches the bank amount.",
   "license": "MIT",
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "node --test \"test/*.test.js\"",
+    "check": "node tools/check-repo.js",
     "icons": "node tools/make-icons.js",
     "locales": "node tools/make-locales.js"
   }

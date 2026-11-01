@@ -2,6 +2,17 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.14.0 - 2026-11-01
+
+- Amounts in the panel and on the invoice page use the currency of the orders (for example PLN, CZK, HUF or RON), not always euros. Amounts in lei are recognised.
+- Interface and invoice in 17 languages: Romanian, Italian, Dutch, Turkish, Ukrainian, Japanese and Korean added.
+- The invoice language is set separately from the interface, in the settings and on the invoice page. Default texts (title, notes) follow the invoice language.
+- After installation the settings page opens with a short guide, and the panel points to Edit until a company is filled in.
+- "Report a problem" link next to technical errors.
+- `npm run check` checks the repository for personal data and runs before every `git push` (hook in `.githooks`).
+- Store descriptions in all 17 languages.
+- Page titles of the settings and the invoice page fixed.
+
 ## 1.13.0 - 2026-10-24
 
 - Public release preparation: new name "Combined Invoice for AliExpress" (localized in 10 languages), no personal data in the defaults, empty customer company to fill in.

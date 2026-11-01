@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "AliExpress用まとめ請求書"
+  },
+  "extDescription": {
+    "message": "選択したAliExpressの注文を、合計が銀行明細の金額と一致する1つの請求書にまとめます。"
+  },
+  "actionTitle": {
+    "message": "AliExpress用まとめ請求書 - 「私の注文」を開く"
+  }
+}

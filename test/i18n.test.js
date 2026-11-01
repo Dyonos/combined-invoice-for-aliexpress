@@ -7,7 +7,7 @@ const placeholders = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1
 
 test('every language has all texts and the same placeholders as English', () => {
   const en = I.STRINGS.en;
-  assert.equal(I.LANGS.length, 10);
+  assert.equal(I.LANGS.length, 17);
   for (const { code } of I.LANGS) {
     const d = I.STRINGS[code];
     assert.ok(d, 'missing language ' + code);
@@ -15,7 +15,7 @@ test('every language has all texts and the same placeholders as English', () => 
     for (const [key, value] of Object.entries(en)) {
       if (typeof value === 'object') {
         assert.ok(d[key].other, `${code}.${key}: missing the other form`);
-        for (const [form, s] of Object.entries(d[key])) assert.ok(s.includes('{n}'), `${code}.${key}.${form} bez {n}`);
+        for (const [form, s] of Object.entries(d[key])) assert.ok(s.includes('{n}'), `${code}.${key}.${form} without {n}`);
       } else {
         assert.equal(placeholders(d[key]), placeholders(value), `${code}.${key}: different placeholders`);
         assert.ok(d[key].trim(), `${code}.${key} is empty`);
@@ -65,4 +65,30 @@ test('texts with parameters, amount and date by language', () => {
   assert.equal(I.t('neexistuje.kluc'), 'neexistuje.kluc');
   I.setLang('xx');
   assert.equal(I.lang(), 'en');
+});
+
+test('currency symbol next to amount fields', () => {
+  I.setLang('pl');
+  assert.equal(I.currencySymbol('PLN'), 'zł');
+  I.setLang('en');
+  assert.equal(I.currencySymbol('EUR'), '€');
+  assert.equal(I.currencySymbol(null), '€');
+});
+
+test('invoice language helpers', () => {
+  assert.equal(I.tIn('en', 'doc.invoice'), 'Invoice');
+  assert.equal(I.pluralIn('en', 1, 'doc.pcs'), '1 pc');
+  assert.equal(I.pluralIn('en', 3, 'doc.pcs'), '3 pcs');
+  assert.equal(I.dateIn('en', '2026-08-16', { dateStyle: 'medium' }), '16 Aug 2026');
+  assert.equal(I.moneyIn('en', 123456, 'EUR'), '€1,234.56');
+  assert.equal(I.unitIn('en', 1000, 3, 'EUR'), '€3.3333');
+});
+
+test('amount field in the number format of the interface language', () => {
+  I.setLang('sk');
+  assert.equal(I.amount(3770), '37,70');
+  I.setLang('ja');
+  assert.equal(I.amount(3770), '37.70');
+  I.setLang('en');
+  assert.equal(I.amount(123456), '1234.56');
 });

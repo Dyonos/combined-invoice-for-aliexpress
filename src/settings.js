@@ -6,7 +6,8 @@
   const EXPORT_APP = 'combined-invoice-for-aliexpress';
 
   const DEFAULTS = {
-    lang: 'en', // interface language (the invoice is always in English)
+    lang: 'en', // interface language
+    invoiceLang: 'en', // invoice language, set separately from the interface
     title: 'Invoice',
     numberPrefix: 'AE',
     mode: 'detail',

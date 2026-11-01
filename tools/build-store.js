@@ -24,7 +24,7 @@ function walk(rel) {
 }
 
 function fail(msg) {
-  console.error('CHYBA: ' + msg);
+  console.error('ERROR: ' + msg);
   process.exit(1);
 }
 

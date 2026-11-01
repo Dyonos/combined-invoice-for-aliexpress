@@ -17,7 +17,7 @@
 
   const CURRENCY_SYMBOLS = [
     ['US $', 'USD'], ['US$', 'USD'], ['€', 'EUR'], ['£', 'GBP'], ['zł', 'PLN'],
-    ['Kč', 'CZK'], ['Ft', 'HUF'], ['CHF', 'CHF'], ['$', 'USD'],
+    ['Kč', 'CZK'], ['Ft', 'HUF'], ['CHF', 'CHF'], ['lei', 'RON'], ['Lei', 'RON'], ['$', 'USD'],
   ];
   const CURRENCY_CODES = /\b(EUR|USD|GBP|PLN|CZK|HUF|CHF|RON|BGN|SEK|DKK|NOK)\b/;
 
@@ -325,19 +325,19 @@
         lines.push({ kind: 'item', title: it.title, sku: it.sku, qty: it.qty, unitCents: it.unitCents, lineCents: it.lineCents });
       }
       if (order.itemsDiffCents) {
-        lines.push({ kind: 'diff', label: 'Item price adjustment', lineCents: order.itemsDiffCents });
+        lines.push({ kind: 'diff', key: 'items', label: 'Item price adjustment', lineCents: order.itemsDiffCents });
       }
       for (const c of order.charges) {
         lines.push({ kind: 'charge', key: c.key, label: c.label, lineCents: c.cents, children: c.children });
       }
       if (order.residualCents) {
-        lines.push({ kind: 'diff', label: 'Other adjustment', lineCents: order.residualCents });
+        lines.push({ kind: 'diff', key: 'other', label: 'Other adjustment', lineCents: order.residualCents });
       }
     }
     const sum = lines.reduce((a, l) => a + l.lineCents, 0);
     if (sum !== order.totalCents) {
       // should not happen; a visible line is better than a silent mismatch
-      lines.push({ kind: 'diff', label: 'Rounding', lineCents: order.totalCents - sum });
+      lines.push({ kind: 'diff', key: 'rounding', label: 'Rounding', lineCents: order.totalCents - sum });
     }
     return lines;
   }

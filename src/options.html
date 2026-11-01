@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Ali Invoice - settings</title>
+  <title>Combined Invoice for AliExpress - settings</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; background: #f2f2f5; color: #1d1d1f; font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -29,6 +29,10 @@
     h1 .ver { font-size: 13px; font-weight: 400; color: #6b6b70; }
     .actions { display: flex; flex-wrap: wrap; gap: 10px; }
     .file-btn { display: inline-flex; align-items: center; font-size: 14px; color: #1d1d1f; }
+    .welcome { display: flex; align-items: center; gap: 16px; border-color: #f3c2b8; background: #fff8f5; }
+    .welcome[hidden] { display: none; }
+    .welcome p { flex: 1; margin: 0; }
+    a.btn { display: inline-flex; flex: none; align-items: center; text-decoration: none; }
     .bar { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 12px 0; background: linear-gradient(transparent, #f2f2f5 30%); }
   </style>
 </head>
@@ -36,10 +40,17 @@
   <main>
     <h1><span data-i18n="brand"></span> - <span data-i18n="opt.title"></span> <span id="version" class="ver"></span></h1>
     <p class="lead" data-i18n="opt.lead"></p>
+    <div id="welcome" class="card welcome" hidden>
+      <p data-i18n="opt.welcome"></p>
+      <a class="btn primary" href="https://www.aliexpress.com/p/order/index.html" target="_blank" rel="noopener" data-i18n="opt.openOrders"></a>
+    </div>
 
     <div class="card grid">
       <label class="c2"><span data-i18n="opt.language"></span>
         <select id="lang"></select>
+      </label>
+      <label class="c2"><span data-i18n="opt.invoiceLanguage"></span>
+        <select id="docLang"></select>
       </label>
     </div>
 

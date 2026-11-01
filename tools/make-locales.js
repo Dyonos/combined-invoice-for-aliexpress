@@ -19,6 +19,13 @@ const DESCRIPTION = {
   fr: 'Regroupe les commandes AliExpress sélectionnées en une facture dont le total correspond au paiement bancaire.',
   pt: 'Junta as encomendas selecionadas do AliExpress numa fatura cujo total corresponde ao pagamento bancário.',
   ru: 'Объединяет выбранные заказы AliExpress в один счёт, сумма которого совпадает с банковским платежом.',
+  ro: 'Combină comenzile AliExpress selectate într-o singură factură al cărei total corespunde cu plata bancară.',
+  it: 'Riunisce gli ordini AliExpress selezionati in un’unica fattura il cui totale corrisponde al pagamento bancario.',
+  nl: 'Voegt geselecteerde AliExpress-bestellingen samen tot één factuur waarvan het totaal overeenkomt met de bankbetaling.',
+  tr: 'Seçilen AliExpress siparişlerini, toplamı banka ödemesiyle eşleşen tek bir faturada birleştirir.',
+  uk: 'Об’єднує вибрані замовлення AliExpress в один рахунок, сума якого збігається з банківським платежем.',
+  ja: '選択したAliExpressの注文を、合計が銀行明細の金額と一致する1つの請求書にまとめます。',
+  ko: '선택한 AliExpress 주문을 합계가 은행 거래 금액과 일치하는 하나의 인보이스로 합칩니다.',
 };
 
 const ACTION = {
@@ -32,6 +39,13 @@ const ACTION = {
   fr: 'ouvrir Mes commandes',
   pt: 'abrir As minhas encomendas',
   ru: 'открыть «Мои заказы»',
+  ro: 'deschideți Comenzile mele',
+  it: 'apri I miei ordini',
+  nl: 'Mijn bestellingen openen',
+  tr: 'Siparişlerim sayfasını aç',
+  uk: 'відкрити «Мої замовлення»',
+  ja: '「私の注文」を開く',
+  ko: '“내 주문” 열기',
 };
 
 const root = path.join(__dirname, '..', '_locales');

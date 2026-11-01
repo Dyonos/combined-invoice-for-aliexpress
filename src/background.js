@@ -17,6 +17,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   return false;
 });
 
+// After installation open the settings, so the company is filled in first.
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') chrome.runtime.openOptionsPage();
+});
+
 // Clicking the extension icon opens My orders on AliExpress.
 chrome.action.onClicked.addListener(() => {
   chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });

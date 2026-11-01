@@ -98,9 +98,20 @@
 
   // ---------------------------------------------------------------- checkboxes on orders
 
+  // most common currency of the orders on the page, for the panel amounts
+  let pageCurrency = null;
+
+  function topCurrency(counts) {
+    let best = null;
+    for (const [c, n] of counts) if (!best || n > counts.get(best)) best = c;
+    return best;
+  }
+
   function decorate() {
+    const counts = new Map();
     for (const el of orderElements()) {
       const order = readOrder(el);
+      if (order.currency) counts.set(order.currency, (counts.get(order.currency) || 0) + 1);
       if (!order.id) continue;
       let pick = el.querySelector(':scope .alifa-pick');
       if (!pick) {
@@ -126,6 +137,7 @@
       el.classList.toggle('alifa-selected', on);
       if (on) state.selected.set(order.id, Object.assign({}, state.selected.get(order.id), order));
     }
+    pageCurrency = topCurrency(counts) || pageCurrency;
   }
 
   // ---------------------------------------------------------------- panel
@@ -148,6 +160,20 @@
       : esc(err && err.message ? err.message : err);
   }
 
+  const ISSUES_URL = 'https://github.com/Dyonos/combined-invoice-for-aliexpress/issues';
+  // errors the user can fix (sign in, robot check, wrong order number) get no "Report a problem" link
+  const USER_ERRORS = new Set(['login', 'captcha', 'badId']);
+
+  function reportLink() {
+    return ` <a class="alifa-report" href="${ISSUES_URL}" target="_blank" rel="noopener">${esc(I.t('st.report'))}</a>`;
+  }
+
+  /** "Report a problem" link for a technical error; nothing for errors the user can fix or after an update. */
+  function reportFor(err) {
+    if (/Extension context invalidated/i.test(String(err && err.message))) return '';
+    return err && USER_ERRORS.has(err.code) ? '' : reportLink();
+  }
+
   async function loadSettings() {
     try {
       settings = await S.load();
@@ -164,6 +190,10 @@
       .map((p) => `<option value="${esc(p.id)}">${esc(p.name || I.t('panel.noName'))}</option>`)
       .join('');
     sel.value = settings.profiles.some((p) => p.id === settings.profileId) ? settings.profileId : settings.profiles[0].id;
+    // no company filled in yet (e.g. right after installation): point to Edit
+    const named = settings.profiles.some((p) => String(p.name || '').trim());
+    panel.querySelector('.alifa-setup').hidden = named;
+    panel.querySelector('.alifa-edit-profiles').classList.toggle('alifa-primary', !named);
   }
 
   function buildPanel() {
@@ -189,10 +219,11 @@
             <select class="alifa-profile" aria-label="${esc(I.t('panel.invoiceToAria'))}"></select>
             <button type="button" class="alifa-btn alifa-edit-profiles" title="${esc(I.t('panel.editTitle'))}">${esc(I.t('panel.edit'))}</button>
           </span>
+          <span class="alifa-setup" hidden>${esc(I.t('panel.setupHint'))}</span>
         </div>
         <label class="alifa-bank-row">
           <span>${esc(I.t('panel.bankAmount'))}</span>
-          <span class="alifa-bank-input"><input type="text" inputmode="decimal" class="alifa-bank" placeholder="${esc(I.t('panel.amountPlaceholder'))}"> €</span>
+          <span class="alifa-bank-input"><input type="text" inputmode="decimal" class="alifa-bank" placeholder="${esc(I.t('panel.amountPlaceholder'))}"> <span class="alifa-cur">€</span></span>
         </label>
         <label class="alifa-bank-row">
           <span>${esc(I.t('panel.paymentDate'))} <span class="alifa-muted">${esc(I.t('panel.optional'))}</span></span>
@@ -219,7 +250,7 @@
 
     const bank = panel.querySelector('.alifa-bank');
     if (state.bankCents !== null) {
-      bank.value = I.lang() === 'en' ? (state.bankCents / 100).toFixed(2) : (state.bankCents / 100).toFixed(2).replace('.', ',');
+      bank.value = I.amount(state.bankCents);
     }
     bank.addEventListener('input', () => {
       const m = A.parseMoney(bank.value);
@@ -246,7 +277,7 @@
         try {
           await S.save(settings);
         } catch (err) {
-          setStatus(contextError(err), 'bad');
+          setStatus(contextError(err) + reportFor(err), 'bad');
         }
       }
       refreshLanguage();
@@ -257,14 +288,14 @@
       try {
         await S.save(settings);
       } catch (err) {
-        setStatus(contextError(err), 'bad');
+        setStatus(contextError(err) + reportFor(err), 'bad');
       }
     });
     panel.querySelector('.alifa-edit-profiles').addEventListener('click', async () => {
       try {
         await chrome.runtime.sendMessage({ type: 'alifa-open-options' });
       } catch (err) {
-        setStatus(contextError(err), 'bad');
+        setStatus(contextError(err) + reportFor(err), 'bad');
       }
     });
     panel.querySelector('.alifa-find').addEventListener('click', findByAmount);
@@ -307,19 +338,28 @@
     return { cents, unknown };
   }
 
+  /** Currency of the panel amounts: the most common one among the selected orders, otherwise on the page. */
+  function panelCurrency() {
+    const counts = new Map();
+    for (const o of state.selected.values()) if (o.currency) counts.set(o.currency, (counts.get(o.currency) || 0) + 1);
+    return topCurrency(counts) || pageCurrency || 'EUR';
+  }
+
   function renderPanel() {
     if (!panel) return;
     const n = state.selected.size;
     const { cents, unknown } = selectedSum();
+    const cur = panelCurrency();
+    panel.querySelector('.alifa-cur').textContent = I.currencySymbol(cur);
     const sumEl = panel.querySelector('.alifa-sum');
     let html = n
-      ? I.t('sum.selected', { orders: `<b>${esc(orders(n))}</b>`, amount: `<b>${esc(I.money(cents))}</b>` })
+      ? I.t('sum.selected', { orders: `<b>${esc(orders(n))}</b>`, amount: `<b>${esc(I.money(cents, cur))}</b>` })
       : esc(I.t('sum.empty'));
     if (unknown) html += `<div class="alifa-warn">${esc(I.t('sum.unknown'))}</div>`;
     if (n && state.bankCents !== null) {
       const diff = state.bankCents - cents;
       if (diff === 0) html += `<div class="alifa-ok">${esc(I.t('sum.match'))}</div>`;
-      else html += `<div class="alifa-bad">${esc(I.t(diff > 0 ? 'sum.missing' : 'sum.extra', { amount: I.money(Math.abs(diff)) }))}</div>`;
+      else html += `<div class="alifa-bad">${esc(I.t(diff > 0 ? 'sum.missing' : 'sum.extra', { amount: I.money(Math.abs(diff), cur) }))}</div>`;
     }
     sumEl.innerHTML = html;
 
@@ -410,7 +450,7 @@
         amount: I.money(entry.cents, entry.currency),
       })), 'ok');
     } catch (e) {
-      setStatus(esc(I.t('st.addFailed', { id, error: '' })) + contextError(e), 'bad');
+      setStatus(esc(I.t('st.addFailed', { id, error: '' })) + contextError(e) + reportFor(e), 'bad');
     } finally {
       state.busy = false;
       decorate();
@@ -620,7 +660,7 @@
     if (state.busy) return;
     state.busy = true;
     renderPanel();
-    const amount = I.money(state.bankCents);
+    const amount = I.money(state.bankCents, panelCurrency());
     try {
       if (state.bankDate) await findOnDate(state.bankDate, amount);
       else await findAnyDay(amount);
@@ -647,6 +687,16 @@
     return e.detail ? `${base} (${e.detail})` : base;
   }
 
+  /** Code of a bridge error ('login', 'captcha', 'other', ...), or null. */
+  function bridgeErrorCode(payload) {
+    try {
+      const e = JSON.parse(payload);
+      return e && e.code ? e.code : null;
+    } catch (x) {
+      return null;
+    }
+  }
+
   function fetchReceipt(orderId) {
     return new Promise((resolve, reject) => {
       const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -659,7 +709,11 @@
         clearTimeout(timer);
         window.removeEventListener('message', onMessage);
         if (ev.data.ok) resolve(JSON.parse(ev.data.payload));
-        else reject(new Error(bridgeErrorText(ev.data.payload)));
+        else {
+          const err = new Error(bridgeErrorText(ev.data.payload));
+          err.code = bridgeErrorCode(ev.data.payload);
+          reject(err);
+        }
       }
       window.addEventListener('message', onMessage);
       window.postMessage({ __aliFaktura: 'req', id, orderId }, location.origin);
@@ -681,12 +735,13 @@
         try {
           receipts.push(await fetchReceipt(list[i].id));
         } catch (e) {
-          failed.push({ order: list[i], error: e.message });
+          failed.push({ order: list[i], error: e.message, code: e.code || null });
         }
         if (i < list.length - 1) await sleep(300);
       }
       if (failed.length) {
-        setStatus(esc(I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>'), 'bad');
+        const report = failed.every((f) => USER_ERRORS.has(f.code)) ? '' : reportLink();
+        setStatus(esc(I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>') + report, 'bad');
         return;
       }
       const draft = {
@@ -699,7 +754,7 @@
       await chrome.runtime.sendMessage({ type: 'alifa-open-invoice' });
       setStatus(esc(I.t('st.invoiceOpened')), 'ok');
     } catch (e) {
-      setStatus(contextError(e), 'bad');
+      setStatus(contextError(e) + reportFor(e), 'bad');
     } finally {
       state.busy = false;
       renderPanel();

@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "AliExpress용 통합 인보이스"
+  },
+  "extDescription": {
+    "message": "선택한 AliExpress 주문을 합계가 은행 거래 금액과 일치하는 하나의 인보이스로 합칩니다."
+  },
+  "actionTitle": {
+    "message": "AliExpress용 통합 인보이스 - “내 주문” 열기"
+  }
+}

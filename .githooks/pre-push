@@ -1,0 +1,3 @@
+#!/bin/sh
+# Block the push when the repository check (npm run check) finds a problem.
+exec node tools/check-repo.js

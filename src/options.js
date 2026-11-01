@@ -6,6 +6,8 @@
   const $ = (id) => document.getElementById(id);
   let settings = await S.load();
   I.setLang(settings.lang);
+  // no company yet (e.g. right after installation): show how to begin
+  $('welcome').hidden = settings.profiles.some((p) => String(p.name || '').trim());
 
   const FIELDS = [
     ['name', 'opt.f.name', 'c6'],
@@ -26,6 +28,7 @@
     document.documentElement.lang = I.lang();
     I.apply(document);
     $('lang').innerHTML = I.langOptions(I.lang());
+    $('docLang').innerHTML = I.langOptions(settings.invoiceLang || 'en');
     document.title = `${I.t('brand')} - ${I.t('opt.title')}`;
     try {
       $('version').textContent = 'v' + chrome.runtime.getManifest().version;
@@ -54,6 +57,7 @@
     $('shipNote').value = settings.shipNote;
     $('shipNoteOn').checked = !!settings.shipNoteOn;
     $('invoiceNote').value = settings.invoiceNote || '';
+    $('docLang').value = settings.invoiceLang || 'en';
   }
 
   function collect() {
@@ -74,6 +78,7 @@
       shipNote: $('shipNote').value.trim() || S.DEFAULTS.shipNote,
       shipNoteOn: $('shipNoteOn').checked,
       invoiceNote: $('invoiceNote').value.trim(),
+      invoiceLang: $('docLang').value || 'en',
       lang: I.lang(),
     });
   }
@@ -92,6 +97,12 @@
     render();
     const stored = await S.load();
     stored.lang = settings.lang;
+    await S.save(stored);
+  });
+  $('docLang').addEventListener('change', async () => {
+    settings = collect();
+    const stored = await S.load();
+    stored.invoiceLang = settings.invoiceLang;
     await S.save(stored);
   });
   $('add').addEventListener('click', () => {

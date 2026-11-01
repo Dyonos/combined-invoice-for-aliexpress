@@ -15,8 +15,8 @@ One AliExpress checkout often becomes several orders from different stores, but 
 - **Tick orders** on the AliExpress "My orders" page or let the extension **find them by the bank amount** (and optionally the payment date, also 1 to 3 days earlier because banks post card payments later). It loads older orders by itself.
 - **Accurate totals** from the official order receipt (the data behind AliExpress's "Receipt" button): items, shipping, discounts, fees and VAT. Summary lines shown twice, symbolic shipping that is not charged and orders skipped in the order list are handled.
 - **Missing orders**: add an order by its number from the confirmation e-mail. With a payment date the extension also fills in orders that AliExpress skipped in the list.
-- **Invoice** in English: items, shipping and discounts as separate lines, or spread into item prices. Several customer companies (company ID, tax ID, VAT ID), optional "EU Stock" and "(no tracking)" notes, print or save as PDF without browser header and footer.
-- **Interface in 10 languages**: English, Slovak, Czech, Hungarian, Polish, German, Spanish, French, Portuguese, Russian.
+- **Invoice** in any of the 17 languages, set separately from the interface: items, shipping and discounts as separate lines, or spread into item prices. Several customer companies (company ID, tax ID, VAT ID), optional notes for goods from an EU warehouse and for shipping without tracking, print or save as PDF without browser header and footer.
+- **Interface in 17 languages**: English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Czech, Slovak, Hungarian, Romanian, Ukrainian, Russian, Turkish, Japanese, Korean.
 - **Private**: runs only in your browser, reads only your own signed-in account, sends nothing anywhere. See [PRIVACY.md](PRIVACY.md).
 
 ## Install
@@ -37,11 +37,14 @@ The version shown in the panel header tells you which version is loaded.
 
 ```
 npm test                          # unit tests (totals, receipts, translations, settings)
+npm run check                     # files and commits: no personal data or e-mail addresses
 node tools/build-store.js         # Chrome Web Store package -> dist/*.zip
 node tools/make-store-images.js   # store screenshots with demo data (needs Chrome)
 npm run icons                     # icons
 npm run locales                   # _locales (name and description for Chrome)
 ```
+
+`npm run check` also runs before every `git push` once the hook is enabled with `git config core.hooksPath .githooks`.
 
 - `src/core.js` - amounts, receipts, allocation, search by amount (runs in Node too)
 - `src/page-bridge.js` - reads order receipts through the AliExpress page's own request library

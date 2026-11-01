@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Fattura cumulativa per AliExpress"
+  },
+  "extDescription": {
+    "message": "Riunisce gli ordini AliExpress selezionati in un’unica fattura il cui totale corrisponde al pagamento bancario."
+  },
+  "actionTitle": {
+    "message": "Fattura cumulativa per AliExpress - apri I miei ordini"
+  }
+}

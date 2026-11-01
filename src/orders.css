@@ -198,3 +198,8 @@
 #alifa-panel .alifa-status.alifa-ok { background: #e9f7ee; }
 #alifa-panel .alifa-status.alifa-bad { background: #fdeeea; }
 #alifa-panel .alifa-status.alifa-warn { background: #fff6dd; color: #6b4a00; font-weight: 400; }
+
+/* hint while no company is filled in, and the "Report a problem" link next to errors */
+#alifa-panel .alifa-setup { display: block; color: #c4320a; font-size: 12px; font-weight: 600; }
+#alifa-panel .alifa-setup[hidden] { display: none; }
+#alifa-panel .alifa-report { color: inherit; font-weight: 600; text-decoration: underline; white-space: nowrap; }

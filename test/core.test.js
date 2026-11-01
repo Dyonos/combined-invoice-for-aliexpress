@@ -228,3 +228,8 @@ test('search by bank amount: prefers orders from one day', () => {
   assert.equal(A.findOrdersForAmount(F.orderList, 2239 + 1229, { sameDayOnly: true }), null);
   assert.deepEqual(A.findOrdersForAmount(F.orderList, 3770, { sameDayOnly: true }).ids.slice().sort(), ['aug16-a', 'aug16-b', 'aug16-c']);
 });
+
+test('parseMoney: Romanian lei', () => {
+  assert.deepEqual(A.parseMoney('123,45 lei'), { cents: 12345, currency: 'RON' });
+  assert.deepEqual(A.parseMoney('RON 9.99'), { cents: 999, currency: 'RON' });
+});

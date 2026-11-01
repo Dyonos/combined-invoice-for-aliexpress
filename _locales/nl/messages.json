@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Verzamelfactuur voor AliExpress"
+  },
+  "extDescription": {
+    "message": "Voegt geselecteerde AliExpress-bestellingen samen tot één factuur waarvan het totaal overeenkomt met de bankbetaling."
+  },
+  "actionTitle": {
+    "message": "Verzamelfactuur voor AliExpress - Mijn bestellingen openen"
+  }
+}

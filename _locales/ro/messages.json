@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Factură combinată pentru AliExpress"
+  },
+  "extDescription": {
+    "message": "Combină comenzile AliExpress selectate într-o singură factură al cărei total corespunde cu plata bancară."
+  },
+  "actionTitle": {
+    "message": "Factură combinată pentru AliExpress - deschideți Comenzile mele"
+  }
+}

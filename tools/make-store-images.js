@@ -41,10 +41,10 @@ const ORDERS = [
   { id: '1000000000030002', status: 'Completed', date: 'Aug 9, 2026', store: 'Example Light Store', title: 'LED strip 5V USB, warm white, 2 m', variant: '2M', price: '€4.59', qty: 1, total: '€6.12', icon: '💡' },
 ];
 
-function ordersPage(settings) {
+function ordersPage(settings, orders = ORDERS, bankCents = 3770) {
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-  const selection = { orders: ORDERS.filter((o) => o.pick).map((o) => ({ id: o.id })), extra: [], bankCents: 3770, bankDate: null };
-  const cards = ORDERS.map((o) => `
+  const selection = { orders: orders.filter((o) => o.pick).map((o) => ({ id: o.id })), extra: [], bankCents, bankDate: null };
+  const cards = orders.map((o) => `
   <div class="order-item">
     <div class="order-item-header">
       <span class="order-item-header-status-text">${esc(o.status)}</span>
@@ -128,26 +128,35 @@ const PROMO = `<!doctype html><html><head><meta charset="utf-8"><style>
 const JOBS = [
   { name: 'screenshots/1-orders-en.png', file: '_shot-1.html', html: ordersPage(Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
   { name: 'screenshots/2-invoice-en.png', file: '_shot-2.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
-  { name: 'screenshots/3-invoice-de-allocated.png', file: '_shot-3.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'de', mode: 'allocated' })), size: '1280,800' },
+  { name: 'screenshots/3-invoice-de-allocated.png', file: '_shot-3.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'de', invoiceLang: 'de', mode: 'allocated' })), size: '1280,800' },
   { name: 'screenshots/4-settings-en.png', file: '_shot-4.html', html: page('options.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
   { name: 'promo-440x280.png', file: '_promo.html', html: PROMO, size: '440,280' },
 ];
 
-fs.mkdirSync(path.join(OUT, 'screenshots'), { recursive: true });
-for (const job of JOBS) {
-  const tmp = path.join(SRC, job.file);
+/** Renders html (written as src/<file>, so relative paths work) to a PNG with headless Chrome. */
+function shoot(html, file, size, outFile) {
+  const tmp = path.join(SRC, file);
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'alifa-shot-'));
-  fs.writeFileSync(tmp, job.html);
+  fs.writeFileSync(tmp, html);
   try {
     execFileSync(CHROME, [
       '--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--hide-scrollbars',
       '--lang=en-GB', // date fields and other browser texts in English, whatever the system language
-      `--user-data-dir=${profile}`, `--window-size=${job.size}`, '--virtual-time-budget=5000',
-      `--screenshot=${path.join(OUT, job.name)}`, 'file:///' + tmp.replace(/\\/g, '/'),
+      `--user-data-dir=${profile}`, `--window-size=${size}`, '--virtual-time-budget=5000',
+      `--screenshot=${outFile}`, 'file:///' + tmp.replace(/\\/g, '/'),
     ], { stdio: 'ignore', timeout: 60000 });
-    console.log('store/' + job.name);
   } finally {
     fs.rmSync(tmp, { force: true });
     fs.rmSync(profile, { recursive: true, force: true });
   }
 }
+
+if (require.main === module) {
+  fs.mkdirSync(path.join(OUT, 'screenshots'), { recursive: true });
+  for (const job of JOBS) {
+    shoot(job.html, job.file, job.size, path.join(OUT, job.name));
+    console.log('store/' + job.name);
+  }
+}
+
+module.exports = { DEMO, ORDERS, ordersPage, page, shoot };

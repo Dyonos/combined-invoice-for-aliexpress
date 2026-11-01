@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "AliExpress için Birleşik Fatura"
+  },
+  "extDescription": {
+    "message": "Seçilen AliExpress siparişlerini, toplamı banka ödemesiyle eşleşen tek bir faturada birleştirir."
+  },
+  "actionTitle": {
+    "message": "AliExpress için Birleşik Fatura - Siparişlerim sayfasını aç"
+  }
+}

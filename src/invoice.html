@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Ali Invoice</title>
+  <title>Combined Invoice for AliExpress</title>
   <link rel="stylesheet" href="invoice.css">
+  <style id="pageCss"></style>
 </head>
 <body>
   <header class="toolbar no-print">
@@ -18,10 +19,13 @@
         <input id="number" type="text">
       </label>
       <label><span data-i18n="inv.bank"></span>
-        <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> €</span>
+        <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> <span id="bankCur">€</span></span>
       </label>
-      <label><span data-i18n="panel.language"></span>
+      <label><span data-i18n="opt.language"></span>
         <select id="lang"></select>
+      </label>
+      <label><span data-i18n="opt.invoiceLanguage"></span>
+        <select id="docLang"></select>
       </label>
     </div>
     <div class="tb-row">
