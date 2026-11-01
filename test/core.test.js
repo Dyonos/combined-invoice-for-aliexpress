@@ -233,3 +233,22 @@ test('parseMoney: Romanian lei', () => {
   assert.deepEqual(A.parseMoney('123,45 lei'), { cents: 12345, currency: 'RON' });
   assert.deepEqual(A.parseMoney('RON 9.99'), { cents: 999, currency: 'RON' });
 });
+
+test('parsePayments: payments pasted from a bank statement', () => {
+  const p = A.parsePayments([
+    '37,70 18.08.2026',
+    '2026-09-09;-149.73 EUR',
+    '',
+    '18. 8. 2026 1 234,56 €',
+    'Card payment 4234****1234 ALIEXPRESS 22,39 EUR 2026. 10. 20.',
+    'no amount here',
+    '08/18/2026 12.29',
+    'Aug 16, 2026 6.12',
+    '-12,29 18-08-2026',
+  ].join('\n'));
+  assert.deepEqual(p.map((x) => [x.cents, x.date]), [
+    [3770, '2026-08-18'], [14973, '2026-09-09'], [123456, '2026-08-18'], [2239, '2026-10-20'],
+    [null, null], [1229, '2026-08-18'], [612, '2026-08-16'], [1229, '2026-08-18'],
+  ]);
+  assert.equal(p[1].currency, 'EUR');
+});

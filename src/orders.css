@@ -203,3 +203,37 @@
 #alifa-panel .alifa-setup { display: block; color: #c4320a; font-size: 12px; font-weight: 600; }
 #alifa-panel .alifa-setup[hidden] { display: none; }
 #alifa-panel .alifa-report { color: inherit; font-weight: 600; text-decoration: underline; white-space: nowrap; }
+
+/* several payments at once */
+#alifa-panel .alifa-batch { padding-top: 8px; border-top: 1px solid #eee; }
+#alifa-panel .alifa-batch summary { font-weight: 600; cursor: pointer; }
+#alifa-panel .alifa-batch-body { display: grid; gap: 6px; margin-top: 6px; }
+#alifa-panel .alifa-batch-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  resize: vertical;
+}
+#alifa-panel .alifa-batch-list { margin: 0; padding: 0; list-style: none; }
+#alifa-panel .alifa-batch-list:empty { display: none; }
+#alifa-panel .alifa-batch-list li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1px 6px;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid #f0f0f0;
+  font-size: 12px;
+}
+#alifa-panel .alifa-b-head { font-weight: 600; }
+#alifa-panel .alifa-b-res { grid-column: 1; color: #555; }
+#alifa-panel .alifa-b-btns { display: flex; grid-column: 2; grid-row: 1 / span 2; gap: 4px; }
+#alifa-panel .alifa-b-btns .alifa-btn { height: 26px; padding: 0 8px; font-size: 12px; }
+#alifa-panel .alifa-b-ok .alifa-b-res { color: #1a7f37; }
+#alifa-panel .alifa-b-warn .alifa-b-res { color: #9a6700; }
+#alifa-panel .alifa-b-bad .alifa-b-res { color: #c4320a; }
+#alifa-panel .alifa-batch-all[hidden] { display: none; }
+#alifa-panel .alifa-batch-find, #alifa-panel .alifa-batch-all { height: auto; min-height: 34px; padding-top: 6px; padding-bottom: 6px; }

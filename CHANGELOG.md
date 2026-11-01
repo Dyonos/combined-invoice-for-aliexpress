@@ -2,6 +2,12 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.15.0 - 2026-11-01
+
+- Several payments at once: paste amounts and dates from the bank statement (one payment per line), the extension finds the orders of each payment and opens one invoice per payment.
+- Each invoice tab keeps its own data, so several invoices can be open at the same time.
+- Store link in the README.
+
 ## 1.14.0 - 2026-11-01
 
 - Amounts in the panel and on the invoice page use the currency of the orders (for example PLN, CZK, HUF or RON), not always euros. Amounts in lei are recognised.

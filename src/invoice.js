@@ -31,7 +31,10 @@
 
   let draft = null;
   if (hasExt) {
-    draft = (await chrome.storage.local.get('alifa.draft'))['alifa.draft'] || null;
+    // each invoice tab reads its own draft (?draft=<id>); without it the last one
+    const draftId = new URLSearchParams(location.search).get('draft');
+    const key = draftId ? 'alifa.draft.' + draftId : 'alifa.draft';
+    draft = (await chrome.storage.local.get(key))[key] || null;
   } else {
     // preview outside the extension (file opened directly in the browser)
     try {

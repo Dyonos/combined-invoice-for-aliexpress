@@ -33,6 +33,7 @@ All amounts come from the official receipt of each order (the same data AliExpre
 
 FEATURES
 • Find orders by bank amount and payment date (also 1 to 3 days before it, because banks post card payments later)
+• Several payments at once: paste amounts and dates from your bank statement and get one invoice per payment
 • Add a missing order by its number from the confirmation e-mail
 • Items, shipping and discounts as separate lines, or spread into item prices (handy for stock records)
 • Several companies with company ID, tax ID and VAT ID
@@ -69,6 +70,7 @@ Všetky sumy pochádzajú z oficiálnej účtenky každej objednávky (rovnaké 
 
 FUNKCIE
 • Hľadanie objednávok podľa sumy z banky a dátumu platby (aj 1 až 3 dni pred ním, pretože banky zaúčtujú platby kartou neskôr)
+• Viac platieb naraz: samostatná faktúra ku každej platbe po vložení súm a dátumov z výpisu z banky
 • Pridanie chýbajúcej objednávky podľa jej čísla z potvrdzujúceho e-mailu
 • Položky, doprava a zľavy v samostatných riadkoch alebo rozpočítané do cien položiek (hodí sa na skladovú evidenciu)
 • Viac firiem s IČO, DIČ a IČ DPH
@@ -100,6 +102,7 @@ Všechny částky pocházejí z oficiální účtenky každé objednávky (stejn
 
 FUNKCE
 • Hledání objednávek podle částky z banky a data platby (i 1 až 3 dny před ním, protože banky zaúčtují platby kartou později)
+• Více plateb najednou: samostatná faktura ke každé platbě po vložení řádků s částkou a datem z bankovního výpisu
 • Přidání chybějící objednávky podle jejího čísla z potvrzovacího e-mailu
 • Položky, doprava a slevy na samostatných řádcích nebo rozpočítané do cen položek (hodí se pro skladovou evidenci)
 • Více firem s IČO, DIČ a DIČ pro DPH
@@ -131,6 +134,7 @@ Minden összeg az egyes rendelések hivatalos nyugtájáról származik (ugyanaz
 
 FUNKCIÓK
 • Rendelések keresése a banki összeg és a fizetés dátuma alapján (az azt megelőző 1-3 napon is, mert a bankok később könyvelik a kártyás fizetéseket)
+• Több fizetés egyszerre: a bankszámlakivonatból beillesztett összegek és dátumok alapján minden fizetéshez külön számla
 • Hiányzó rendelés hozzáadása a visszaigazoló e-mailben szereplő száma alapján
 • Tételek, szállítás és kedvezmények külön sorban vagy a tételárakba osztva (hasznos a készletnyilvántartáshoz)
 • Több cég cégazonosítóval, adószámmal és közösségi adószámmal
@@ -162,6 +166,7 @@ Wszystkie kwoty pochodzą z oficjalnego paragonu każdego zamówienia (te same d
 
 FUNKCJE
 • Wyszukiwanie zamówień według kwoty z banku i daty płatności (także od 1 do 3 dni przed nią, bo banki księgują płatności kartą później)
+• Kilka płatności naraz: osobna faktura dla każdej płatności po wklejeniu kwot i dat z wyciągu bankowego
 • Dodanie brakującego zamówienia według jego numeru z e-maila potwierdzającego
 • Pozycje, wysyłka i rabaty w osobnych wierszach albo rozliczone w cenach pozycji (przydatne w ewidencji magazynowej)
 • Kilka firm z numerami REGON, NIP i NIP UE
@@ -193,6 +198,7 @@ Alle Beträge stammen aus dem offiziellen Beleg jeder Bestellung (dieselben Date
 
 FUNKTIONEN
 • Suche nach Bestellungen anhand von Bankbetrag und Zahlungsdatum (auch 1 bis 3 Tage davor, weil Banken Kartenzahlungen später buchen)
+• Mehrere Zahlungen auf einmal: eine eigene Rechnung für jede Zahlung nach dem Einfügen von Beträgen und Datumsangaben aus dem Kontoauszug
 • Hinzufügen einer fehlenden Bestellung über ihre Nummer aus der Bestätigungs-E-Mail
 • Positionen, Versand und Rabatte als getrennte Zeilen oder auf die Positionspreise verteilt (praktisch für die Lagerbuchhaltung)
 • Mehrere Firmen mit Firmen-ID, Steuernummer und USt-IdNr.
@@ -224,6 +230,7 @@ Toate sumele provin din chitanța oficială a fiecărei comenzi (aceleași date 
 
 FUNCȚII
 • Căutarea comenzilor după suma de la bancă și data plății (și cu 1 până la 3 zile înainte, deoarece băncile înregistrează plățile cu cardul mai târziu)
+• Mai multe plăți deodată: este suficient să lipiți sumele și datele din extrasul bancar, iar extensia creează câte o factură pentru fiecare plată
 • Adăugarea unei comenzi lipsă după numărul ei din e-mailul de confirmare
 • Articole, transport și reduceri pe rânduri separate sau repartizate în prețurile articolelor (util pentru evidența stocurilor)
 • Mai multe firme, cu număr de înregistrare, cod fiscal și cod de TVA
@@ -255,6 +262,7 @@ Todos los importes proceden del recibo oficial de cada pedido (los mismos datos 
 
 FUNCIONES
 • Buscar pedidos por el importe del banco y la fecha de pago (también de 1 a 3 días antes, porque los bancos registran los pagos con tarjeta más tarde)
+• Varios pagos a la vez: pegar los importes y las fechas de tu extracto bancario y obtener una factura por cada pago
 • Añadir un pedido que falta por su número del correo de confirmación
 • Artículos, envío y descuentos en líneas separadas o repartidos en los precios de los artículos (práctico para el control de existencias)
 • Varias empresas con número de empresa, NIF y NIF-IVA
@@ -286,6 +294,7 @@ Tous les montants proviennent du reçu officiel de chaque commande (les mêmes d
 
 FONCTIONNALITÉS
 • Recherche des commandes d’après le montant de la banque et la date du paiement (également 1 à 3 jours avant celle-ci, car les banques comptabilisent les paiements par carte plus tard)
+• Plusieurs paiements à la fois : une facture par paiement à partir des montants et des dates copiés depuis votre relevé bancaire
 • Ajout d’une commande manquante grâce à son numéro figurant dans l’e-mail de confirmation
 • Articles, livraison et remises sur des lignes séparées ou répartis dans les prix des articles (pratique pour la gestion des stocks)
 • Plusieurs sociétés avec numéro d’entreprise, numéro fiscal et numéro de TVA
@@ -317,6 +326,7 @@ Todos os valores provêm do recibo oficial de cada encomenda (os mesmos dados qu
 
 FUNCIONALIDADES
 • Pesquisar encomendas pelo valor do banco e pela data do pagamento (também de 1 a 3 dias antes, porque os bancos registam os pagamentos com cartão mais tarde)
+• Vários pagamentos de uma vez: colar os valores e as datas do seu extrato bancário e obter uma fatura por cada pagamento
 • Adicionar uma encomenda em falta pelo número indicado no e-mail de confirmação
 • Artigos, envio e descontos em linhas separadas ou repartidos pelos preços dos artigos (prático para a gestão de stocks)
 • Várias empresas com número de empresa, NIF e número de IVA
@@ -348,6 +358,7 @@ Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é el
 
 ВОЗМОЖНОСТИ
 • Поиск заказов по сумме из банка и дате платежа (а также за 1-3 дня до неё, потому что банки проводят платежи по карте позже)
+• Сразу несколько платежей: достаточно вставить суммы и даты из банковской выписки, чтобы получить отдельный счёт для каждого платежа
 • Добавление недостающего заказа по его номеру из письма-подтверждения
 • Товары, доставка и скидки отдельными строками или с распределением по ценам товаров (удобно для складского учёта)
 • Несколько компаний с регистрационным номером, налоговым номером и номером плательщика НДС
@@ -379,6 +390,7 @@ Tutti gli importi provengono dalla ricevuta ufficiale di ciascun ordine (gli ste
 
 FUNZIONALITÀ
 • Ricerca degli ordini per importo addebitato e data di pagamento (anche da 1 a 3 giorni prima, perché le banche contabilizzano i pagamenti con carta più tardi)
+• Più pagamenti insieme: basta incollare importi e date dall’estratto conto e avrai una fattura per ogni pagamento
 • Aggiunta di un ordine mancante tramite il numero indicato nell’e-mail di conferma
 • Articoli, spedizione e sconti su righe separate oppure ripartiti nei prezzi degli articoli (comodo per la gestione del magazzino)
 • Più aziende con numero di registro imprese, codice fiscale e partita IVA
@@ -410,6 +422,7 @@ Alle bedragen komen uit het officiële ontvangstbewijs van elke bestelling (deze
 
 FUNCTIES
 • Bestellingen zoeken op bankbedrag en betaaldatum (ook 1 tot 3 dagen ervoor, omdat banken kaartbetalingen later boeken)
+• Meerdere betalingen tegelijk: bedragen en datums uit je bankafschrift plakken en per betaling één factuur krijgen
 • Een ontbrekende bestelling toevoegen met het nummer uit de bevestigingsmail
 • Artikelen, verzending en kortingen op aparte regels of verdeeld over de artikelprijzen (handig voor de voorraadadministratie)
 • Meerdere bedrijven met KvK-nummer, fiscaal nummer en btw-id
@@ -441,6 +454,7 @@ Tüm tutarlar, sayfada ne yazdığına dair tahminlerden değil, her siparişin 
 
 ÖZELLİKLER
 • Siparişleri banka tutarına ve ödeme tarihine göre bulma (bankalar kart ödemelerini daha geç işlediği için 1 ila 3 gün öncesi de dahil)
+• Tek seferde birden fazla ödeme: banka ekstrenizdeki tutarları ve tarihleri yapıştırıp her ödeme için ayrı bir fatura alma
 • Eksik bir siparişi onay e-postasındaki numarasıyla ekleme
 • Ürünler, kargo ve indirimler ayrı satırlarda ya da ürün fiyatlarına dağıtılmış olarak (stok kayıtları için kullanışlı)
 • Sicil numarası, vergi numarası ve KDV numarasıyla birden fazla firma
@@ -472,6 +486,7 @@ Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı A
 
 МОЖЛИВОСТІ
 • Пошук замовлень за сумою списання та датою платежу (також за 1-3 дні до неї, бо банки проводять платежі карткою пізніше)
+• Кілька платежів одночасно: достатньо вставити суми й дати з банківської виписки, щоб отримати окремий рахунок для кожного платежу
 • Додавання відсутнього замовлення за його номером із листа-підтвердження
 • Товари, доставка та знижки окремими рядками або розподілені між цінами товарів (зручно для складського обліку)
 • Кілька компаній із реєстраційним номером, податковим номером і номером платника ПДВ
@@ -503,6 +518,7 @@ AliExpressで複数の注文を一度に支払い、経理処理用に請求書�
 
 【機能】
 • 銀行明細の金額と支払日で注文を検索（銀行ではカード決済が遅れて計上されるため、支払日の1～3日前も検索）
+• 複数の支払いを一度に処理：銀行明細の金額と日付を貼り付けるだけで、支払いごとに請求書を1つずつ作成
 • 一覧にない注文を、確認メールに記載の注文番号で追加
 • 商品、送料、割引を別々の行に表示、または商品価格に配分（在庫管理に便利）
 • 複数の会社を登録可能（法人番号、納税者番号、VAT登録番号）
@@ -534,6 +550,7 @@ AliExpress에서 여러 주문을 한 번에 결제했는데 장부 정리를 �
 
 [기능]
 • 은행 거래 금액과 결제일로 주문 찾기(은행은 카드 결제를 늦게 반영하므로 결제일 1~3일 전도 검색)
+• 여러 결제를 한 번에 처리: 은행 거래 내역의 금액과 날짜를 붙여 넣으면 결제마다 인보이스를 하나씩 생성
 • 목록에 없는 주문을 확인 이메일의 주문 번호로 추가
 • 상품, 배송비, 할인을 별도 행으로 표시하거나 상품 가격에 배분(재고 관리에 유용)
 • 여러 회사 등록(회사 등록번호, 납세자 번호, 부가세 등록번호 포함)

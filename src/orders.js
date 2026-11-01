@@ -21,6 +21,9 @@
     extra: new Map(),
     bankCents: null,
     bankDate: null, // "YYYY-MM-DD", search only on this day (and 1-3 days before it)
+    // several payments at once: the pasted lines and one result per payment
+    batchText: '',
+    batch: [],
     busy: false,
   };
 
@@ -198,6 +201,7 @@
 
   function buildPanel() {
     const collapsed = panel && panel.classList.contains('alifa-collapsed');
+    const batchOpen = !!(panel && panel.querySelector('.alifa-batch[open]'));
     const status = panel ? panel.querySelector('.alifa-status') : null;
     const statusHtml = status ? status.innerHTML : '';
     const statusClass = status ? status.className : 'alifa-status';
@@ -243,6 +247,16 @@
           <button type="button" class="alifa-btn alifa-primary alifa-create">${esc(I.t('panel.create'))}</button>
           <button type="button" class="alifa-btn alifa-clear">${esc(I.t('panel.clear'))}</button>
         </div>
+        <details class="alifa-batch"${batchOpen || state.batch.length ? ' open' : ''}>
+          <summary>${esc(I.t('batch.title'))}</summary>
+          <div class="alifa-batch-body">
+            <span class="alifa-muted">${esc(I.t('batch.hint', { example: I.t('batch.example') }))}</span>
+            <textarea class="alifa-batch-input" rows="4" spellcheck="false" placeholder="${esc(I.t('batch.example'))}"></textarea>
+            <button type="button" class="alifa-btn alifa-batch-find">${esc(I.t('batch.find'))}</button>
+            <ul class="alifa-batch-list"></ul>
+            <button type="button" class="alifa-btn alifa-primary alifa-batch-all" hidden>${esc(I.t('batch.createAll'))}</button>
+          </div>
+        </details>
         <div class="${esc(statusClass)}" role="status">${statusHtml}</div>
       </div>`;
     if (collapsed) panel.classList.add('alifa-collapsed');
@@ -318,6 +332,22 @@
       const btn = e.target.closest('[data-remove]');
       if (btn) setSelected({ id: btn.dataset.remove }, false);
     });
+    const batchInput = panel.querySelector('.alifa-batch-input');
+    batchInput.value = state.batchText;
+    batchInput.addEventListener('input', () => {
+      state.batchText = batchInput.value;
+      saveBatch();
+    });
+    panel.querySelector('.alifa-batch-find').addEventListener('click', findBatch);
+    panel.querySelector('.alifa-batch-all').addEventListener('click', () => {
+      createBatch(state.batch.map((b, i) => (b.status === 'found' || b.status === 'ambiguous' ? i : -1)).filter((i) => i >= 0));
+    });
+    panel.querySelector('.alifa-batch-list').addEventListener('click', (e) => {
+      const select = e.target.closest('[data-batch-select]');
+      if (select) selectBatch(Number(select.dataset.batchSelect));
+      const make = e.target.closest('[data-batch-create]');
+      if (make) createBatch([Number(make.dataset.batchCreate)]);
+    });
     fillProfiles();
   }
 
@@ -377,6 +407,7 @@
     panel.querySelector('.alifa-create').disabled = !n || state.busy;
     panel.querySelector('.alifa-find').disabled = state.busy;
     panel.querySelector('.alifa-add').disabled = state.busy;
+    renderBatch();
   }
 
   function setStatus(text, kind) {
@@ -529,7 +560,7 @@
    * Fills in orders from the given days that AliExpress skipped in the list: tries the receipts of neighbouring
    * order numbers from the same day. Returns the number of orders added.
    */
-  async function probeSiblings(days) {
+  async function probeSiblings(days, progress) {
     let probes = 0;
     let added = 0;
     const known = new Set(loadedOrders().map((o) => o.id));
@@ -543,7 +574,7 @@
           if (known.has(id) || tried.has(id) || probes >= MAX_PROBES) continue;
           tried.add(id);
           probes++;
-          setStatus(esc(I.t('st.probing', { date: I.date(day), n: probes })));
+          progress(I.t('st.probing', { date: I.date(day), n: probes }));
           let o = null;
           try {
             o = A.normalizeReceipt(await fetchReceipt(id), id);
@@ -575,76 +606,67 @@
     return added;
   }
 
-  /** Payment with a date: searches that day, then 1-3 days before it. */
-  async function findOnDate(day, amount) {
-    const days = [];
-    for (let back = 0; back <= DATE_LOOKBACK; back++) days.push(A.addDays(day, -back));
-    const lastDay = days[days.length - 1];
-    let added = 0;
-    let probed = false;
+  /**
+   * Searches the orders of one payment (amount in cents, optional date "YYYY-MM-DD"). Loads older orders and fills in
+   * orders that AliExpress skipped in the list when needed, but does not change the selection.
+   * exclude: ids already used for other payments; progress(text): status while searching.
+   * Returns { found, list, back, added } or { error, ... } (see searchErrorText).
+   */
+  async function searchPayment(cents, day, exclude, progress) {
+    const usable = () => loadedOrders().filter((o) => !exclude.has(o.id));
+    if (day) {
+      const days = [];
+      for (let back = 0; back <= DATE_LOOKBACK; back++) days.push(A.addDays(day, -back));
+      const lastDay = days[days.length - 1];
+      let added = 0;
+      let probed = false;
+      for (let loads = 0; ; loads++) {
+        const list = usable();
+        // orders are newest first, so once orders from an older day are loaded, the newer days are complete
+        for (let back = 0; back < days.length; back++) {
+          const found = A.findOrdersForAmount(list.filter((o) => o.date === days[back]), cents, { sameDayOnly: true });
+          if (found) return { found, list, back, added };
+        }
+        const oldest = oldestDate(domOrders()); // page orders only, orders added by number do not move the loading
+        if (!(oldest && oldest < lastDay)) {
+          if (loads >= MAX_LOADS_DATE) return { error: 'loadLimitDate', oldest };
+          progress(I.t('st.loadingToDate', { date: I.date(day), oldest: oldest ? I.date(oldest) : '?' }));
+          const res = await loadMore();
+          if (res === 'stuck') return { error: 'stuck' };
+          if (res === 'ok') continue;
+        }
+        // the days around the date are loaded and the sum does not match: fill in orders that AliExpress skipped in the list
+        if (!probed) {
+          probed = true;
+          added = await probeSiblings(days.filter((d) => list.some((o) => o.date === d)), progress);
+          if (added) continue;
+        }
+        const inWindow = usable().filter((o) => o.date && o.date >= lastDay && o.date <= day).length;
+        return { error: inWindow ? 'notFoundDate' : 'noOrdersDate', inWindow };
+      }
+    }
     for (let loads = 0; ; loads++) {
-      const list = loadedOrders();
-      // orders are newest first, so once orders from an older day are loaded, the newer days are complete
-      for (let back = 0; back < days.length; back++) {
-        const found = A.findOrdersForAmount(list.filter((o) => o.date === days[back]), state.bankCents, { sameDayOnly: true });
-        if (found) {
-          selectFound(found, list, back, added);
-          return;
-        }
-      }
-      const oldest = oldestDate(domOrders()); // page orders only, orders added by number do not move the loading
-      let exhausted = !!(oldest && oldest < lastDay);
-      if (!exhausted) {
-        if (loads >= MAX_LOADS_DATE) {
-          setStatus(esc(I.t('st.loadLimitDate', { oldest: I.date(oldest), date: I.date(day) })), 'bad');
-          return;
-        }
-        setStatus(esc(I.t('st.loadingToDate', { date: I.date(day), oldest: oldest ? I.date(oldest) : '?' })));
-        const res = await loadMore();
-        if (res === 'stuck') {
-          setStatus(esc(I.t('st.stuck')), 'bad');
-          return;
-        }
-        if (res === 'ok') continue;
-        exhausted = true; // no more orders
-      }
-      // the days around the date are loaded and the sum does not match: fill in orders that AliExpress skipped in the list
-      if (!probed) {
-        probed = true;
-        added = await probeSiblings(days.filter((d) => list.some((o) => o.date === d)));
-        if (added) continue;
-      }
-      const inWindow = loadedOrders().filter((o) => o.date && o.date >= lastDay && o.date <= day).length;
-      setStatus(esc(inWindow
-        ? I.t('st.notFoundDate', { date: I.date(day), k: DATE_LOOKBACK, orders: orders(inWindow), amount })
-        : I.t('st.noOrdersDate', { date: I.date(day), k: DATE_LOOKBACK })), 'bad');
-      return;
+      const list = usable();
+      const found = A.findOrdersForAmount(list, cents, { sameDayOnly: true });
+      if (found) return { found, list, back: 0, added: 0 };
+      if (loads >= MAX_LOADS) return { error: 'limitAny', list };
+      progress(I.t('st.searched', { searched: searchedText(list) }));
+      const res = await loadMore();
+      if (res === 'end') return { error: 'allSearched', list };
+      if (res === 'stuck') return { error: 'stuckSearched', list };
     }
   }
 
-  /** Without a date: a combination from any (single) day among the loaded orders, otherwise loads older ones. */
-  async function findAnyDay(amount) {
-    for (let loads = 0; ; loads++) {
-      const list = loadedOrders();
-      const found = A.findOrdersForAmount(list, state.bankCents, { sameDayOnly: true });
-      if (found) {
-        selectFound(found, list, 0, 0);
-        return;
-      }
-      if (loads >= MAX_LOADS) {
-        setStatus(esc(I.t('st.limitAny', { searched: searchedText(list), amount })), 'bad');
-        return;
-      }
-      setStatus(esc(I.t('st.searched', { searched: searchedText(list) })));
-      const res = await loadMore();
-      if (res === 'end') {
-        setStatus(esc(I.t('st.allSearched', { searched: searchedText(list), amount })), 'bad');
-        return;
-      }
-      if (res === 'stuck') {
-        setStatus(esc(I.t('st.stuckSearched', { searched: searchedText(list) })), 'bad');
-        return;
-      }
+  /** Message for a search that found nothing (an error of searchPayment), in the interface language. */
+  function searchErrorText(r, day, amount) {
+    switch (r.error) {
+      case 'loadLimitDate': return I.t('st.loadLimitDate', { oldest: I.date(r.oldest), date: I.date(day) });
+      case 'stuck': return I.t('st.stuck');
+      case 'notFoundDate': return I.t('st.notFoundDate', { date: I.date(day), k: DATE_LOOKBACK, orders: orders(r.inWindow), amount });
+      case 'noOrdersDate': return I.t('st.noOrdersDate', { date: I.date(day), k: DATE_LOOKBACK });
+      case 'limitAny': return I.t('st.limitAny', { searched: searchedText(r.list), amount });
+      case 'allSearched': return I.t('st.allSearched', { searched: searchedText(r.list), amount });
+      default: return I.t('st.stuckSearched', { searched: searchedText(r.list || []) });
     }
   }
 
@@ -660,14 +682,134 @@
     if (state.busy) return;
     state.busy = true;
     renderPanel();
-    const amount = I.money(state.bankCents, panelCurrency());
     try {
-      if (state.bankDate) await findOnDate(state.bankDate, amount);
-      else await findAnyDay(amount);
+      const r = await searchPayment(state.bankCents, state.bankDate, new Set(), (text) => setStatus(esc(text)));
+      if (r.found) selectFound(r.found, r.list, r.back, r.added);
+      else setStatus(esc(searchErrorText(r, state.bankDate, I.money(state.bankCents, panelCurrency()))), 'bad');
     } finally {
       state.busy = false;
       renderPanel();
     }
+  }
+
+  // ---------------------------------------------------------------- several payments at once
+
+  const BATCH_KEY = 'alifa.batch';
+
+  function saveBatch() {
+    try {
+      sessionStorage.setItem(BATCH_KEY, JSON.stringify({ text: state.batchText, items: state.batch }));
+    } catch (e) { /* private window etc. */ }
+  }
+
+  function restoreBatch() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(BATCH_KEY) || 'null');
+      if (!saved) return;
+      state.batchText = String(saved.text || '');
+      state.batch = Array.isArray(saved.items) ? saved.items.filter((b) => b && typeof b === 'object') : [];
+      for (const b of state.batch) {
+        if (!Array.isArray(b.orders)) b.orders = [];
+        if (b.status === 'searching') b.status = 'pending'; // a search interrupted by a reload
+      }
+    } catch (e) { /* ignore a corrupted record */ }
+  }
+
+  const hasOrders = (b) => b.orders.length > 0 && b.status !== 'notFound';
+
+  function batchResult(b) {
+    if (b.status === 'noAmount') return I.t('batch.noAmount');
+    if (b.status === 'searching') return I.t('batch.searching');
+    if (b.status === 'notFound') return I.t('batch.notFound');
+    if (!hasOrders(b)) return '';
+    const text = I.t('batch.found', { orders: orders(b.orders.length), date: I.date(b.foundDate) });
+    if (b.status === 'ambiguous') return text + ', ' + I.t('batch.ambiguous');
+    if (b.status === 'opened') return text + ', ' + I.t('batch.opened');
+    return text;
+  }
+
+  function renderBatch() {
+    if (!panel) return;
+    const list = panel.querySelector('.alifa-batch-list');
+    const cur = panelCurrency();
+    list.innerHTML = state.batch.map((b, i) => {
+      const cls = b.status === 'notFound' || b.status === 'noAmount' ? 'bad' : b.status === 'ambiguous' ? 'warn' : hasOrders(b) ? 'ok' : 'new';
+      const head = [b.date ? I.date(b.date) : '', b.cents ? I.money(b.cents, cur) : ''].filter(Boolean).join(' · ') || b.line;
+      const buttons = hasOrders(b)
+        ? `<span class="alifa-b-btns"><button type="button" class="alifa-btn" data-batch-select="${i}" title="${esc(I.t('batch.selectTitle'))}">${esc(I.t('batch.select'))}</button>` +
+          `<button type="button" class="alifa-btn" data-batch-create="${i}" title="${esc(I.t('batch.createTitle'))}">${esc(I.t('batch.create'))}</button></span>`
+        : '';
+      return `<li class="alifa-b-${cls}" title="${esc(b.error || b.line)}"><span class="alifa-b-head">${esc(head)}</span>` +
+        `<span class="alifa-b-res">${esc(batchResult(b))}</span>${buttons}</li>`;
+    }).join('');
+    const all = panel.querySelector('.alifa-batch-all');
+    all.hidden = !state.batch.some((b) => b.status === 'found' || b.status === 'ambiguous');
+    all.disabled = state.busy;
+    panel.querySelector('.alifa-batch-find').disabled = state.busy;
+    for (const btn of list.querySelectorAll('button')) btn.disabled = state.busy;
+  }
+
+  /** Finds the orders of every pasted payment; each order is used for one payment only. */
+  async function findBatch() {
+    if (state.busy) return;
+    state.batchText = panel.querySelector('.alifa-batch-input').value;
+    state.batch = A.parsePayments(state.batchText).map((p) => Object.assign(p, { status: p.cents ? 'pending' : 'noAmount', orders: [] }));
+    saveBatch();
+    renderBatch();
+    // newest payments first: the order list loads from the newest orders
+    const queue = state.batch.filter((b) => b.status === 'pending')
+      .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+    if (!queue.length) {
+      setStatus(esc(I.t('batch.empty')), 'bad');
+      return;
+    }
+    state.busy = true;
+    renderPanel();
+    const used = new Set();
+    try {
+      for (let i = 0; i < queue.length; i++) {
+        const b = queue[i];
+        b.status = 'searching';
+        renderBatch();
+        const prefix = I.t('batch.progress', { i: i + 1, n: queue.length }) + ' ';
+        const r = await searchPayment(b.cents, b.date, used, (text) => setStatus(esc(prefix + text)));
+        if (r.found) {
+          b.orders = r.found.ids.map((id) => r.list.find((o) => o.id === id)).filter(Boolean)
+            .map((o) => ({ id: o.id, cents: o.cents, currency: o.currency, date: o.date, dateRaw: o.dateRaw, store: o.store, status: o.status }));
+          b.foundDate = r.found.date || (b.orders[0] && b.orders[0].date) || null;
+          b.status = r.found.ambiguous ? 'ambiguous' : 'found';
+          b.error = '';
+          for (const o of b.orders) used.add(o.id);
+        } else {
+          b.status = 'notFound';
+          b.error = searchErrorText(r, b.date, I.money(b.cents, panelCurrency()));
+        }
+        saveBatch();
+        renderBatch();
+      }
+      const found = state.batch.filter(hasOrders).length;
+      setStatus(esc(I.t('batch.summary', { found, n: state.batch.length })), found === state.batch.length ? 'ok' : 'warn');
+    } finally {
+      state.busy = false;
+      renderPanel();
+    }
+  }
+
+  /** Ticks the orders of one payment on the page to check them, and fills in its amount and date. */
+  function selectBatch(i) {
+    const b = state.batch[i];
+    if (!b || !hasOrders(b) || state.busy) return;
+    state.selected.clear();
+    for (const o of b.orders) state.selected.set(o.id, o);
+    state.bankCents = b.cents;
+    state.bankDate = b.date || null;
+    panel.querySelector('.alifa-bank').value = I.amount(b.cents);
+    panel.querySelector('.alifa-date').value = b.date || '';
+    saveSelection();
+    decorate();
+    renderPanel();
+    const first = orderElements().find((el) => el.classList.contains('alifa-selected'));
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   // ---------------------------------------------------------------- receipts and invoice
@@ -722,37 +864,87 @@
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  // drafts of the last invoices: each invoice tab reads its own (?draft=<id>), older ones are removed
+  const MAX_DRAFTS = 30;
+
+  async function storeDraft(id, draft) {
+    const all = await chrome.storage.local.get(null);
+    const old = Object.keys(all).filter((k) => k.startsWith('alifa.draft.'))
+      .sort((a, b) => String(all[b].createdAt).localeCompare(String(all[a].createdAt)))
+      .slice(MAX_DRAFTS - 1);
+    if (old.length) await chrome.storage.local.remove(old);
+    await chrome.storage.local.set({ ['alifa.draft.' + id]: draft, 'alifa.draft': draft });
+  }
+
+  /**
+   * Loads the receipts of the orders, stores them as a draft and opens the invoice page in a new tab
+   * (in the background for several payments). Returns false when a receipt could not be loaded.
+   */
+  async function openInvoice(list, bankCents, prefix, background) {
+    const receipts = [];
+    const failed = [];
+    for (let i = 0; i < list.length; i++) {
+      setStatus(esc(prefix + I.t('st.loadingReceipt', { i: i + 1, n: list.length })));
+      try {
+        receipts.push(await fetchReceipt(list[i].id));
+      } catch (e) {
+        failed.push({ order: list[i], error: e.message, code: e.code || null });
+      }
+      if (i < list.length - 1) await sleep(300);
+    }
+    if (failed.length) {
+      const report = failed.every((f) => USER_ERRORS.has(f.code)) ? '' : reportLink();
+      setStatus(esc(prefix + I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>') + report, 'bad');
+      return false;
+    }
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    await storeDraft(id, {
+      createdAt: new Date().toISOString(),
+      bankCents,
+      receipts,
+      listTotals: Object.fromEntries(list.map((o) => [o.id, o.cents])),
+    });
+    await chrome.runtime.sendMessage({ type: 'alifa-open-invoice', draft: id, active: !background });
+    return true;
+  }
+
+  const byDate = (a, b) => String(a.date).localeCompare(String(b.date)) || a.id.localeCompare(b.id);
+
   async function createInvoice() {
     if (state.busy || !state.selected.size) return;
     state.busy = true;
     renderPanel();
-    const list = [...state.selected.values()].sort((a, b) => String(a.date).localeCompare(String(b.date)) || a.id.localeCompare(b.id));
-    const receipts = [];
-    const failed = [];
     try {
-      for (let i = 0; i < list.length; i++) {
-        setStatus(esc(I.t('st.loadingReceipt', { i: i + 1, n: list.length })));
-        try {
-          receipts.push(await fetchReceipt(list[i].id));
-        } catch (e) {
-          failed.push({ order: list[i], error: e.message, code: e.code || null });
-        }
-        if (i < list.length - 1) await sleep(300);
+      if (await openInvoice([...state.selected.values()].sort(byDate), state.bankCents, '', false)) {
+        setStatus(esc(I.t('st.invoiceOpened')), 'ok');
       }
-      if (failed.length) {
-        const report = failed.every((f) => USER_ERRORS.has(f.code)) ? '' : reportLink();
-        setStatus(esc(I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>') + report, 'bad');
-        return;
+    } catch (e) {
+      setStatus(contextError(e) + reportFor(e), 'bad');
+    } finally {
+      state.busy = false;
+      renderPanel();
+    }
+  }
+
+  /** Invoices for the given payments of the batch, one tab each (in the background when there are several). */
+  async function createBatch(indexes) {
+    if (state.busy) return;
+    const items = indexes.map((i) => state.batch[i]).filter((b) => b && hasOrders(b));
+    if (!items.length) return;
+    state.busy = true;
+    renderPanel();
+    let opened = 0;
+    try {
+      for (let k = 0; k < items.length; k++) {
+        const b = items[k];
+        const prefix = items.length > 1 ? I.t('batch.progress', { i: k + 1, n: items.length }) + ' ' : '';
+        if (!(await openInvoice(b.orders.slice().sort(byDate), b.cents, prefix, items.length > 1))) return;
+        b.status = 'opened';
+        opened++;
+        saveBatch();
+        renderBatch();
       }
-      const draft = {
-        createdAt: new Date().toISOString(),
-        bankCents: state.bankCents,
-        receipts,
-        listTotals: Object.fromEntries(list.map((o) => [o.id, o.cents])),
-      };
-      await chrome.storage.local.set({ 'alifa.draft': draft });
-      await chrome.runtime.sendMessage({ type: 'alifa-open-invoice' });
-      setStatus(esc(I.t('st.invoiceOpened')), 'ok');
+      setStatus(esc(I.plural(opened, 'plural.invoicesOpened')), 'ok');
     } catch (e) {
       setStatus(contextError(e) + reportFor(e), 'bad');
     } finally {
@@ -766,6 +958,7 @@
   async function start() {
     await loadSettings();
     restoreSelection();
+    restoreBatch();
     buildPanel();
     decorate();
     renderPanel();

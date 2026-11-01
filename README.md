@@ -13,6 +13,7 @@ One AliExpress checkout often becomes several orders from different stores, but 
 ## Features
 
 - **Tick orders** on the AliExpress "My orders" page or let the extension **find them by the bank amount** (and optionally the payment date, also 1 to 3 days earlier because banks post card payments later). It loads older orders by itself.
+- **Several payments at once**: paste the amounts and dates of your bank statement (one payment per line); the extension finds the orders of each payment and opens one invoice per payment.
 - **Accurate totals** from the official order receipt (the data behind AliExpress's "Receipt" button): items, shipping, discounts, fees and VAT. Summary lines shown twice, symbolic shipping that is not charged and orders skipped in the order list are handled.
 - **Missing orders**: add an order by its number from the confirmation e-mail. With a payment date the extension also fills in orders that AliExpress skipped in the list.
 - **Invoice** in any of the 17 languages, set separately from the interface: items, shipping and discounts as separate lines, or spread into item prices. Several customer companies (company ID, tax ID, VAT ID), optional notes for goods from an EU warehouse and for shipping without tracking, print or save as PDF without browser header and footer.
@@ -21,7 +22,7 @@ One AliExpress checkout often becomes several orders from different stores, but 
 
 ## Install
 
-- **Chrome Web Store**: link will be added after publication.
+- **Chrome Web Store**: [Combined Invoice for AliExpress](https://chromewebstore.google.com/detail/combined-invoice-for-alie/ajnecbhkoohhidmgjphfdgeahjhmhfab)
 - **From source**: download this repository, open `chrome://extensions`, turn on *Developer mode*, click *Load unpacked* and select the folder. Requires Chrome 131 or newer.
 
 ## Use

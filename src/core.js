@@ -124,6 +124,52 @@
     return `${d}. ${m}. ${y}`;
   }
 
+  // ---------------------------------------------------------------- bank statement lines
+
+  /** Payment date in a bank statement line: 18.08.2026, 18. 8. 2026, 2026-08-18, 2026/08/18, 2026. 8. 18., 18-08-2026, 18/08/2026, Aug 18, 2026. */
+  function statementDate(line) {
+    let m = line.match(/(\d{4})[-/.]\s*(\d{1,2})[-/.]\s*(\d{1,2})\.?/);
+    if (m) return { text: m[0], date: iso(+m[1], +m[2], +m[3]) };
+    m = line.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/);
+    if (m) return { text: m[0], date: iso(+m[3], +m[2], +m[1]) };
+    m = line.match(/(\d{1,2})-(\d{1,2})-(\d{4})/); // Dutch bank statements
+    if (m) return { text: m[0], date: iso(+m[3], +m[2], +m[1]) };
+    m = line.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (m) {
+      // day first (European), unless only the other order gives a valid date
+      const a = +m[1];
+      const b = +m[2];
+      return { text: m[0], date: a > 12 || b <= 12 ? iso(+m[3], b, a) : iso(+m[3], a, b) };
+    }
+    const named = parseDate(line);
+    return named ? { text: '', date: named } : null;
+  }
+
+  /**
+   * Payments pasted from a bank statement, one per line: an amount and an optional date in any order
+   * ("37,70 18.08.2026", "2026-08-18;-37.70 EUR"). Returns [{ line, cents, currency, date }];
+   * cents is null for a line without an amount, debits (negative amounts) count as positive.
+   */
+  function parsePayments(text) {
+    const out = [];
+    for (const raw of String(text || '').split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line) continue;
+      const d = statementDate(line);
+      const rest = d && d.text ? line.replace(d.text, ' ') : line;
+      const amounts = rest.match(/-?\d{1,3}(?:[ .'\u00a0]\d{3})+[.,]\d{2}(?!\d)|-?\d+[.,]\d{2}(?!\d)/g) || [];
+      const money = parseMoney(amounts.length ? amounts[amounts.length - 1] : rest);
+      const whole = parseMoney(rest);
+      out.push({
+        line,
+        cents: money && money.cents ? Math.abs(money.cents) : null,
+        currency: whole ? whole.currency : null,
+        date: d ? d.date : null,
+      });
+    }
+    return out;
+  }
+
   // ---------------------------------------------------------------- receipt
 
   // sign -1: AliExpress sends a positive number that is subtracted from the total (discounts).
@@ -464,6 +510,7 @@
     vatRate,
     subsetSums,
     findOrdersForAmount,
+    parsePayments,
     CHARGE_FIELDS,
   };
 });

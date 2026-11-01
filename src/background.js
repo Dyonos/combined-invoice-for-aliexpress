@@ -2,7 +2,8 @@
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg && msg.type === 'alifa-open-invoice') {
-    const opts = { url: chrome.runtime.getURL('src/invoice.html') };
+    const opts = { url: chrome.runtime.getURL('src/invoice.html' + (msg.draft ? '?draft=' + encodeURIComponent(msg.draft) : '')) };
+    if (msg.active === false) opts.active = false;
     if (sender.tab) {
       opts.index = sender.tab.index + 1;
       opts.openerTabId = sender.tab.id;

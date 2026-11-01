@@ -41,7 +41,24 @@ const ORDERS = [
   { id: '1000000000030002', status: 'Completed', date: 'Aug 9, 2026', store: 'Example Light Store', title: 'LED strip 5V USB, warm white, 2 m', variant: '2M', price: '€4.59', qty: 1, total: '€6.12', icon: '💡' },
 ];
 
-function ordersPage(settings, orders = ORDERS, bankCents = 3770) {
+// Several payments at once: three payments from a bank statement, each matched to its orders above.
+const BATCH_DEMO = {
+  text: '8.47 23.08.2026\n37.70 18.08.2026\n6.12 11.08.2026',
+  items: [
+    { line: '8.47 23.08.2026', cents: 847, currency: null, date: '2026-08-23', status: 'found', foundDate: '2026-08-21',
+      orders: [{ id: '1000000000030001', cents: 847, currency: 'EUR', date: '2026-08-21', store: 'Example Garden Store' }] },
+    { line: '37.70 18.08.2026', cents: 3770, currency: null, date: '2026-08-18', status: 'found', foundDate: '2026-08-16',
+      orders: [
+        { id: '1000000000010001', cents: 1229, currency: 'EUR', date: '2026-08-16', store: 'Example Tools Store' },
+        { id: '1000000000010002', cents: 1121, currency: 'EUR', date: '2026-08-16', store: 'Example Parts Store' },
+        { id: '1000000000010003', cents: 1420, currency: 'EUR', date: '2026-08-16', store: 'Example Battery Store' },
+      ] },
+    { line: '6.12 11.08.2026', cents: 612, currency: null, date: '2026-08-11', status: 'found', foundDate: '2026-08-09',
+      orders: [{ id: '1000000000030002', cents: 612, currency: 'EUR', date: '2026-08-09', store: 'Example Light Store' }] },
+  ],
+};
+
+function ordersPage(settings, orders = ORDERS, bankCents = 3770, batch = null) {
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   const selection = { orders: orders.filter((o) => o.pick).map((o) => ({ id: o.id })), extra: [], bankCents, bankDate: null };
   const cards = orders.map((o) => `
@@ -95,6 +112,7 @@ function ordersPage(settings, orders = ORDERS, bankCents = 3770) {
 <script>
   localStorage.setItem('alifa.settings', ${JSON.stringify(JSON.stringify(settings))});
   sessionStorage.setItem('alifa.selection', ${JSON.stringify(JSON.stringify(selection))});
+  ${batch ? `sessionStorage.setItem('alifa.batch', ${JSON.stringify(JSON.stringify(batch))});` : ''}
   window.chrome = window.chrome || {};
   window.chrome.runtime = { getManifest: () => ({ version: ${JSON.stringify(VERSION)} }) };
 </script>
@@ -109,6 +127,7 @@ function ordersPage(settings, orders = ORDERS, bankCents = 3770) {
 <script src="settings.js"></script>
 <script src="i18n.js"></script>
 <script src="orders.js"></script>
+${batch ? "<script>setTimeout(() => { const p = document.getElementById('alifa-panel'); if (p) p.scrollTop = p.scrollHeight; }, 1500);</script>" : ''}
 </body></html>`;
 }
 
@@ -130,6 +149,7 @@ const JOBS = [
   { name: 'screenshots/2-invoice-en.png', file: '_shot-2.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
   { name: 'screenshots/3-invoice-de-allocated.png', file: '_shot-3.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'de', invoiceLang: 'de', mode: 'allocated' })), size: '1280,800' },
   { name: 'screenshots/4-settings-en.png', file: '_shot-4.html', html: page('options.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
+  { name: 'screenshots/5-batch-en.png', file: '_shot-5.html', html: ordersPage(Object.assign({}, DEMO, { lang: 'en' }), ORDERS.map((o) => Object.assign({}, o, { pick: false })), null, BATCH_DEMO), size: '1280,800' },
   { name: 'promo-440x280.png', file: '_promo.html', html: PROMO, size: '440,280' },
 ];
 
