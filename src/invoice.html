@@ -18,6 +18,12 @@
       <label><span data-i18n="inv.number"></span>
         <input id="number" type="text">
       </label>
+      <label><span data-i18n="inv.date"></span>
+        <input id="docDate" type="date">
+      </label>
+      <label id="docTypeWrap" hidden><span data-i18n="inv.docType"></span>
+        <select id="docType"><option value="invoice" data-i18n="inv.typeInvoice"></option><option value="credit" data-i18n="inv.typeCredit"></option></select>
+      </label>
       <label><span data-i18n="inv.bank"></span>
         <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> <span id="bankCur">€</span></span>
       </label>
@@ -39,6 +45,14 @@
       <span id="version" class="version" data-i18n-title="versionTitle"></span>
       <button id="settings" type="button" class="btn" data-i18n="inv.settings"></button>
       <button id="print" type="button" class="btn primary" data-i18n="inv.print"></button>
+    </div>
+    <div class="tb-row show-row">
+      <span data-i18n="inv.show"></span>
+      <label><input type="checkbox" data-show="logo"> <span data-i18n="inv.showLogo"></span></label>
+      <label><input type="checkbox" data-show="images"> <span data-i18n="inv.showImages"></span></label>
+      <label><input type="checkbox" data-show="stores"> <span data-i18n="inv.showStores"></span></label>
+      <label><input type="checkbox" data-show="status"> <span data-i18n="inv.showStatus"></span></label>
+      <label><input type="checkbox" data-show="dates"> <span data-i18n="inv.showDates"></span></label>
     </div>
     <div id="check" class="check"></div>
     <ul id="warnings" class="warnings"></ul>

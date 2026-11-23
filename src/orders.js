@@ -11,6 +11,7 @@
   const A = globalThis.AliFa;
   const I = globalThis.AliFaI18n;
   const S = globalThis.AliFaSettings;
+  const R = globalThis.AliFaReceipts;
   const SEL_KEY = 'alifa.selection';
   // order status in the language of AliExpress, not of the extension
   const SKIP_STATUS = /cancel|closed|to pay|awaiting payment|unpaid|zrušen|nezaplaten/i;
@@ -127,12 +128,26 @@
         });
         const header = el.querySelector('.order-item-header') || el;
         header.insertBefore(pick, header.firstChild);
+        const one = document.createElement('button');
+        one.type = 'button';
+        one.className = 'alifa-one';
+        one.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          quickInvoice(readOrder(el));
+        });
+        header.insertBefore(one, pick.nextSibling);
       }
       const label = I.t('pick.label');
       const span = pick.querySelector('span');
       if (span.textContent !== label) {
         span.textContent = label;
         pick.title = I.t('pick.title');
+      }
+      const one = el.querySelector(':scope .alifa-one');
+      if (one && one.textContent !== I.t('pick.one')) {
+        one.textContent = I.t('pick.one');
+        one.title = I.t('pick.oneTitle');
       }
       pick.dataset.orderId = order.id;
       const on = state.selected.has(order.id);
@@ -253,6 +268,12 @@
             <span class="alifa-muted">${esc(I.t('batch.hint', { example: I.t('batch.example') }))}</span>
             <textarea class="alifa-batch-input" rows="4" spellcheck="false" placeholder="${esc(I.t('batch.example'))}"></textarea>
             <button type="button" class="alifa-btn alifa-batch-find">${esc(I.t('batch.find'))}</button>
+            <div class="alifa-range">
+              <span class="alifa-muted">${esc(I.t('batch.range'))}</span>
+              <span class="alifa-range-row"><input type="date" class="alifa-range-from" title="${esc(I.t('batch.from'))}" aria-label="${esc(I.t('batch.from'))}"> - <input type="date" class="alifa-range-to" title="${esc(I.t('batch.to'))}" aria-label="${esc(I.t('batch.to'))}"></span>
+              <span class="alifa-range-row"><select class="alifa-range-mode"><option value="day">${esc(I.t('batch.perDay'))}</option><option value="order">${esc(I.t('batch.perOrder'))}</option></select>
+                <button type="button" class="alifa-btn alifa-range-load">${esc(I.t('batch.load'))}</button></span>
+            </div>
             <ul class="alifa-batch-list"></ul>
             <button type="button" class="alifa-btn alifa-primary alifa-batch-all" hidden>${esc(I.t('batch.createAll'))}</button>
           </div>
@@ -339,6 +360,7 @@
       saveBatch();
     });
     panel.querySelector('.alifa-batch-find').addEventListener('click', findBatch);
+    panel.querySelector('.alifa-range-load').addEventListener('click', loadRange);
     panel.querySelector('.alifa-batch-all').addEventListener('click', () => {
       createBatch(state.batch.map((b, i) => (b.status === 'found' || b.status === 'ambiguous' ? i : -1)).filter((i) => i >= 0));
     });
@@ -460,7 +482,7 @@
     renderPanel();
     setStatus(esc(I.t('st.loadingOrder', { id })));
     try {
-      const o = A.normalizeReceipt(await fetchReceipt(id), id);
+      const o = A.normalizeReceipt(await R.fetchReceipt(id), id);
       const entry = {
         id: o.orderId || id,
         cents: o.totalCents,
@@ -577,7 +599,7 @@
           progress(I.t('st.probing', { date: I.date(day), n: probes }));
           let o = null;
           try {
-            o = A.normalizeReceipt(await fetchReceipt(id), id);
+            o = A.normalizeReceipt(await R.fetchReceipt(id), id);
           } catch (e) {
             o = null; // no such order, or it is not yours
           }
@@ -746,6 +768,7 @@
     all.hidden = !state.batch.some((b) => b.status === 'found' || b.status === 'ambiguous');
     all.disabled = state.busy;
     panel.querySelector('.alifa-batch-find').disabled = state.busy;
+    panel.querySelector('.alifa-range-load').disabled = state.busy;
     for (const btn of list.querySelectorAll('button')) btn.disabled = state.busy;
   }
 
@@ -814,67 +837,7 @@
 
   // ---------------------------------------------------------------- receipts and invoice
 
-  /** Bridge error ({ code, detail }) as text in the selected language. */
-  function bridgeErrorText(payload) {
-    let e = null;
-    try {
-      e = JSON.parse(payload);
-    } catch (x) {
-      return String(payload);
-    }
-    if (!e || !e.code) return String(payload);
-    if (e.code === 'other') return e.detail || '?';
-    if (e.code === 'badId') return I.t('err.badId', { id: e.detail });
-    const base = I.t('err.' + e.code);
-    return e.detail ? `${base} (${e.detail})` : base;
-  }
-
-  /** Code of a bridge error ('login', 'captcha', 'other', ...), or null. */
-  function bridgeErrorCode(payload) {
-    try {
-      const e = JSON.parse(payload);
-      return e && e.code ? e.code : null;
-    } catch (x) {
-      return null;
-    }
-  }
-
-  function fetchReceipt(orderId) {
-    return new Promise((resolve, reject) => {
-      const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2);
-      const timer = setTimeout(() => {
-        window.removeEventListener('message', onMessage);
-        reject(new Error(I.t('st.timeout')));
-      }, 30000);
-      function onMessage(ev) {
-        if (ev.source !== window || !ev.data || ev.data.__aliFaktura !== 'res' || ev.data.id !== id) return;
-        clearTimeout(timer);
-        window.removeEventListener('message', onMessage);
-        if (ev.data.ok) resolve(JSON.parse(ev.data.payload));
-        else {
-          const err = new Error(bridgeErrorText(ev.data.payload));
-          err.code = bridgeErrorCode(ev.data.payload);
-          reject(err);
-        }
-      }
-      window.addEventListener('message', onMessage);
-      window.postMessage({ __aliFaktura: 'req', id, orderId }, location.origin);
-    });
-  }
-
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-  // drafts of the last invoices: each invoice tab reads its own (?draft=<id>), older ones are removed
-  const MAX_DRAFTS = 30;
-
-  async function storeDraft(id, draft) {
-    const all = await chrome.storage.local.get(null);
-    const old = Object.keys(all).filter((k) => k.startsWith('alifa.draft.'))
-      .sort((a, b) => String(all[b].createdAt).localeCompare(String(all[a].createdAt)))
-      .slice(MAX_DRAFTS - 1);
-    if (old.length) await chrome.storage.local.remove(old);
-    await chrome.storage.local.set({ ['alifa.draft.' + id]: draft, 'alifa.draft': draft });
-  }
 
   /**
    * Loads the receipts of the orders, stores them as a draft and opens the invoice page in a new tab
@@ -886,7 +849,7 @@
     for (let i = 0; i < list.length; i++) {
       setStatus(esc(prefix + I.t('st.loadingReceipt', { i: i + 1, n: list.length })));
       try {
-        receipts.push(await fetchReceipt(list[i].id));
+        receipts.push(await R.fetchReceipt(list[i].id));
       } catch (e) {
         failed.push({ order: list[i], error: e.message, code: e.code || null });
       }
@@ -897,14 +860,13 @@
       setStatus(esc(prefix + I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>') + report, 'bad');
       return false;
     }
-    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    await storeDraft(id, {
+    await R.openDraft({
       createdAt: new Date().toISOString(),
       bankCents,
       receipts,
       listTotals: Object.fromEntries(list.map((o) => [o.id, o.cents])),
-    });
-    await chrome.runtime.sendMessage({ type: 'alifa-open-invoice', draft: id, active: !background });
+      listStatus: Object.fromEntries(list.map((o) => [o.id, o.status || ''])),
+    }, background);
     return true;
   }
 
@@ -953,6 +915,67 @@
     }
   }
 
+  /** Invoice of one order straight from its row, without changing the selection. */
+  async function quickInvoice(order) {
+    if (state.busy || !order || !order.id) return;
+    state.busy = true;
+    renderPanel();
+    try {
+      if (await openInvoice([order], null, '', false)) setStatus(esc(I.t('st.invoiceOpened')), 'ok');
+    } catch (e) {
+      setStatus(contextError(e) + reportFor(e), 'bad');
+    } finally {
+      state.busy = false;
+      renderPanel();
+    }
+  }
+
+  /** All paid orders of a period as rows of the batch: one invoice per day (usually one checkout) or per order. */
+  async function loadRange() {
+    if (state.busy) return;
+    const from = panel.querySelector('.alifa-range-from').value;
+    const to = panel.querySelector('.alifa-range-to').value || from;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(from)) {
+      setStatus(esc(I.t('batch.rangeDates')), 'bad');
+      return;
+    }
+    const perOrder = panel.querySelector('.alifa-range-mode').value === 'order';
+    state.busy = true;
+    renderPanel();
+    try {
+      for (let loads = 0; loads < MAX_LOADS_DATE; loads++) {
+        const oldest = oldestDate(domOrders());
+        if (oldest && oldest < from) break;
+        setStatus(esc(I.t('st.loadingToDate', { date: I.date(from), oldest: oldest ? I.date(oldest) : '?' })));
+        if ((await loadMore()) !== 'ok') break;
+      }
+      const inRange = loadedOrders().filter((o) => o.date && o.date >= from && o.date <= to)
+        .sort((a, b) => String(b.date).localeCompare(String(a.date)) || a.id.localeCompare(b.id));
+      const groups = new Map();
+      for (const o of inRange) {
+        const key = perOrder ? o.id : o.date;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(o);
+      }
+      state.batch = [...groups.values()].map((list) => ({
+        line: perOrder ? list[0].id : list[0].date,
+        cents: list.reduce((sum, o) => sum + o.cents, 0),
+        currency: list[0].currency,
+        date: list[0].date,
+        status: 'found',
+        foundDate: list[0].date,
+        orders: list.map((o) => ({ id: o.id, cents: o.cents, currency: o.currency, date: o.date, dateRaw: o.dateRaw, store: o.store, status: o.status })),
+      }));
+      saveBatch();
+      setStatus(esc(state.batch.length
+        ? I.plural(state.batch.length, 'plural.invoicesPrepared', { orders: orders(inRange.length) })
+        : I.t('batch.rangeEmpty')), state.batch.length ? 'ok' : 'bad');
+    } finally {
+      state.busy = false;
+      renderPanel();
+    }
+  }
+
   // ---------------------------------------------------------------- start
 
   async function start() {
@@ -973,7 +996,7 @@
     } catch (e) { /* the extension was updated in the meantime */ }
     let pending = null;
     new MutationObserver((mutations) => {
-      if (mutations.every((m) => panel.contains(m.target) || (m.target.closest && m.target.closest('.alifa-pick')))) return;
+      if (mutations.every((m) => panel.contains(m.target) || (m.target.closest && m.target.closest('.alifa-pick, .alifa-one')))) return;
       clearTimeout(pending);
       pending = setTimeout(() => { decorate(); renderPanel(); }, 250);
     }).observe(document.body, { childList: true, subtree: true });

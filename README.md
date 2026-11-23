@@ -14,11 +14,14 @@ One AliExpress checkout often becomes several orders from different stores, but 
 
 - **Tick orders** on the AliExpress "My orders" page or let the extension **find them by the bank amount** (and optionally the payment date, also 1 to 3 days earlier because banks post card payments later). It loads older orders by itself.
 - **Several payments at once**: paste the amounts and dates of your bank statement (one payment per line); the extension finds the orders of each payment and opens one invoice per payment.
+- **Credit notes** for refunded orders, from the same order receipts.
+- **One click per order**: an Invoice button next to every order and on the order detail page, or invoices for a whole period, one per day or per order.
+- **Your choice of details**: company logo, product images, stores, order status and order dates on the invoice, each optional.
 - **Accurate totals** from the official order receipt (the data behind AliExpress's "Receipt" button): items, shipping, discounts, fees and VAT. Summary lines shown twice, symbolic shipping that is not charged and orders skipped in the order list are handled.
 - **Missing orders**: add an order by its number from the confirmation e-mail. With a payment date the extension also fills in orders that AliExpress skipped in the list.
 - **Invoice** in any of the 17 languages, set separately from the interface: items, shipping and discounts as separate lines, or spread into item prices. Several customer companies (company ID, tax ID, VAT ID), optional notes for goods from an EU warehouse and for shipping without tracking, print or save as PDF without browser header and footer.
 - **Interface in 17 languages**: English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Czech, Slovak, Hungarian, Romanian, Ukrainian, Russian, Turkish, Japanese, Korean.
-- **Private**: runs only in your browser, reads only your own signed-in account, sends nothing anywhere. See [PRIVACY.md](PRIVACY.md).
+- **Private**: runs only in your browser, reads only your own signed-in account, sends nothing anywhere, no affiliate links. See [PRIVACY.md](PRIVACY.md).
 
 ## Install
 

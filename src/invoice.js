@@ -58,6 +58,10 @@
     // the checkboxes remember their state: they stay as last set for the next invoice
     euWarehouse: settings.euDefault !== false, // "EU Stock" on items
     shipNote: !!settings.shipNoteOn, // "(no tracking)" on Shipping and fees
+    docType: 'invoice', // or 'credit': a credit note for the refunded amounts
+    date: '', // date of issue typed in the toolbar ('' = automatic)
+    invoiceNumber: '', // the last invoice number, a credit note refers to it
+    show: Object.assign({ logo: true, images: false, stores: true, status: false, dates: false }, settings.show),
   };
   const edits = {}; // edited item names: "orderId:index" -> text
 
@@ -93,6 +97,8 @@
   $('title').value = ui.title;
   $('eu').checked = ui.euWarehouse;
   $('ship').checked = ui.shipNote;
+  for (const box of document.querySelectorAll('[data-show]')) box.checked = !!ui.show[box.dataset.show];
+  $('docTypeWrap').hidden = !orders.some((o) => o.refund && o.refund.cents);
   $('bank').value = bankText(ui.bankCents);
   document.querySelector(`input[name="mode"][value="${ui.mode}"]`).checked = true;
 
@@ -145,6 +151,22 @@
     render();
     await S.save(settings);
   });
+  for (const box of document.querySelectorAll('[data-show]')) {
+    box.addEventListener('change', async () => {
+      ui.show[box.dataset.show] = box.checked;
+      settings.show = Object.assign({}, ui.show);
+      render();
+      await S.save(settings);
+    });
+  }
+  $('docType').addEventListener('change', (e) => {
+    ui.docType = e.target.value;
+    ui.numberTouched = false;
+    ui.date = '';
+    $('docDate').value = '';
+    render();
+  });
+  $('docDate').addEventListener('input', (e) => { ui.date = e.target.value; render(); });
   $('print').addEventListener('click', () => window.print());
   $('settings').addEventListener('click', () => {
     if (hasExt && chrome.runtime && chrome.runtime.openOptionsPage) chrome.runtime.openOptionsPage();
@@ -196,10 +218,10 @@
     return v === S.DEFAULTS[field] ? T(key) : v;
   }
 
-  const DEFAULT_TITLES = new Set([S.DEFAULTS.title].concat(I.LANGS.map((l) => I.tIn(l.code, 'doc.invoice'))));
+  const DEFAULT_TITLES = new Set([S.DEFAULTS.title].concat(...I.LANGS.map((l) => [I.tIn(l.code, 'doc.invoice'), I.tIn(l.code, 'doc.creditNote')])));
 
   function docTitle() {
-    return DEFAULT_TITLES.has(ui.title) ? T('doc.invoice') : ui.title;
+    return DEFAULT_TITLES.has(ui.title) ? T(ui.docType === 'credit' ? 'doc.creditNote' : 'doc.invoice') : ui.title;
   }
 
   function docSupplier() {
@@ -248,6 +270,13 @@
     return `<tr${cls ? ` class="${cls}"` : ''}><td>${esc(label)}</td><td>${esc(value)}</td></tr>`;
   }
 
+  /** Picture of an item from the receipt (AliExpress sometimes gives it without the protocol). */
+  function imgSrc(url) {
+    const u = String(url || '');
+    if (u.startsWith('//')) return 'https:' + u;
+    return /^https:\/\//.test(u) ? u : '';
+  }
+
   function render() {
     const doc = $('doc');
     if (!orders.length) {
@@ -256,6 +285,7 @@
       return;
     }
 
+    const credit = ui.docType === 'credit';
     if (DEFAULT_TITLES.has(ui.title) && ui.title !== docTitle()) {
       ui.title = docTitle();
       $('title').value = ui.title;
@@ -266,16 +296,26 @@
     const money = (c) => I.moneyIn(docLang, c, cur); // on the invoice (invoice language)
     const uiMoney = (c) => I.money(c, cur); // in on-screen messages (interface language)
     const profile = settings.profiles.find((p) => p.id === ui.profileId) || settings.profiles[0];
-    // combined orders are paid on one day: issue date = payment date = order date
+    // combined orders are paid on one day: issue date = payment date = order date; a credit note is issued today
     const docDate = inv.lastPaidDate || inv.firstPaidDate || todayIso();
+    const issueDate = ui.date || (credit ? todayIso() : docDate);
+    if (!ui.date && document.activeElement !== $('docDate')) $('docDate').value = issueDate;
+    const prefix = settings.numberPrefix || 'AE';
+    const refunded = inv.orders.filter((o) => o.refund && o.refund.cents);
+    const refundCents = refunded.reduce((sum, o) => sum + o.refund.cents, 0);
+    const invoiceNo = ui.invoiceNumber || `${prefix}-${docDate.replace(/-/g, '')}-${inv.paidCents}`;
     if (!ui.numberTouched) {
-      ui.number = `${settings.numberPrefix || 'AE'}-${docDate.replace(/-/g, '')}-${inv.paidCents}`;
+      ui.number = credit ? `${prefix}-CN-${issueDate.replace(/-/g, '')}-${refundCents}` : `${prefix}-${docDate.replace(/-/g, '')}-${inv.paidCents}`;
       $('number').value = ui.number;
     }
+    if (!credit) ui.invoiceNumber = ui.number;
 
     // ---- check and warnings (screen only)
     const check = $('check');
-    if (inv.bankDiffCents === null) {
+    if (credit) {
+      check.className = 'check';
+      check.textContent = I.t('inv.checkRefund', { amount: uiMoney(refundCents) });
+    } else if (inv.bankDiffCents === null) {
       check.className = 'check';
       check.textContent = I.t('inv.checkNone', { amount: uiMoney(inv.paidCents) });
     } else if (inv.bankDiffCents === 0) {
@@ -308,16 +348,19 @@
       profile.icdph ? T('opt.f.icdph') + ': ' + profile.icdph : '',
     ].filter(Boolean).join('\n');
     const methods = [...new Set(inv.orders.map(paymentText))];
+    const logo = ui.show.logo && profile.logo ? `<img class="doc-logo" src="${esc(profile.logo)}" alt="">` : '';
 
     const head = `
       <div class="doc-head">
         <div>
+          ${logo}
           <h1>${esc(docTitle())}</h1>
           <div class="doc-no">${esc(T('doc.no'))} ${esc(ui.number)}</div>
+          ${credit ? `<div class="doc-ref">${esc(T('doc.toInvoice', { number: invoiceNo }))}</div>` : ''}
         </div>
         <table class="meta">
-          <tr><td>${esc(T('doc.issueDate'))}</td><td>${esc(dateText(docDate))}</td></tr>
-          <tr><td>${esc(T('doc.paymentDate'))}</td><td>${esc(dateText(docDate))}</td></tr>
+          <tr><td>${esc(T('doc.issueDate'))}</td><td>${esc(dateText(issueDate))}</td></tr>
+          ${credit ? '' : `<tr><td>${esc(T('doc.paymentDate'))}</td><td>${esc(dateText(docDate))}</td></tr>`}
           <tr><td>${esc(T('doc.paymentMethod'))}</td><td>${esc(methods.join(', '))}</td></tr>
         </table>
       </div>
@@ -335,39 +378,55 @@
         </div>
       </div>`;
 
-    // ---- items
+    // ---- order heading: the number, and the stores, status and date when they are switched on
+    const orderHead = (o) => {
+      const extra = [];
+      if (ui.show.stores && o.sellers.length) extra.push(o.sellers.join(', '));
+      const status = ui.show.status && draft.listStatus ? draft.listStatus[o.orderId] : '';
+      if (status) extra.push(status);
+      const day = o.paidDate || o.orderDate;
+      if (ui.show.dates && day) extra.push(dateText(day));
+      else if (o.paidDate && o.paidDate !== docDate) extra.push(T('doc.paidOn', { date: dateText(o.paidDate) }));
+      return `<tr class="order-head"><td colspan="5">${esc(T('doc.orderNo'))} <b>${esc(o.orderId)}</b>${extra.length ? ` (${esc(extra.join(', '))})` : ''}</td></tr>`;
+    };
+
+    // ---- items (a credit note has one line per refunded order)
     let n = 0;
-    const bodies = inv.orders.map((o) => {
-      const sellers = o.sellers.join(', ');
-      const otherDay = o.paidDate && o.paidDate !== docDate ? ', ' + T('doc.paidOn', { date: dateText(o.paidDate) }) : '';
-      const headRow = `<tr class="order-head"><td colspan="5">${esc(T('doc.orderNo'))} <b>${esc(o.orderId)}</b>${sellers || otherDay ? ` (${esc(sellers)}${esc(otherDay)})` : ''}</td></tr>`;
-      // "Shipping without tracking" checkbox: "(no tracking)" on the "Shipping and fees" line
-      const shipText = ui.shipNote ? docText('shipNote', 'doc.shipNote') : '';
-      const labelFor = (l) => (shipText && l.key === 'totalReceivableTaxAmount' ? `${lineLabel(l)} ${shipText}` : lineLabel(l));
-      const chargeRow = (cls, label, cents) =>
-        `<tr class="${cls}"><td class="num"></td><td>${esc(label)}</td><td class="qty"></td><td class="unit"></td><td class="sum">${esc(money(cents))}</td></tr>`;
-      const rows = o.lines.map((l, idx) => {
-        if (l.kind === 'item') {
-          n++;
-          const key = o.orderId + ':' + idx;
-          const title = edits[key] !== undefined ? edits[key] : l.title;
-          const unit = ui.mode === 'allocated' ? I.unitIn(docLang, l.lineCents, l.qty, cur) : money(l.unitCents);
-          // "Shipped from an EU warehouse" checkbox: "EU Stock" in the variant line, the way AliExpress writes it ("2pcs, PL Stock")
-          const euText = ui.euWarehouse ? docText('euNote', 'doc.euNote') : '';
-          const eu = euText && !l.sku.toLowerCase().includes(euText.toLowerCase()) ? euText : '';
-          const sku = [l.sku, eu].filter(Boolean).join(', ');
-          return `<tr class="item"><td class="num">${n}.</td>` +
-            `<td><div class="title" contenteditable="plaintext-only" spellcheck="false" data-key="${esc(key)}">${esc(title)}</div>` +
-            `${sku ? `<div class="sku">${esc(sku)}</div>` : ''}</td>` +
-            `<td class="qty">${esc(I.pluralIn(docLang, l.qty, 'doc.pcs'))}</td><td class="unit">${esc(unit)}</td><td class="sum">${esc(money(l.lineCents))}</td></tr>`;
-        }
-        // receipt sub-lines (customs duty and benefit breakdowns) are not printed on the invoice, only the main lines
-        return chargeRow(l.kind, labelFor(l), l.lineCents);
+    const bodies = credit
+      ? refunded.map((o) => {
+        n++;
+        return `<tbody>${orderHead(o)}<tr class="item"><td class="num">${n}.</td><td><div class="title">${esc(T('doc.refundFor', { id: o.orderId }))}</div></td>` +
+          `<td class="qty"></td><td class="unit"></td><td class="sum">${esc(money(-o.refund.cents))}</td></tr></tbody>`;
+      }).join('')
+      : inv.orders.map((o) => {
+        // "Shipping without tracking" checkbox: "(no tracking)" on the "Shipping and fees" line
+        const shipText = ui.shipNote ? docText('shipNote', 'doc.shipNote') : '';
+        const labelFor = (l) => (shipText && l.key === 'totalReceivableTaxAmount' ? `${lineLabel(l)} ${shipText}` : lineLabel(l));
+        const chargeRow = (cls, label, cents) =>
+          `<tr class="${cls}"><td class="num"></td><td>${esc(label)}</td><td class="qty"></td><td class="unit"></td><td class="sum">${esc(money(cents))}</td></tr>`;
+        const rows = o.lines.map((l, idx) => {
+          if (l.kind === 'item') {
+            n++;
+            const key = o.orderId + ':' + idx;
+            const title = edits[key] !== undefined ? edits[key] : l.title;
+            const unit = ui.mode === 'allocated' ? I.unitIn(docLang, l.lineCents, l.qty, cur) : money(l.unitCents);
+            // "Shipped from an EU warehouse" checkbox: "EU Stock" in the variant line, the way AliExpress writes it ("2pcs, PL Stock")
+            const euText = ui.euWarehouse ? docText('euNote', 'doc.euNote') : '';
+            const eu = euText && !l.sku.toLowerCase().includes(euText.toLowerCase()) ? euText : '';
+            const sku = [l.sku, eu].filter(Boolean).join(', ');
+            const img = ui.show.images && imgSrc(l.img) ? `<img class="item-img" src="${esc(imgSrc(l.img))}" alt="">` : '';
+            return `<tr class="item"><td class="num">${n}.</td>` +
+              `<td>${img}<div class="title" contenteditable="plaintext-only" spellcheck="false" data-key="${esc(key)}">${esc(title)}</div>` +
+              `${sku ? `<div class="sku">${esc(sku)}</div>` : ''}</td>` +
+              `<td class="qty">${esc(I.pluralIn(docLang, l.qty, 'doc.pcs'))}</td><td class="unit">${esc(unit)}</td><td class="sum">${esc(money(l.lineCents))}</td></tr>`;
+          }
+          // receipt sub-lines (customs duty and benefit breakdowns) are not printed on the invoice, only the main lines
+          return chargeRow(l.kind, labelFor(l), l.lineCents);
+        }).join('');
+        const allocation = ui.mode === 'allocated' ? allocationNote(o, money, labelFor) : '';
+        const total = `<tr class="order-total"><td class="num"></td><td colspan="3">${esc(T('doc.orderTotal'))}</td><td class="sum">${esc(money(o.totalCents))}</td></tr>`;
+        return `<tbody>${orderHead(o)}${allocation}${rows}${total}</tbody>`;
       }).join('');
-      const note = ui.mode === 'allocated' ? allocationNote(o, money, labelFor) : '';
-      const total = `<tr class="order-total"><td class="num"></td><td colspan="3">${esc(T('doc.orderTotal'))}</td><td class="sum">${esc(money(o.totalCents))}</td></tr>`;
-      return `<tbody>${headRow}${note}${rows}${total}</tbody>`;
-    }).join('');
 
     const table = `
       <table class="items">
@@ -377,21 +436,25 @@
 
     // ---- totals
     const t = [];
-    if (inv.includedTaxCents !== null && inv.includedTaxComplete) {
-      t.push(totalRow(T('doc.totalExclVat'), money(inv.totalCents - inv.includedTaxCents), 'muted'));
-      t.push(totalRow(`${T('doc.vat')}${inv.vatRate ? ' ' + inv.vatRate + '%' : ''}`, money(inv.includedTaxCents), 'muted'));
-    }
-    if (inv.bonusCents) {
-      t.push(totalRow(T('doc.total'), money(inv.totalCents)));
-      t.push(totalRow(T('doc.paidCredit'), money(-inv.bonusCents)));
-      t.push(totalRow(T('doc.paidCard'), money(inv.paidCents), 'grand'));
+    if (credit) {
+      t.push(totalRow(T('doc.total'), money(-refundCents), 'grand'));
     } else {
-      t.push(totalRow(T('doc.total'), money(inv.totalCents), 'grand'));
+      if (inv.includedTaxCents !== null && inv.includedTaxComplete) {
+        t.push(totalRow(T('doc.totalExclVat'), money(inv.totalCents - inv.includedTaxCents), 'muted'));
+        t.push(totalRow(`${T('doc.vat')}${inv.vatRate ? ' ' + inv.vatRate + '%' : ''}`, money(inv.includedTaxCents), 'muted'));
+      }
+      if (inv.bonusCents) {
+        t.push(totalRow(T('doc.total'), money(inv.totalCents)));
+        t.push(totalRow(T('doc.paidCredit'), money(-inv.bonusCents)));
+        t.push(totalRow(T('doc.paidCard'), money(inv.paidCents), 'grand'));
+      } else {
+        t.push(totalRow(T('doc.total'), money(inv.totalCents), 'grand'));
+      }
     }
     const totals = `<div class="totals"><table>${t.join('')}</table></div>`;
 
     // note at the bottom of the invoice from the settings (empty = none)
-    const note = docText('invoiceNote', 'doc.note');
+    const note = String(settings.invoiceNote || '').trim();
     const foot = note ? `<p class="doc-foot">${esc(note)}</p>` : '';
     doc.lang = docLang;
     doc.innerHTML = head + table + totals + foot;

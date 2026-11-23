@@ -43,6 +43,13 @@
         <div class="grid">
           ${FIELDS.map(([key, label, cls]) => `<label class="${cls}">${esc(I.t(label))}<input data-field="${key}" type="text" value="${esc(p[key])}"></label>`).join('')}
         </div>
+        <div class="row logo-row">
+          <span class="logo-label">${esc(I.t('opt.logo'))}</span>
+          ${p.logo ? `<img class="logo-preview" src="${esc(p.logo)}" alt="">` : ''}
+          <label class="btn file-btn"><span>${esc(I.t('opt.logoChoose'))}</span><input type="file" accept="image/png,image/jpeg,image/webp" data-logo="${i}" hidden></label>
+          ${p.logo ? `<button type="button" class="btn" data-logo-remove="${i}">${esc(I.t('opt.logoRemove'))}</button>` : ''}
+          <span class="muted">${esc(I.t('opt.logoHint'))}</span>
+        </div>
         <div class="row">
           <label class="default"><input type="radio" name="default" value="${esc(p.id)}" ${p.id === settings.profileId ? 'checked' : ''}> ${esc(I.t('opt.default'))}</label>
           <span class="spacer"></span>
@@ -62,7 +69,7 @@
 
   function collect() {
     const profiles = [...document.querySelectorAll('#profiles .card')].map((card, i) => {
-      const p = { id: settings.profiles[i].id };
+      const p = { id: settings.profiles[i].id, logo: settings.profiles[i].logo || '' };
       for (const [key] of FIELDS) p[key] = card.querySelector(`[data-field="${key}"]`).value.trim();
       return p;
     });
@@ -116,6 +123,49 @@
     settings = collect();
     const removed = settings.profiles.splice(Number(btn.dataset.remove), 1)[0];
     if (removed && removed.id === settings.profileId) settings.profileId = settings.profiles[0].id;
+    render();
+  });
+  /** Image file -> PNG data URL of at most 600 x 200 px, so the settings stay small. */
+  function logoDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, 600 / img.naturalWidth, 200 / img.naturalHeight);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('image'));
+      };
+      img.src = url;
+    });
+  }
+
+  // logo of a company: chosen here, saved with the Save button like the other fields
+  $('profiles').addEventListener('change', async (e) => {
+    const input = e.target.closest('[data-logo]');
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    settings = collect();
+    try {
+      settings.profiles[Number(input.dataset.logo)].logo = await logoDataUrl(file);
+    } catch (err) {
+      flash(I.t('opt.logoFailed'));
+      return;
+    }
+    render();
+  });
+  $('profiles').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-logo-remove]');
+    if (!btn) return;
+    settings = collect();
+    settings.profiles[Number(btn.dataset.logoRemove)].logo = '';
     render();
   });
   $('save').addEventListener('click', async () => {

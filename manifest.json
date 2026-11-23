@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "minimum_chrome_version": "131",
@@ -26,14 +26,20 @@
   "options_page": "src/options.html",
   "content_scripts": [
     {
-      "matches": ["https://*.aliexpress.com/p/order/index.html*"],
+      "matches": ["https://*.aliexpress.com/p/order/index.html*", "https://*.aliexpress.com/p/order/detail.html*"],
       "js": ["src/page-bridge.js"],
       "world": "MAIN",
       "run_at": "document_idle"
     },
     {
       "matches": ["https://*.aliexpress.com/p/order/index.html*"],
-      "js": ["src/core.js", "src/settings.js", "src/i18n.js", "src/orders.js"],
+      "js": ["src/core.js", "src/settings.js", "src/i18n.js", "src/receipts.js", "src/orders.js"],
+      "css": ["src/orders.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.aliexpress.com/p/order/detail.html*"],
+      "js": ["src/core.js", "src/settings.js", "src/i18n.js", "src/receipts.js", "src/detail.js"],
       "css": ["src/orders.css"],
       "run_at": "document_idle"
     }

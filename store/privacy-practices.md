@@ -9,10 +9,10 @@ Combine selected AliExpress orders that were paid with one bank payment into one
 ## Permission justification
 
 **storage**
-Saves the user's company details (invoice recipient), invoice texts, language and the last created invoice locally in the browser (`chrome.storage.local`).
+Saves the user's company details and logo (invoice recipient), invoice texts, language and the last created invoices locally in the browser (`chrome.storage.local`).
 
-**Host permission** (content scripts on `https://*.aliexpress.com/p/order/index.html*`)
-The extension runs only on the AliExpress "My orders" page. It adds checkboxes and a panel there and reads the order receipts of the signed-in user through the page's own AliExpress request library to build the invoice. It does not run on any other site.
+**Host permission** (content scripts on `https://*.aliexpress.com/p/order/index.html*` and `https://*.aliexpress.com/p/order/detail.html*`)
+The extension runs only on the AliExpress "My orders" page and the order detail page. It adds checkboxes, a panel and an invoice button there and reads the order receipts of the signed-in user through the page's own AliExpress request library to build the invoice. It does not run on any other site.
 
 ## Remote code
 

@@ -34,6 +34,9 @@ All amounts come from the official receipt of each order (the same data AliExpre
 FEATURES
 • Find orders by bank amount and payment date (also 1 to 3 days before it, because banks post card payments later)
 • Several payments at once: paste amounts and dates from your bank statement and get one invoice per payment
+• Credit notes for refunded orders
+• One-click invoice for a single order, also on the order detail page, and invoices for a whole period (one per day or per order)
+• Your logo, product images, stores, order status and dates on the invoice, each optional
 • Add a missing order by its number from the confirmation e-mail
 • Items, shipping and discounts as separate lines, or spread into item prices (handy for stock records)
 • Several companies with company ID, tax ID and VAT ID
@@ -42,7 +45,7 @@ FEATURES
 • Backup and restore of settings
 
 PRIVACY
-Everything runs in your browser. The extension reads orders only from your own signed-in AliExpress account, keeps settings only locally and sends no data anywhere. No account, no tracking, no ads. Source code: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Everything runs in your browser. The extension reads orders only from your own signed-in AliExpress account, keeps settings only locally and sends no data anywhere. No sign-up, no tracking, no ads, no affiliate links. Source code: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 This extension is not affiliated with AliExpress or Alibaba. The invoice is compiled by you from your AliExpress order data; check your local accounting rules for how to use it.
 ```
@@ -71,6 +74,9 @@ Všetky sumy pochádzajú z oficiálnej účtenky každej objednávky (rovnaké 
 FUNKCIE
 • Hľadanie objednávok podľa sumy z banky a dátumu platby (aj 1 až 3 dni pred ním, pretože banky zaúčtujú platby kartou neskôr)
 • Viac platieb naraz: samostatná faktúra ku každej platbe po vložení súm a dátumov z výpisu z banky
+• Dobropisy k objednávkam, za ktoré sa vrátili peniaze
+• Faktúra k jednej objednávke jedným kliknutím, aj na stránke s detailom objednávky, a faktúry za celé obdobie (jedna na deň alebo na objednávku)
+• Vlastné logo, obrázky produktov, obchody, stav a dátum objednávok na faktúre, každé sa dá zapnúť zvlášť
 • Pridanie chýbajúcej objednávky podľa jej čísla z potvrdzujúceho e-mailu
 • Položky, doprava a zľavy v samostatných riadkoch alebo rozpočítané do cien položiek (hodí sa na skladovú evidenciu)
 • Viac firiem s IČO, DIČ a IČ DPH
@@ -79,7 +85,7 @@ FUNKCIE
 • Záloha a obnovenie nastavení
 
 SÚKROMIE
-Všetko beží v tvojom prehliadači. Doplnok číta objednávky len z tvojho vlastného prihláseného účtu na AliExpresse, nastavenia ukladá len lokálne a nikam neposiela žiadne údaje. Bez registrácie, bez sledovania, bez reklám. Zdrojový kód: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Všetko beží v tvojom prehliadači. Doplnok číta objednávky len z tvojho vlastného prihláseného účtu na AliExpresse, nastavenia ukladá len lokálne a nikam neposiela žiadne údaje. Bez registrácie, bez sledovania, bez reklám, bez affiliate odkazov. Zdrojový kód: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Tento doplnok nie je spojený s AliExpressom ani s Alibabou. Faktúru zostavuješ ty z údajov o svojich objednávkach na AliExpresse; v účtovných predpisoch svojej krajiny si over, ako ju použiť.
 ```
@@ -103,6 +109,9 @@ Všechny částky pocházejí z oficiální účtenky každé objednávky (stejn
 FUNKCE
 • Hledání objednávek podle částky z banky a data platby (i 1 až 3 dny před ním, protože banky zaúčtují platby kartou později)
 • Více plateb najednou: samostatná faktura ke každé platbě po vložení řádků s částkou a datem z bankovního výpisu
+• Dobropisy k objednávkám, za které se vrátily peníze
+• Faktura k jedné objednávce jedním kliknutím, i na stránce s detailem objednávky, a faktury za celé období (jedna na den nebo na objednávku)
+• Vlastní logo, obrázky produktů, obchody, stav a datum objednávek na faktuře, každé lze zapnout zvlášť
 • Přidání chybějící objednávky podle jejího čísla z potvrzovacího e-mailu
 • Položky, doprava a slevy na samostatných řádcích nebo rozpočítané do cen položek (hodí se pro skladovou evidenci)
 • Více firem s IČO, DIČ a DIČ pro DPH
@@ -111,7 +120,7 @@ FUNKCE
 • Záloha a obnovení nastavení
 
 SOUKROMÍ
-Vše běží ve vašem prohlížeči. Doplněk čte objednávky jen z vašeho vlastního přihlášeného účtu na AliExpressu, nastavení ukládá jen lokálně a nikam neposílá žádná data. Bez registrace, bez sledování, bez reklam. Zdrojový kód: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Vše běží ve vašem prohlížeči. Doplněk čte objednávky jen z vašeho vlastního přihlášeného účtu na AliExpressu, nastavení ukládá jen lokálně a nikam neposílá žádná data. Bez registrace, bez sledování, bez reklam, bez affiliate odkazů. Zdrojový kód: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Tento doplněk není spojen s AliExpressem ani s Alibabou. Fakturu sestavujete vy z údajů o svých objednávkách na AliExpressu; v účetních předpisech své země si ověřte, jak ji použít.
 ```
@@ -135,6 +144,9 @@ Minden összeg az egyes rendelések hivatalos nyugtájáról származik (ugyanaz
 FUNKCIÓK
 • Rendelések keresése a banki összeg és a fizetés dátuma alapján (az azt megelőző 1-3 napon is, mert a bankok később könyvelik a kártyás fizetéseket)
 • Több fizetés egyszerre: a bankszámlakivonatból beillesztett összegek és dátumok alapján minden fizetéshez külön számla
+• Helyesbítő számlák a visszatérített rendelésekhez
+• Számla egyetlen rendelésről egy kattintással, a rendelés részleteinek oldalán is, valamint számlák egy teljes időszakra (naponta vagy rendelésenként egy)
+• Saját logó, termékképek, boltok, a rendelések állapota és dátuma a számlán, mindegyik külön bekapcsolható
 • Hiányzó rendelés hozzáadása a visszaigazoló e-mailben szereplő száma alapján
 • Tételek, szállítás és kedvezmények külön sorban vagy a tételárakba osztva (hasznos a készletnyilvántartáshoz)
 • Több cég cégazonosítóval, adószámmal és közösségi adószámmal
@@ -143,7 +155,7 @@ FUNKCIÓK
 • A beállítások biztonsági mentése és visszaállítása
 
 ADATVÉDELEM
-Minden a böngésződben fut. A bővítmény csak a saját, bejelentkezett AliExpress-fiókodból olvassa a rendeléseket, a beállításokat csak helyben tárolja, és semmilyen adatot nem küld sehová. Nincs regisztráció, nincs nyomon követés, nincsenek hirdetések. Forráskód: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Minden a böngésződben fut. A bővítmény csak a saját, bejelentkezett AliExpress-fiókodból olvassa a rendeléseket, a beállításokat csak helyben tárolja, és semmilyen adatot nem küld sehová. Nincs regisztráció, nincs nyomon követés, nincsenek hirdetések, nincsenek affiliate linkek. Forráskód: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Ez a bővítmény független az AliExpresstől és az Alibabától. A számlát te állítod össze az AliExpress-rendeléseid adataiból; az országodban érvényes számviteli szabályokban nézd meg, hogyan használhatod.
 ```
@@ -167,6 +179,9 @@ Wszystkie kwoty pochodzą z oficjalnego paragonu każdego zamówienia (te same d
 FUNKCJE
 • Wyszukiwanie zamówień według kwoty z banku i daty płatności (także od 1 do 3 dni przed nią, bo banki księgują płatności kartą później)
 • Kilka płatności naraz: osobna faktura dla każdej płatności po wklejeniu kwot i dat z wyciągu bankowego
+• Faktury korygujące do zamówień ze zwrotem pieniędzy
+• Faktura do jednego zamówienia jednym kliknięciem, także na stronie szczegółów zamówienia, oraz faktury za cały okres (jedna na dzień lub na zamówienie)
+• Własne logo, zdjęcia produktów, sklepy, status i data zamówień na fakturze, każdy element można włączyć osobno
 • Dodanie brakującego zamówienia według jego numeru z e-maila potwierdzającego
 • Pozycje, wysyłka i rabaty w osobnych wierszach albo rozliczone w cenach pozycji (przydatne w ewidencji magazynowej)
 • Kilka firm z numerami REGON, NIP i NIP UE
@@ -175,7 +190,7 @@ FUNKCJE
 • Kopia zapasowa i przywracanie ustawień
 
 PRYWATNOŚĆ
-Wszystko działa w twojej przeglądarce. Rozszerzenie odczytuje zamówienia tylko z twojego własnego zalogowanego konta AliExpress, przechowuje ustawienia tylko lokalnie i nigdzie nie wysyła żadnych danych. Bez rejestracji, bez śledzenia, bez reklam. Kod źródłowy: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Wszystko działa w twojej przeglądarce. Rozszerzenie odczytuje zamówienia tylko z twojego własnego zalogowanego konta AliExpress, przechowuje ustawienia tylko lokalnie i nigdzie nie wysyła żadnych danych. Bez rejestracji, bez śledzenia, bez reklam, bez linków afiliacyjnych. Kod źródłowy: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 To rozszerzenie nie jest powiązane z AliExpress ani z Alibabą. Fakturę zestawiasz ty na podstawie danych swoich zamówień z AliExpress; sprawdź w przepisach księgowych obowiązujących w twoim kraju, jak z niej korzystać.
 ```
@@ -199,6 +214,9 @@ Alle Beträge stammen aus dem offiziellen Beleg jeder Bestellung (dieselben Date
 FUNKTIONEN
 • Suche nach Bestellungen anhand von Bankbetrag und Zahlungsdatum (auch 1 bis 3 Tage davor, weil Banken Kartenzahlungen später buchen)
 • Mehrere Zahlungen auf einmal: eine eigene Rechnung für jede Zahlung nach dem Einfügen von Beträgen und Datumsangaben aus dem Kontoauszug
+• Gutschriften für erstattete Bestellungen
+• Rechnung für eine einzelne Bestellung mit einem Klick, auch auf der Detailseite der Bestellung, und Rechnungen für einen ganzen Zeitraum (eine pro Tag oder pro Bestellung)
+• Ihr Logo, Produktbilder, Shops, Bestellstatus und Bestelldatum auf der Rechnung, jeweils optional
 • Hinzufügen einer fehlenden Bestellung über ihre Nummer aus der Bestätigungs-E-Mail
 • Positionen, Versand und Rabatte als getrennte Zeilen oder auf die Positionspreise verteilt (praktisch für die Lagerbuchhaltung)
 • Mehrere Firmen mit Firmen-ID, Steuernummer und USt-IdNr.
@@ -207,7 +225,7 @@ FUNKTIONEN
 • Sicherung und Wiederherstellung der Einstellungen
 
 DATENSCHUTZ
-Alles läuft in Ihrem Browser. Die Erweiterung liest Bestellungen nur aus Ihrem eigenen AliExpress-Konto, bei dem Sie angemeldet sind, speichert Einstellungen nur lokal und sendet nirgendwohin Daten. Keine Registrierung, kein Tracking, keine Werbung. Quellcode: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Alles läuft in Ihrem Browser. Die Erweiterung liest Bestellungen nur aus Ihrem eigenen AliExpress-Konto, bei dem Sie angemeldet sind, speichert Einstellungen nur lokal und sendet nirgendwohin Daten. Keine Registrierung, kein Tracking, keine Werbung, keine Affiliate-Links. Quellcode: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Diese Erweiterung steht in keiner Verbindung zu AliExpress oder Alibaba. Die Rechnung stellen Sie selbst aus Ihren AliExpress-Bestelldaten zusammen; prüfen Sie anhand der in Ihrem Land geltenden Buchführungsvorschriften, wie Sie sie verwenden können.
 ```
@@ -231,6 +249,9 @@ Toate sumele provin din chitanța oficială a fiecărei comenzi (aceleași date 
 FUNCȚII
 • Căutarea comenzilor după suma de la bancă și data plății (și cu 1 până la 3 zile înainte, deoarece băncile înregistrează plățile cu cardul mai târziu)
 • Mai multe plăți deodată: este suficient să lipiți sumele și datele din extrasul bancar, iar extensia creează câte o factură pentru fiecare plată
+• Facturi de stornare pentru comenzile rambursate
+• Factură pentru o singură comandă cu un singur clic, inclusiv pe pagina cu detaliile comenzii, și facturi pentru o perioadă întreagă (câte una pe zi sau pe comandă)
+• Logoul dumneavoastră, imaginile produselor, magazinele, starea și datele comenzilor pe factură, fiecare opțional
 • Adăugarea unei comenzi lipsă după numărul ei din e-mailul de confirmare
 • Articole, transport și reduceri pe rânduri separate sau repartizate în prețurile articolelor (util pentru evidența stocurilor)
 • Mai multe firme, cu număr de înregistrare, cod fiscal și cod de TVA
@@ -239,7 +260,7 @@ FUNCȚII
 • Copierea de rezervă și restaurarea setărilor
 
 CONFIDENȚIALITATE
-Totul rulează în browserul dumneavoastră. Extensia citește comenzile doar din propriul cont AliExpress, la care v-ați conectat, păstrează setările doar local și nu trimite date nicăieri. Fără înregistrare, fără urmărire, fără reclame. Codul sursă: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Totul rulează în browserul dumneavoastră. Extensia citește comenzile doar din propriul cont AliExpress, la care v-ați conectat, păstrează setările doar local și nu trimite date nicăieri. Fără înregistrare, fără urmărire, fără reclame, fără linkuri de afiliere. Codul sursă: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Această extensie nu este afiliată cu AliExpress sau Alibaba. Factura o întocmiți chiar dumneavoastră, pe baza datelor din comenzile AliExpress; verificați în regulile contabile locale cum o puteți folosi.
 ```
@@ -263,6 +284,9 @@ Todos los importes proceden del recibo oficial de cada pedido (los mismos datos 
 FUNCIONES
 • Buscar pedidos por el importe del banco y la fecha de pago (también de 1 a 3 días antes, porque los bancos registran los pagos con tarjeta más tarde)
 • Varios pagos a la vez: pegar los importes y las fechas de tu extracto bancario y obtener una factura por cada pago
+• Facturas rectificativas para los pedidos reembolsados
+• Factura de un solo pedido con un clic, también en la página de detalles del pedido, y facturas de todo un período (una por día o por pedido)
+• Tu logotipo, imágenes de productos, tiendas, estado y fecha de los pedidos en la factura, cada uno opcional
 • Añadir un pedido que falta por su número del correo de confirmación
 • Artículos, envío y descuentos en líneas separadas o repartidos en los precios de los artículos (práctico para el control de existencias)
 • Varias empresas con número de empresa, NIF y NIF-IVA
@@ -271,7 +295,7 @@ FUNCIONES
 • Copia de seguridad y restauración de los ajustes
 
 PRIVACIDAD
-Todo se ejecuta en tu navegador. La extensión lee los pedidos solo de tu propia cuenta de AliExpress con la sesión iniciada, guarda los ajustes únicamente de forma local y no envía ningún dato a ninguna parte. Sin registro, sin rastreo, sin anuncios. Código fuente: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Todo se ejecuta en tu navegador. La extensión lee los pedidos solo de tu propia cuenta de AliExpress con la sesión iniciada, guarda los ajustes únicamente de forma local y no envía ningún dato a ninguna parte. Sin registro, sin rastreo, sin anuncios, sin enlaces de afiliados. Código fuente: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Esta extensión no está vinculada a AliExpress ni a Alibaba. La factura la elaboras tú con los datos de tus pedidos de AliExpress; consulta en las normas contables de tu país cómo utilizarla.
 ```
@@ -295,6 +319,9 @@ Tous les montants proviennent du reçu officiel de chaque commande (les mêmes d
 FONCTIONNALITÉS
 • Recherche des commandes d’après le montant de la banque et la date du paiement (également 1 à 3 jours avant celle-ci, car les banques comptabilisent les paiements par carte plus tard)
 • Plusieurs paiements à la fois : une facture par paiement à partir des montants et des dates copiés depuis votre relevé bancaire
+• Avoirs pour les commandes remboursées
+• Facture d’une seule commande en un clic, également sur la page de détail de la commande, et factures pour toute une période (une par jour ou par commande)
+• Votre logo, les images des produits, les boutiques, le statut et la date des commandes sur la facture, chacun en option
 • Ajout d’une commande manquante grâce à son numéro figurant dans l’e-mail de confirmation
 • Articles, livraison et remises sur des lignes séparées ou répartis dans les prix des articles (pratique pour la gestion des stocks)
 • Plusieurs sociétés avec numéro d’entreprise, numéro fiscal et numéro de TVA
@@ -303,7 +330,7 @@ FONCTIONNALITÉS
 • Sauvegarde et restauration des paramètres
 
 CONFIDENTIALITÉ
-Tout s’exécute dans votre navigateur. L’extension lit les commandes uniquement depuis votre propre compte AliExpress, sur lequel votre session est ouverte, ne conserve les paramètres qu’en local et n’envoie aucune donnée nulle part. Sans inscription, sans pistage, sans publicité. Code source : https://github.com/Dyonos/combined-invoice-for-aliexpress
+Tout s’exécute dans votre navigateur. L’extension lit les commandes uniquement depuis votre propre compte AliExpress, sur lequel votre session est ouverte, ne conserve les paramètres qu’en local et n’envoie aucune donnée nulle part. Sans inscription, sans pistage, sans publicité, sans liens d’affiliation. Code source : https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Cette extension n’est affiliée ni à AliExpress ni à Alibaba. La facture est établie par vos soins à partir des données de vos commandes AliExpress ; consultez les règles comptables de votre pays pour savoir comment l’utiliser.
 ```
@@ -327,6 +354,9 @@ Todos os valores provêm do recibo oficial de cada encomenda (os mesmos dados qu
 FUNCIONALIDADES
 • Pesquisar encomendas pelo valor do banco e pela data do pagamento (também de 1 a 3 dias antes, porque os bancos registam os pagamentos com cartão mais tarde)
 • Vários pagamentos de uma vez: colar os valores e as datas do seu extrato bancário e obter uma fatura por cada pagamento
+• Notas de crédito para encomendas reembolsadas
+• Fatura de uma só encomenda com um clique, também na página de detalhes da encomenda, e faturas de todo um período (uma por dia ou por encomenda)
+• O seu logótipo, imagens dos produtos, lojas, estado e data das encomendas na fatura, cada um opcional
 • Adicionar uma encomenda em falta pelo número indicado no e-mail de confirmação
 • Artigos, envio e descontos em linhas separadas ou repartidos pelos preços dos artigos (prático para a gestão de stocks)
 • Várias empresas com número de empresa, NIF e número de IVA
@@ -335,7 +365,7 @@ FUNCIONALIDADES
 • Cópia de segurança e restauro das definições
 
 PRIVACIDADE
-Tudo funciona no seu navegador. A extensão lê as encomendas apenas da sua própria conta do AliExpress, com a sessão iniciada, guarda as definições só localmente e não envia dados para lado nenhum. Sem registo, sem rastreio, sem anúncios. Código-fonte: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Tudo funciona no seu navegador. A extensão lê as encomendas apenas da sua própria conta do AliExpress, com a sessão iniciada, guarda as definições só localmente e não envia dados para lado nenhum. Sem registo, sem rastreio, sem anúncios, sem links de afiliados. Código-fonte: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é elaborada por si a partir dos dados das suas encomendas do AliExpress; consulte as regras contabilísticas do seu país para saber como a utilizar.
 ```
@@ -359,6 +389,9 @@ Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é el
 ВОЗМОЖНОСТИ
 • Поиск заказов по сумме из банка и дате платежа (а также за 1-3 дня до неё, потому что банки проводят платежи по карте позже)
 • Сразу несколько платежей: достаточно вставить суммы и даты из банковской выписки, чтобы получить отдельный счёт для каждого платежа
+• Кредит-ноты для заказов с возвратом денег
+• Счёт для одного заказа в один клик, в том числе на странице заказа, и счета за целый период (по одному на день или на заказ)
+• Ваш логотип, фото товаров, магазины, статус и даты заказов в счёте (каждый элемент по желанию)
 • Добавление недостающего заказа по его номеру из письма-подтверждения
 • Товары, доставка и скидки отдельными строками или с распределением по ценам товаров (удобно для складского учёта)
 • Несколько компаний с регистрационным номером, налоговым номером и номером плательщика НДС
@@ -367,7 +400,7 @@ Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é el
 • Резервное копирование и восстановление настроек
 
 КОНФИДЕНЦИАЛЬНОСТЬ
-Всё работает в вашем браузере. Расширение читает заказы только из вашего собственного аккаунта AliExpress, в который вы вошли, хранит настройки только локально и никуда не отправляет никаких данных. Без регистрации, без отслеживания, без рекламы. Исходный код: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Всё работает в вашем браузере. Расширение читает заказы только из вашего собственного аккаунта AliExpress, в который вы вошли, хранит настройки только локально и никуда не отправляет никаких данных. Без регистрации, без отслеживания, без рекламы, без партнёрских ссылок. Исходный код: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Это расширение не связано ни с AliExpress, ни с Alibaba. Счёт вы составляете сами на основе данных своих заказов на AliExpress; как его использовать, уточните в правилах бухгалтерского учёта своей страны.
 ```
@@ -391,6 +424,9 @@ Tutti gli importi provengono dalla ricevuta ufficiale di ciascun ordine (gli ste
 FUNZIONALITÀ
 • Ricerca degli ordini per importo addebitato e data di pagamento (anche da 1 a 3 giorni prima, perché le banche contabilizzano i pagamenti con carta più tardi)
 • Più pagamenti insieme: basta incollare importi e date dall’estratto conto e avrai una fattura per ogni pagamento
+• Note di credito per gli ordini rimborsati
+• Fattura di un singolo ordine con un clic, anche dalla pagina di dettaglio dell’ordine, e fatture per un intero periodo (una al giorno o una per ordine)
+• Il tuo logo, le immagini dei prodotti, i negozi, lo stato e le date degli ordini in fattura, ognuno facoltativo
 • Aggiunta di un ordine mancante tramite il numero indicato nell’e-mail di conferma
 • Articoli, spedizione e sconti su righe separate oppure ripartiti nei prezzi degli articoli (comodo per la gestione del magazzino)
 • Più aziende con numero di registro imprese, codice fiscale e partita IVA
@@ -399,7 +435,7 @@ FUNZIONALITÀ
 • Backup e ripristino delle impostazioni
 
 PRIVACY
-Tutto avviene nel tuo browser. L’estensione legge gli ordini solo dal tuo account AliExpress, a cui hai già effettuato l’accesso, salva le impostazioni solo in locale e non invia dati da nessuna parte. Nessuna registrazione richiesta, nessun tracciamento, nessuna pubblicità. Codice sorgente: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Tutto avviene nel tuo browser. L’estensione legge gli ordini solo dal tuo account AliExpress, a cui hai già effettuato l’accesso, salva le impostazioni solo in locale e non invia dati da nessuna parte. Nessuna registrazione richiesta, nessun tracciamento, nessuna pubblicità, nessun link di affiliazione. Codice sorgente: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Questa estensione non è affiliata ad AliExpress né ad Alibaba. La fattura la compili tu con i dati dei tuoi ordini AliExpress; verifica le norme del tuo Paese per sapere come utilizzarla.
 ```
@@ -423,6 +459,9 @@ Alle bedragen komen uit het officiële ontvangstbewijs van elke bestelling (deze
 FUNCTIES
 • Bestellingen zoeken op bankbedrag en betaaldatum (ook 1 tot 3 dagen ervoor, omdat banken kaartbetalingen later boeken)
 • Meerdere betalingen tegelijk: bedragen en datums uit je bankafschrift plakken en per betaling één factuur krijgen
+• Creditnota’s voor terugbetaalde bestellingen
+• Met één klik een factuur voor één bestelling, ook op de pagina met de bestelgegevens, en facturen voor een hele periode (één per dag of per bestelling)
+• Je logo, productafbeeldingen, winkels, bestelstatus en datums op de factuur, elk optioneel
 • Een ontbrekende bestelling toevoegen met het nummer uit de bevestigingsmail
 • Artikelen, verzending en kortingen op aparte regels of verdeeld over de artikelprijzen (handig voor de voorraadadministratie)
 • Meerdere bedrijven met KvK-nummer, fiscaal nummer en btw-id
@@ -431,7 +470,7 @@ FUNCTIES
 • Back-up en herstel van de instellingen
 
 PRIVACY
-Alles gebeurt in je browser. De extensie leest bestellingen alleen uit je eigen AliExpress-account waarop je bent ingelogd, bewaart instellingen alleen lokaal en stuurt nergens gegevens naartoe. Geen registratie nodig, geen tracking, geen advertenties. Broncode: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Alles gebeurt in je browser. De extensie leest bestellingen alleen uit je eigen AliExpress-account waarop je bent ingelogd, bewaart instellingen alleen lokaal en stuurt nergens gegevens naartoe. Geen registratie nodig, geen tracking, geen advertenties, geen affiliatelinks. Broncode: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Deze extensie is niet verbonden aan AliExpress of Alibaba. Je stelt de factuur zelf samen uit de gegevens van je AliExpress-bestellingen; controleer in de regels van je land hoe je die mag gebruiken.
 ```
@@ -455,6 +494,9 @@ Tüm tutarlar, sayfada ne yazdığına dair tahminlerden değil, her siparişin 
 ÖZELLİKLER
 • Siparişleri banka tutarına ve ödeme tarihine göre bulma (bankalar kart ödemelerini daha geç işlediği için 1 ila 3 gün öncesi de dahil)
 • Tek seferde birden fazla ödeme: banka ekstrenizdeki tutarları ve tarihleri yapıştırıp her ödeme için ayrı bir fatura alma
+• İade edilen siparişler için iade faturaları
+• Tek bir sipariş için tek tıkla fatura (sipariş ayrıntıları sayfasında da) ve bütün bir dönem için faturalar (gün veya sipariş başına bir fatura)
+• Faturada logonuz, ürün görselleri, mağazalar, sipariş durumu ve tarihleri, her biri isteğe bağlı
 • Eksik bir siparişi onay e-postasındaki numarasıyla ekleme
 • Ürünler, kargo ve indirimler ayrı satırlarda ya da ürün fiyatlarına dağıtılmış olarak (stok kayıtları için kullanışlı)
 • Sicil numarası, vergi numarası ve KDV numarasıyla birden fazla firma
@@ -463,7 +505,7 @@ Tüm tutarlar, sayfada ne yazdığına dair tahminlerden değil, her siparişin 
 • Ayarların yedeklenmesi ve geri yüklenmesi
 
 GİZLİLİK
-Her şey tarayıcınızda çalışır. Uzantı siparişleri yalnızca oturum açtığınız kendi AliExpress hesabınızdan okur, ayarları yalnızca yerel olarak saklar ve hiçbir yere veri göndermez. Kayıt gerekmez, izleme yok, reklam yok. Kaynak kodu: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Her şey tarayıcınızda çalışır. Uzantı siparişleri yalnızca oturum açtığınız kendi AliExpress hesabınızdan okur, ayarları yalnızca yerel olarak saklar ve hiçbir yere veri göndermez. Kayıt gerekmez, izleme yok, reklam yok, satış ortaklığı bağlantısı yok. Kaynak kodu: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı AliExpress sipariş verilerinizden siz derlersiniz; nasıl kullanabileceğiniz konusunda ülkenizin kurallarını kontrol edin.
 ```
@@ -487,6 +529,9 @@ Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı A
 МОЖЛИВОСТІ
 • Пошук замовлень за сумою списання та датою платежу (також за 1-3 дні до неї, бо банки проводять платежі карткою пізніше)
 • Кілька платежів одночасно: достатньо вставити суми й дати з банківської виписки, щоб отримати окремий рахунок для кожного платежу
+• Кредит-ноти для замовлень із поверненням коштів
+• Рахунок для одного замовлення одним кліком, зокрема на сторінці замовлення, і рахунки за цілий період (по одному на день або на замовлення)
+• Ваш логотип, фото товарів, магазини, статус і дати замовлень у рахунку (кожен елемент за бажанням)
 • Додавання відсутнього замовлення за його номером із листа-підтвердження
 • Товари, доставка та знижки окремими рядками або розподілені між цінами товарів (зручно для складського обліку)
 • Кілька компаній із реєстраційним номером, податковим номером і номером платника ПДВ
@@ -495,7 +540,7 @@ Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı A
 • Резервне копіювання та відновлення налаштувань
 
 КОНФІДЕНЦІЙНІСТЬ
-Усе працює у вашому браузері. Розширення читає замовлення лише з вашого власного облікового запису AliExpress, у який ви ввійшли, зберігає налаштування лише локально й нікуди не надсилає жодних даних. Без реєстрації, без відстеження, без реклами. Вихідний код: https://github.com/Dyonos/combined-invoice-for-aliexpress
+Усе працює у вашому браузері. Розширення читає замовлення лише з вашого власного облікового запису AliExpress, у який ви ввійшли, зберігає налаштування лише локально й нікуди не надсилає жодних даних. Без реєстрації, без відстеження, без реклами, без партнерських посилань. Вихідний код: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 Це розширення не пов’язане з AliExpress чи Alibaba. Рахунок ви складаєте самі з даних своїх замовлень на AliExpress; як його використовувати, перевірте в правилах своєї країни.
 ```
@@ -519,6 +564,9 @@ AliExpressで複数の注文を一度に支払い、経理処理用に請求書�
 【機能】
 • 銀行明細の金額と支払日で注文を検索（銀行ではカード決済が遅れて計上されるため、支払日の1～3日前も検索）
 • 複数の支払いを一度に処理：銀行明細の金額と日付を貼り付けるだけで、支払いごとに請求書を1つずつ作成
+• 返金された注文のクレジットノートを作成
+• 1件の注文の請求書をワンクリックで作成（注文詳細ページからも可能）、期間を指定して請求書をまとめて作成（1日ごとまたは注文ごとに1件）
+• 自社のロゴ、商品画像、ストア、注文状況、注文日を請求書に表示（それぞれ任意）
 • 一覧にない注文を、確認メールに記載の注文番号で追加
 • 商品、送料、割引を別々の行に表示、または商品価格に配分（在庫管理に便利）
 • 複数の会社を登録可能（法人番号、納税者番号、VAT登録番号）
@@ -527,7 +575,7 @@ AliExpressで複数の注文を一度に支払い、経理処理用に請求書�
 • 設定のバックアップと復元
 
 【プライバシー】
-すべての処理はブラウザ内で行われます。拡張機能は、サインインしているご自身のAliExpressアカウントからのみ注文を読み取り、設定はローカルにのみ保存し、データをどこにも送信しません。登録不要、トラッキングなし、広告なし。ソースコード：https://github.com/Dyonos/combined-invoice-for-aliexpress
+すべての処理はブラウザ内で行われます。拡張機能は、サインインしているご自身のAliExpressアカウントからのみ注文を読み取り、設定はローカルにのみ保存し、データをどこにも送信しません。登録不要、トラッキングなし、広告なし、アフィリエイトリンクなし。ソースコード：https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 この拡張機能は、AliExpressおよびAlibabaとは提携していません。請求書はAliExpressの注文データをもとにご自身で作成するものです。請求書の使い方については、お住まいの国のルールをご確認ください。
 ```
@@ -551,6 +599,9 @@ AliExpress에서 여러 주문을 한 번에 결제했는데 장부 정리를 �
 [기능]
 • 은행 거래 금액과 결제일로 주문 찾기(은행은 카드 결제를 늦게 반영하므로 결제일 1~3일 전도 검색)
 • 여러 결제를 한 번에 처리: 은행 거래 내역의 금액과 날짜를 붙여 넣으면 결제마다 인보이스를 하나씩 생성
+• 환불된 주문의 크레딧 노트 생성
+• 클릭 한 번으로 주문 하나의 인보이스 생성(주문 상세 페이지에서도 가능), 기간을 지정해 인보이스 일괄 생성(날짜별 또는 주문별로 1건씩)
+• 회사 로고, 상품 이미지, 스토어, 주문 상태, 주문일을 인보이스에 표시(각각 선택 사항)
 • 목록에 없는 주문을 확인 이메일의 주문 번호로 추가
 • 상품, 배송비, 할인을 별도 행으로 표시하거나 상품 가격에 배분(재고 관리에 유용)
 • 여러 회사 등록(회사 등록번호, 납세자 번호, 부가세 등록번호 포함)
@@ -559,7 +610,7 @@ AliExpress에서 여러 주문을 한 번에 결제했는데 장부 정리를 �
 • 설정 백업 및 복원
 
 [개인정보 보호]
-모든 작업은 브라우저 안에서 이루어집니다. 확장 프로그램은 로그인한 본인의 AliExpress 계정에서만 주문을 읽고, 설정은 로컬에만 저장하며, 어떤 데이터도 외부로 보내지 않습니다. 가입 불필요, 추적 없음, 광고 없음. 소스 코드: https://github.com/Dyonos/combined-invoice-for-aliexpress
+모든 작업은 브라우저 안에서 이루어집니다. 확장 프로그램은 로그인한 본인의 AliExpress 계정에서만 주문을 읽고, 설정은 로컬에만 저장하며, 어떤 데이터도 외부로 보내지 않습니다. 가입 불필요, 추적 없음, 광고 없음, 제휴 링크 없음. 소스 코드: https://github.com/Dyonos/combined-invoice-for-aliexpress
 
 이 확장 프로그램은 AliExpress 또는 Alibaba와 제휴 관계가 없습니다. 인보이스는 AliExpress 주문 데이터를 바탕으로 사용자가 직접 작성하는 것이므로, 인보이스를 어떻게 사용할 수 있는지는 거주 국가의 규정을 확인하세요.
 ```

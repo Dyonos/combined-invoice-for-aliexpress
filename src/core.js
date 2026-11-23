@@ -364,11 +364,11 @@
       const extra = order.totalCents - order.items.reduce((a, i) => a + i.lineCents, 0);
       const shares = allocate(extra, order.items.map((i) => i.lineCents));
       order.items.forEach((it, k) => {
-        lines.push({ kind: 'item', title: it.title, sku: it.sku, qty: it.qty, origUnitCents: it.unitCents, lineCents: it.lineCents + shares[k] });
+        lines.push({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, origUnitCents: it.unitCents, lineCents: it.lineCents + shares[k] });
       });
     } else {
       for (const it of order.items) {
-        lines.push({ kind: 'item', title: it.title, sku: it.sku, qty: it.qty, unitCents: it.unitCents, lineCents: it.lineCents });
+        lines.push({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, unitCents: it.unitCents, lineCents: it.lineCents });
       }
       if (order.itemsDiffCents) {
         lines.push({ kind: 'diff', key: 'items', label: 'Item price adjustment', lineCents: order.itemsDiffCents });

@@ -30,8 +30,8 @@ body {
 }
 .tb-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 8px; }
 .toolbar label { display: grid; gap: 3px; font-size: 12px; font-weight: 600; color: var(--muted); }
-.toolbar .grow { flex: 1; min-width: 260px; }
-.toolbar input[type="text"], .toolbar select {
+.toolbar .grow { flex: 1; min-width: 160px; }
+.toolbar input[type="text"], .toolbar input[type="date"], .toolbar select {
   height: 32px;
   padding: 0 9px;
   border: 1px solid #c9c9ce;
@@ -165,3 +165,11 @@ tr.alloc-note td { color: var(--muted); font-size: 8.5pt; border-bottom: 0; padd
   .doc { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
   td .title[contenteditable]:hover { background: none; }
 }
+
+/* document type, date of issue and what the invoice shows */
+.toolbar [hidden] { display: none !important; }
+.show-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13px; color: #444; }
+.show-row label { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; }
+.doc-logo { display: block; max-width: 240px; max-height: 64px; margin-bottom: 10px; object-fit: contain; }
+.doc-ref { margin-top: 2px; color: #555; font-size: 12px; }
+.item-img { float: left; width: 36px; height: 36px; margin-right: 8px; border-radius: 4px; object-fit: cover; }

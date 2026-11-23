@@ -20,13 +20,15 @@
       'www.aliexpress.com',
     ].join('\n'),
     // note at the bottom of the invoice; empty = no note
-    invoiceNote: 'Compiled by the customer from AliExpress order receipts.',
+    invoiceNote: '',
     // text that the "Shipped from an EU warehouse" checkbox adds to each item variant, and its remembered state
     euNote: 'EU Stock',
     euDefault: false,
     // text that the "Shipping without tracking" checkbox adds to the "Shipping and fees" line, and its remembered state
     shipNote: '(no tracking)',
     shipNoteOn: false,
+    // what the invoice shows besides the items (remembers the last setting from the invoice page)
+    show: { logo: true, images: false, stores: true, status: false, dates: false },
     profileId: 'p1',
     profiles: [
       { id: 'p1', name: '', street: '', city: '', country: '', ico: '', dic: '', icdph: '' },
@@ -39,6 +41,7 @@
     supplier: ['Predajcovia na AliExpress.com\n(obchod je uvedený pri každej objednávke)'],
     euNote: ['Goods shipped from a warehouse within the EU.'],
     shipNote: ['(order tracking: no, economy shipping without tracking)'],
+    invoiceNote: ['Compiled by the customer from AliExpress order receipts.'],
   };
 
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -60,6 +63,7 @@
     }
     const merged = Object.assign({}, DEFAULTS, overrides);
     if (!Array.isArray(merged.profiles) || !merged.profiles.length) merged.profiles = DEFAULTS.profiles;
+    merged.show = Object.assign({}, DEFAULTS.show, merged.show && typeof merged.show === 'object' ? merged.show : {});
     return merged;
   }
 
@@ -79,6 +83,9 @@
     return { app: EXPORT_APP, version: 1, settings };
   }
 
+  // a logo is a small PNG, JPEG or WebP data URL (options.js scales it down)
+  const validLogo = (v) => typeof v === 'string' && v.length < 600000 && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(v);
+
   /** Settings from a backup; returns null if the file is not a backup of this extension. Unknown fields are left out. */
   function fromExport(data) {
     const s = data && data.app === EXPORT_APP && data.settings && typeof data.settings === 'object' ? data.settings : null;
@@ -87,7 +94,7 @@
     for (const key of Object.keys(DEFAULTS)) if (s[key] !== undefined) out[key] = s[key];
     if (out.profiles !== undefined) {
       if (!Array.isArray(out.profiles) || !out.profiles.length) return null;
-      out.profiles = out.profiles.map((p, i) => ({
+      out.profiles = out.profiles.map((p, i) => Object.assign({
         id: String(p.id || 'p' + (i + 1)),
         name: String(p.name || ''),
         street: String(p.street || ''),
@@ -96,7 +103,7 @@
         ico: String(p.ico || ''),
         dic: String(p.dic || ''),
         icdph: String(p.icdph || ''),
-      }));
+      }, validLogo(p.logo) ? { logo: p.logo } : {}));
     }
     return out;
   }

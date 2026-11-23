@@ -2,6 +2,14 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.16.0 - 2026-11-23
+
+- Credit notes for refunded orders: the invoice page switches to "Credit note" when an order has a refund.
+- Invoice button next to every order and on the order detail page, for the invoice of one order.
+- Invoices for all orders of a period, one per day or per order.
+- Optional company logo, product images, stores, order status and order dates on the invoice; editable date of issue.
+- The note "Compiled by the customer from AliExpress order receipts." is no longer printed (a footer note can still be set in the settings).
+
 ## 1.15.0 - 2026-11-01
 
 - Several payments at once: paste amounts and dates from the bank statement (one payment per line), the extension finds the orders of each payment and opens one invoice per payment.

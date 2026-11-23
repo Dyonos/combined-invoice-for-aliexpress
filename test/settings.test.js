@@ -31,3 +31,14 @@ test('settings backup: export and import', () => {
   assert.equal(partial.profiles[0].id, 'p1');
   assert.equal(partial.profiles[0].ico, '');
 });
+
+test('settings backup keeps a valid logo and drops anything else', () => {
+  const logo = 'data:image/png;base64,iVBORw0KGgo=';
+  const back = S.fromExport({ app: 'combined-invoice-for-aliexpress', settings: { profiles: [
+    { id: 'a', name: 'A', logo },
+    { id: 'b', name: 'B', logo: 'javascript:alert(1)' },
+  ] } });
+  assert.equal(back.profiles[0].logo, logo);
+  assert.equal(back.profiles[1].logo, undefined);
+  assert.equal(S.DEFAULTS.invoiceNote, '');
+});
