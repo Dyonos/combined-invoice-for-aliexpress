@@ -2,6 +2,13 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.17.0 - 2026-11-23
+
+- Several invoices in one PDF: under "Several payments at once", also for all orders of a period, "All invoices in one PDF" opens all prepared invoices on one page. Each invoice starts on a new printed page and keeps its own number and dates, the toolbar options apply to all of them, and the invoice numbers can be edited right on the invoices.
+- Export for accounting on the invoice page: CSV with the lines and totals of the shown invoices, and ISDOC 6.0.2 electronic invoices (the Czech and Slovak standard), several invoices in one ZIP file. A credit note is exported as an ISDOC credit note.
+- Invoices on one page with the same date and amount get different numbers.
+- Older invoice drafts are also removed when they take up too much of the browser storage.
+
 ## 1.16.0 - 2026-11-23
 
 - Credit notes for refunded orders: the invoice page switches to "Credit note" when an order has a refund.

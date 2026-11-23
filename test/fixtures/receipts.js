@@ -139,11 +139,60 @@
     { id: 'aug16-c', cents: 1420, date: '2026-08-16' },
   ];
 
+  // Two more single-order payments of the demo (the "Several payments at once" screenshot): €8.47 and €6.12.
+  const garden = {
+    orderId: '1000000000030001',
+    orderTime: 'Aug 21, 2026',
+    itemsTotal: '€ 6,84',
+    shippingFee: '€ 0,00',
+    totalReceivableTaxAmount: '€ 1,63',
+    includedTaxDisplay: '€ 1,58',
+    orderTotal: '€ 8,47',
+    paymentInfo: card('8.47', 'Aug 21, 2026'),
+    subOrders: [{ amount: '€ 6,84', itemCount: 1, itemTitle: 'Hose quick connector set, 1/2 inch', relateInfo: '4PCS', sellerName: 'Example Garden Store' }],
+  };
+  const light = {
+    orderId: '1000000000030002',
+    orderTime: 'Aug 9, 2026',
+    itemsTotal: '€ 4,59',
+    shippingFee: '€ 0,99',
+    totalDiscountAmount: '€ 0,99',
+    totalReceivableTaxAmount: '€ 1,53',
+    includedTaxDisplay: '€ 1,14',
+    orderTotal: '€ 6,12',
+    paymentInfo: card('6.12', 'Aug 9, 2026'),
+    subOrders: [{ amount: '€ 4,59', itemCount: 1, itemTitle: 'LED strip 5V USB, warm white, 2 m', relateInfo: '2M', sellerName: 'Example Light Store' }],
+  };
+
+  // Several invoices opened on one page (oldest payment first), as the panel stores them.
+  const demoMulti = {
+    createdAt: '2026-10-24T10:00:00.000Z',
+    invoices: [
+      { bankCents: 612, receipts: [light], listTotals: { '1000000000030002': 612 }, listStatus: { '1000000000030002': 'Completed' } },
+      {
+        bankCents: 3770,
+        receipts: payment3770,
+        listTotals: { '1000000000010001': 1229, '1000000000010002': 1121, '1000000000010003': 1420 },
+        listStatus: { '1000000000010001': 'Completed', '1000000000010002': 'Completed', '1000000000010003': 'Completed' },
+      },
+      { bankCents: 847, receipts: [garden], listTotals: { '1000000000030001': 847 }, listStatus: { '1000000000030001': 'Awaiting delivery' } },
+    ],
+  };
+  // the same with money back for the LED strip, for credit notes
+  const demoMultiRefund = {
+    createdAt: demoMulti.createdAt,
+    invoices: demoMulti.invoices.map((p, i) => (i === 0
+      ? Object.assign({}, p, { receipts: [Object.assign({}, light, { refundInfo: { refundCount: 1, refundAmount: '€ 6,12' } })] })
+      : p)),
+  };
+
   const fixtures = {
     payment3770,
     subsidy,
     pennyShipping,
     euWarehouse,
+    garden,
+    light,
     orderList,
     demoDraft: {
       createdAt: '2026-10-24T10:00:00.000Z',
@@ -151,6 +200,8 @@
       receipts: payment3770,
       listTotals: { '1000000000010001': 1229, '1000000000010002': 1121, '1000000000010003': 1420 },
     },
+    demoMulti,
+    demoMultiRefund,
   };
 
   if (typeof module === 'object' && module.exports) module.exports = fixtures;

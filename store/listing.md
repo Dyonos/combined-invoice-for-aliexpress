@@ -36,9 +36,11 @@ FEATURES
 • Several payments at once: paste amounts and dates from your bank statement and get one invoice per payment
 • Credit notes for refunded orders
 • One-click invoice for a single order, also on the order detail page, and invoices for a whole period (one per day or per order)
+• All invoices of several payments or of a period in one PDF, each starting on a new page
 • Your logo, product images, stores, order status and dates on the invoice, each optional
 • Add a missing order by its number from the confirmation e-mail
 • Items, shipping and discounts as separate lines, or spread into item prices (handy for stock records)
+• Export for accounting: CSV with lines and totals, and ISDOC electronic invoices (Czech and Slovak standard)
 • Several companies with company ID, tax ID and VAT ID
 • Optional notes on the invoice for goods shipped from an EU warehouse and for shipping without tracking
 • Interface and invoice in 17 languages: English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Czech, Slovak, Hungarian, Romanian, Ukrainian, Russian, Turkish, Japanese and Korean. The invoice language is set separately from the interface.
@@ -76,9 +78,11 @@ FUNKCIE
 • Viac platieb naraz: samostatná faktúra ku každej platbe po vložení súm a dátumov z výpisu z banky
 • Dobropisy k objednávkam, za ktoré sa vrátili peniaze
 • Faktúra k jednej objednávke jedným kliknutím, aj na stránke s detailom objednávky, a faktúry za celé obdobie (jedna na deň alebo na objednávku)
+• Všetky faktúry z viacerých platieb alebo za obdobie v jednom PDF, každá začína na novej strane
 • Vlastné logo, obrázky produktov, obchody, stav a dátum objednávok na faktúre, každé sa dá zapnúť zvlášť
 • Pridanie chýbajúcej objednávky podľa jej čísla z potvrdzujúceho e-mailu
 • Položky, doprava a zľavy v samostatných riadkoch alebo rozpočítané do cien položiek (hodí sa na skladovú evidenciu)
+• Export pre účtovníctvo: CSV s riadkami a súčtami a elektronické faktúry ISDOC (český a slovenský štandard)
 • Viac firiem s IČO, DIČ a IČ DPH
 • Nepovinné poznámky na faktúre pri tovare odoslanom zo skladu v EÚ a pri doprave bez sledovania
 • Rozhranie aj faktúra v 17 jazykoch: angličtina, nemčina, francúzština, španielčina, taliančina, portugalčina, holandčina, poľština, čeština, slovenčina, maďarčina, rumunčina, ukrajinčina, ruština, turečtina, japončina a kórejčina. Jazyk faktúry sa nastavuje nezávisle od rozhrania.
@@ -111,9 +115,11 @@ FUNKCE
 • Více plateb najednou: samostatná faktura ke každé platbě po vložení řádků s částkou a datem z bankovního výpisu
 • Dobropisy k objednávkám, za které se vrátily peníze
 • Faktura k jedné objednávce jedním kliknutím, i na stránce s detailem objednávky, a faktury za celé období (jedna na den nebo na objednávku)
+• Všechny faktury z více plateb nebo za období v jednom PDF, každá začíná na nové straně
 • Vlastní logo, obrázky produktů, obchody, stav a datum objednávek na faktuře, každé lze zapnout zvlášť
 • Přidání chybějící objednávky podle jejího čísla z potvrzovacího e-mailu
 • Položky, doprava a slevy na samostatných řádcích nebo rozpočítané do cen položek (hodí se pro skladovou evidenci)
+• Export pro účetnictví: CSV s řádky a součty a elektronické faktury ISDOC (český a slovenský standard)
 • Více firem s IČO, DIČ a DIČ pro DPH
 • Volitelné poznámky na faktuře u zboží odeslaného ze skladu v EU a u dopravy bez sledování
 • Rozhraní i faktura v 17 jazycích: angličtina, němčina, francouzština, španělština, italština, portugalština, nizozemština, polština, čeština, slovenština, maďarština, rumunština, ukrajinština, ruština, turečtina, japonština a korejština. Jazyk faktury se nastavuje nezávisle na rozhraní.
@@ -146,9 +152,11 @@ FUNKCIÓK
 • Több fizetés egyszerre: a bankszámlakivonatból beillesztett összegek és dátumok alapján minden fizetéshez külön számla
 • Helyesbítő számlák a visszatérített rendelésekhez
 • Számla egyetlen rendelésről egy kattintással, a rendelés részleteinek oldalán is, valamint számlák egy teljes időszakra (naponta vagy rendelésenként egy)
+• Több fizetés vagy egy időszak összes számlája egyetlen PDF-ben, mindegyik új oldalon kezdődik
 • Saját logó, termékképek, boltok, a rendelések állapota és dátuma a számlán, mindegyik külön bekapcsolható
 • Hiányzó rendelés hozzáadása a visszaigazoló e-mailben szereplő száma alapján
 • Tételek, szállítás és kedvezmények külön sorban vagy a tételárakba osztva (hasznos a készletnyilvántartáshoz)
+• Exportálás a könyveléshez: CSV a tételsorokkal és a végösszegekkel, valamint ISDOC elektronikus számlák (cseh és szlovák szabvány)
 • Több cég cégazonosítóval, adószámmal és közösségi adószámmal
 • Választható megjegyzések a számlán az EU-s raktárból feladott áruhoz és a nyomkövetés nélküli szállításhoz
 • Kezelőfelület és számla 17 nyelven: angol, német, francia, spanyol, olasz, portugál, holland, lengyel, cseh, szlovák, magyar, román, ukrán, orosz, török, japán és koreai. A számla nyelve a kezelőfelülettől függetlenül állítható be.
@@ -181,9 +189,11 @@ FUNKCJE
 • Kilka płatności naraz: osobna faktura dla każdej płatności po wklejeniu kwot i dat z wyciągu bankowego
 • Faktury korygujące do zamówień ze zwrotem pieniędzy
 • Faktura do jednego zamówienia jednym kliknięciem, także na stronie szczegółów zamówienia, oraz faktury za cały okres (jedna na dzień lub na zamówienie)
+• Wszystkie faktury z kilku płatności lub za okres w jednym PDF, każda zaczyna się na nowej stronie
 • Własne logo, zdjęcia produktów, sklepy, status i data zamówień na fakturze, każdy element można włączyć osobno
 • Dodanie brakującego zamówienia według jego numeru z e-maila potwierdzającego
 • Pozycje, wysyłka i rabaty w osobnych wierszach albo rozliczone w cenach pozycji (przydatne w ewidencji magazynowej)
+• Eksport do księgowości: CSV z wierszami i sumami oraz faktury elektroniczne ISDOC (standard czeski i słowacki)
 • Kilka firm z numerami REGON, NIP i NIP UE
 • Opcjonalne uwagi na fakturze przy towarze wysłanym z magazynu w UE i przy wysyłce bez śledzenia
 • Interfejs i faktura w 17 językach: angielskim, niemieckim, francuskim, hiszpańskim, włoskim, portugalskim, niderlandzkim, polskim, czeskim, słowackim, węgierskim, rumuńskim, ukraińskim, rosyjskim, tureckim, japońskim i koreańskim. Język faktury ustawia się niezależnie od interfejsu.
@@ -216,9 +226,11 @@ FUNKTIONEN
 • Mehrere Zahlungen auf einmal: eine eigene Rechnung für jede Zahlung nach dem Einfügen von Beträgen und Datumsangaben aus dem Kontoauszug
 • Gutschriften für erstattete Bestellungen
 • Rechnung für eine einzelne Bestellung mit einem Klick, auch auf der Detailseite der Bestellung, und Rechnungen für einen ganzen Zeitraum (eine pro Tag oder pro Bestellung)
+• Alle Rechnungen mehrerer Zahlungen oder eines Zeitraums in einem PDF, jede beginnt auf einer neuen Seite
 • Ihr Logo, Produktbilder, Shops, Bestellstatus und Bestelldatum auf der Rechnung, jeweils optional
 • Hinzufügen einer fehlenden Bestellung über ihre Nummer aus der Bestätigungs-E-Mail
 • Positionen, Versand und Rabatte als getrennte Zeilen oder auf die Positionspreise verteilt (praktisch für die Lagerbuchhaltung)
+• Export für die Buchhaltung: CSV mit Positionen und Summen sowie elektronische Rechnungen im ISDOC-Format (tschechischer und slowakischer Standard)
 • Mehrere Firmen mit Firmen-ID, Steuernummer und USt-IdNr.
 • Optionale Hinweise auf der Rechnung für aus einem EU-Lager versandte Ware und für Versand ohne Sendungsverfolgung
 • Oberfläche und Rechnung in 17 Sprachen: Englisch, Deutsch, Französisch, Spanisch, Italienisch, Portugiesisch, Niederländisch, Polnisch, Tschechisch, Slowakisch, Ungarisch, Rumänisch, Ukrainisch, Russisch, Türkisch, Japanisch und Koreanisch. Die Sprache der Rechnung wird unabhängig von der Oberfläche eingestellt.
@@ -251,9 +263,11 @@ FUNCȚII
 • Mai multe plăți deodată: este suficient să lipiți sumele și datele din extrasul bancar, iar extensia creează câte o factură pentru fiecare plată
 • Facturi de stornare pentru comenzile rambursate
 • Factură pentru o singură comandă cu un singur clic, inclusiv pe pagina cu detaliile comenzii, și facturi pentru o perioadă întreagă (câte una pe zi sau pe comandă)
+• Toate facturile mai multor plăți sau ale unei perioade într-un singur PDF, fiecare începând pe o pagină nouă
 • Logoul dumneavoastră, imaginile produselor, magazinele, starea și datele comenzilor pe factură, fiecare opțional
 • Adăugarea unei comenzi lipsă după numărul ei din e-mailul de confirmare
 • Articole, transport și reduceri pe rânduri separate sau repartizate în prețurile articolelor (util pentru evidența stocurilor)
+• Export pentru contabilitate: CSV cu rândurile și totalurile, precum și facturi electronice ISDOC (standard ceh și slovac)
 • Mai multe firme, cu număr de înregistrare, cod fiscal și cod de TVA
 • Note opționale pe factură pentru produsele expediate dintr-un depozit din UE și pentru transportul fără urmărire
 • Interfață și factură în 17 limbi: engleză, germană, franceză, spaniolă, italiană, portugheză, neerlandeză, poloneză, cehă, slovacă, maghiară, română, ucraineană, rusă, turcă, japoneză și coreeană. Limba facturii se setează separat de cea a interfeței.
@@ -286,9 +300,11 @@ FUNCIONES
 • Varios pagos a la vez: pegar los importes y las fechas de tu extracto bancario y obtener una factura por cada pago
 • Facturas rectificativas para los pedidos reembolsados
 • Factura de un solo pedido con un clic, también en la página de detalles del pedido, y facturas de todo un período (una por día o por pedido)
+• Todas las facturas de varios pagos o de todo un período en un solo PDF, cada una en una página nueva
 • Tu logotipo, imágenes de productos, tiendas, estado y fecha de los pedidos en la factura, cada uno opcional
 • Añadir un pedido que falta por su número del correo de confirmación
 • Artículos, envío y descuentos en líneas separadas o repartidos en los precios de los artículos (práctico para el control de existencias)
+• Exportación para la contabilidad: CSV con las líneas y los totales, y facturas electrónicas ISDOC (estándar checo y eslovaco)
 • Varias empresas con número de empresa, NIF y NIF-IVA
 • Notas opcionales en la factura para la mercancía enviada desde un almacén de la UE y para los envíos sin seguimiento
 • Interfaz y factura en 17 idiomas: inglés, alemán, francés, español, italiano, portugués, neerlandés, polaco, checo, eslovaco, húngaro, rumano, ucraniano, ruso, turco, japonés y coreano. El idioma de la factura se configura por separado del de la interfaz.
@@ -321,9 +337,11 @@ FONCTIONNALITÉS
 • Plusieurs paiements à la fois : une facture par paiement à partir des montants et des dates copiés depuis votre relevé bancaire
 • Avoirs pour les commandes remboursées
 • Facture d’une seule commande en un clic, également sur la page de détail de la commande, et factures pour toute une période (une par jour ou par commande)
+• Toutes les factures de plusieurs paiements ou d’une période dans un seul PDF, chacune sur une nouvelle page
 • Votre logo, les images des produits, les boutiques, le statut et la date des commandes sur la facture, chacun en option
 • Ajout d’une commande manquante grâce à son numéro figurant dans l’e-mail de confirmation
 • Articles, livraison et remises sur des lignes séparées ou répartis dans les prix des articles (pratique pour la gestion des stocks)
+• Export pour la comptabilité : CSV avec les lignes et les totaux, et factures électroniques ISDOC (norme tchèque et slovaque)
 • Plusieurs sociétés avec numéro d’entreprise, numéro fiscal et numéro de TVA
 • Notes facultatives sur la facture pour les marchandises expédiées depuis un entrepôt de l’UE et pour la livraison sans suivi
 • Interface et facture en 17 langues : anglais, allemand, français, espagnol, italien, portugais, néerlandais, polonais, tchèque, slovaque, hongrois, roumain, ukrainien, russe, turc, japonais et coréen. La langue de la facture se règle indépendamment de celle de l’interface.
@@ -356,9 +374,11 @@ FUNCIONALIDADES
 • Vários pagamentos de uma vez: colar os valores e as datas do seu extrato bancário e obter uma fatura por cada pagamento
 • Notas de crédito para encomendas reembolsadas
 • Fatura de uma só encomenda com um clique, também na página de detalhes da encomenda, e faturas de todo um período (uma por dia ou por encomenda)
+• Todas as faturas de vários pagamentos ou de todo um período num só PDF, cada uma numa nova página
 • O seu logótipo, imagens dos produtos, lojas, estado e data das encomendas na fatura, cada um opcional
 • Adicionar uma encomenda em falta pelo número indicado no e-mail de confirmação
 • Artigos, envio e descontos em linhas separadas ou repartidos pelos preços dos artigos (prático para a gestão de stocks)
+• Exportação para a contabilidade: CSV com as linhas e os totais, e faturas eletrónicas ISDOC (norma checa e eslovaca)
 • Várias empresas com número de empresa, NIF e número de IVA
 • Notas opcionais na fatura para artigos enviados de um armazém da UE e para envios sem rastreio
 • Interface e fatura em 17 idiomas: inglês, alemão, francês, espanhol, italiano, português, neerlandês, polaco, checo, eslovaco, húngaro, romeno, ucraniano, russo, turco, japonês e coreano. O idioma da fatura é definido à parte do idioma da interface.
@@ -391,9 +411,11 @@ Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é el
 • Сразу несколько платежей: достаточно вставить суммы и даты из банковской выписки, чтобы получить отдельный счёт для каждого платежа
 • Кредит-ноты для заказов с возвратом денег
 • Счёт для одного заказа в один клик, в том числе на странице заказа, и счета за целый период (по одному на день или на заказ)
+• Все счета по нескольким платежам или за целый период в одном PDF, каждый с новой страницы
 • Ваш логотип, фото товаров, магазины, статус и даты заказов в счёте (каждый элемент по желанию)
 • Добавление недостающего заказа по его номеру из письма-подтверждения
 • Товары, доставка и скидки отдельными строками или с распределением по ценам товаров (удобно для складского учёта)
+• Экспорт для бухгалтерии: CSV с позициями и итогами, а также электронные счета ISDOC (чешский и словацкий стандарт)
 • Несколько компаний с регистрационным номером, налоговым номером и номером плательщика НДС
 • Необязательные примечания в счёте для товаров, отправленных со склада в ЕС, и для доставки без отслеживания
 • Интерфейс и счёт на 17 языках: английском, немецком, французском, испанском, итальянском, португальском, нидерландском, польском, чешском, словацком, венгерском, румынском, украинском, русском, турецком, японском и корейском. Язык счёта настраивается отдельно от языка интерфейса.
@@ -426,9 +448,11 @@ FUNZIONALITÀ
 • Più pagamenti insieme: basta incollare importi e date dall’estratto conto e avrai una fattura per ogni pagamento
 • Note di credito per gli ordini rimborsati
 • Fattura di un singolo ordine con un clic, anche dalla pagina di dettaglio dell’ordine, e fatture per un intero periodo (una al giorno o una per ordine)
+• Tutte le fatture di più pagamenti o di un intero periodo in un unico PDF, ciascuna su una nuova pagina
 • Il tuo logo, le immagini dei prodotti, i negozi, lo stato e le date degli ordini in fattura, ognuno facoltativo
 • Aggiunta di un ordine mancante tramite il numero indicato nell’e-mail di conferma
 • Articoli, spedizione e sconti su righe separate oppure ripartiti nei prezzi degli articoli (comodo per la gestione del magazzino)
+• Esportazione per la contabilità: CSV con righe e totali e fatture elettroniche ISDOC (standard ceco e slovacco)
 • Più aziende con numero di registro imprese, codice fiscale e partita IVA
 • Note facoltative in fattura per la merce spedita da un magazzino UE e per la spedizione senza tracciamento
 • Interfaccia e fattura in 17 lingue: inglese, tedesco, francese, spagnolo, italiano, portoghese, olandese, polacco, ceco, slovacco, ungherese, rumeno, ucraino, russo, turco, giapponese e coreano. La lingua della fattura si imposta separatamente da quella dell’interfaccia.
@@ -461,9 +485,11 @@ FUNCTIES
 • Meerdere betalingen tegelijk: bedragen en datums uit je bankafschrift plakken en per betaling één factuur krijgen
 • Creditnota’s voor terugbetaalde bestellingen
 • Met één klik een factuur voor één bestelling, ook op de pagina met de bestelgegevens, en facturen voor een hele periode (één per dag of per bestelling)
+• Alle facturen van meerdere betalingen of van een periode in één pdf, elk op een nieuwe pagina
 • Je logo, productafbeeldingen, winkels, bestelstatus en datums op de factuur, elk optioneel
 • Een ontbrekende bestelling toevoegen met het nummer uit de bevestigingsmail
 • Artikelen, verzending en kortingen op aparte regels of verdeeld over de artikelprijzen (handig voor de voorraadadministratie)
+• Export voor de boekhouding: CSV met regels en totalen, en elektronische ISDOC-facturen (Tsjechische en Slowaakse standaard)
 • Meerdere bedrijven met KvK-nummer, fiscaal nummer en btw-id
 • Optionele opmerkingen op de factuur voor goederen uit een EU-magazijn en voor verzending zonder track-and-trace
 • Interface en factuur in 17 talen: Engels, Duits, Frans, Spaans, Italiaans, Portugees, Nederlands, Pools, Tsjechisch, Slowaaks, Hongaars, Roemeens, Oekraïens, Russisch, Turks, Japans en Koreaans. De taal van de factuur stel je los van de interface in.
@@ -496,9 +522,11 @@ Tüm tutarlar, sayfada ne yazdığına dair tahminlerden değil, her siparişin 
 • Tek seferde birden fazla ödeme: banka ekstrenizdeki tutarları ve tarihleri yapıştırıp her ödeme için ayrı bir fatura alma
 • İade edilen siparişler için iade faturaları
 • Tek bir sipariş için tek tıkla fatura (sipariş ayrıntıları sayfasında da) ve bütün bir dönem için faturalar (gün veya sipariş başına bir fatura)
+• Birkaç ödemenin veya bütün bir dönemin tüm faturaları tek bir PDF’te, her biri yeni bir sayfada başlayacak şekilde
 • Faturada logonuz, ürün görselleri, mağazalar, sipariş durumu ve tarihleri, her biri isteğe bağlı
 • Eksik bir siparişi onay e-postasındaki numarasıyla ekleme
 • Ürünler, kargo ve indirimler ayrı satırlarda ya da ürün fiyatlarına dağıtılmış olarak (stok kayıtları için kullanışlı)
+• Muhasebe için dışa aktarma: kalemleri ve toplamları içeren CSV ile ISDOC elektronik faturaları (Çek ve Slovak standardı)
 • Sicil numarası, vergi numarası ve KDV numarasıyla birden fazla firma
 • Faturada AB deposundan gönderilen ürünler ve takipsiz gönderim için isteğe bağlı notlar
 • 17 dilde arayüz ve fatura: İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Felemenkçe, Lehçe, Çekçe, Slovakça, Macarca, Rumence, Ukraynaca, Rusça, Türkçe, Japonca ve Korece. Fatura dili arayüzden ayrı olarak ayarlanır.
@@ -531,9 +559,11 @@ Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı A
 • Кілька платежів одночасно: достатньо вставити суми й дати з банківської виписки, щоб отримати окремий рахунок для кожного платежу
 • Кредит-ноти для замовлень із поверненням коштів
 • Рахунок для одного замовлення одним кліком, зокрема на сторінці замовлення, і рахунки за цілий період (по одному на день або на замовлення)
+• Усі рахунки з кількох платежів або за період в одному PDF, кожен починається з нової сторінки
 • Ваш логотип, фото товарів, магазини, статус і дати замовлень у рахунку (кожен елемент за бажанням)
 • Додавання відсутнього замовлення за його номером із листа-підтвердження
 • Товари, доставка та знижки окремими рядками або розподілені між цінами товарів (зручно для складського обліку)
+• Експорт для бухгалтерії: CSV з рядками й підсумками та електронні рахунки ISDOC (чеський і словацький стандарт)
 • Кілька компаній із реєстраційним номером, податковим номером і номером платника ПДВ
 • Необов’язкові примітки в рахунку для товарів, надісланих зі складу в ЄС, і для доставки без відстеження
 • Інтерфейс і рахунок 17 мовами: англійською, німецькою, французькою, іспанською, італійською, португальською, нідерландською, польською, чеською, словацькою, угорською, румунською, українською, російською, турецькою, японською та корейською. Мова рахунку налаштовується окремо від мови інтерфейсу.
@@ -566,9 +596,11 @@ AliExpressで複数の注文を一度に支払い、経理処理用に請求書�
 • 複数の支払いを一度に処理：銀行明細の金額と日付を貼り付けるだけで、支払いごとに請求書を1つずつ作成
 • 返金された注文のクレジットノートを作成
 • 1件の注文の請求書をワンクリックで作成（注文詳細ページからも可能）、期間を指定して請求書をまとめて作成（1日ごとまたは注文ごとに1件）
+• 複数の支払い分、または期間内のすべての請求書を1つのPDFにまとめて出力（各請求書は新しいページから開始）
 • 自社のロゴ、商品画像、ストア、注文状況、注文日を請求書に表示（それぞれ任意）
 • 一覧にない注文を、確認メールに記載の注文番号で追加
 • 商品、送料、割引を別々の行に表示、または商品価格に配分（在庫管理に便利）
+• 経理処理向けのエクスポート：明細行と合計を含むCSV、ISDOC形式の電子請求書（チェコとスロバキアの標準規格）
 • 複数の会社を登録可能（法人番号、納税者番号、VAT登録番号）
 • EU倉庫から発送された商品や追跡なしの配送について、請求書に任意の注記を追加
 • 画面表示と請求書は17言語に対応：英語、ドイツ語、フランス語、スペイン語、イタリア語、ポルトガル語、オランダ語、ポーランド語、チェコ語、スロバキア語、ハンガリー語、ルーマニア語、ウクライナ語、ロシア語、トルコ語、日本語、韓国語。請求書の言語は表示言語とは別に設定できます。
@@ -601,9 +633,11 @@ AliExpress에서 여러 주문을 한 번에 결제했는데 장부 정리를 �
 • 여러 결제를 한 번에 처리: 은행 거래 내역의 금액과 날짜를 붙여 넣으면 결제마다 인보이스를 하나씩 생성
 • 환불된 주문의 크레딧 노트 생성
 • 클릭 한 번으로 주문 하나의 인보이스 생성(주문 상세 페이지에서도 가능), 기간을 지정해 인보이스 일괄 생성(날짜별 또는 주문별로 1건씩)
+• 여러 결제 또는 특정 기간의 모든 인보이스를 PDF 하나로 생성(각 인보이스는 새 페이지에서 시작)
 • 회사 로고, 상품 이미지, 스토어, 주문 상태, 주문일을 인보이스에 표시(각각 선택 사항)
 • 목록에 없는 주문을 확인 이메일의 주문 번호로 추가
 • 상품, 배송비, 할인을 별도 행으로 표시하거나 상품 가격에 배분(재고 관리에 유용)
+• 회계용 내보내기: 품목과 합계를 담은 CSV, ISDOC 전자 인보이스(체코 및 슬로바키아 표준)
 • 여러 회사 등록(회사 등록번호, 납세자 번호, 부가세 등록번호 포함)
 • EU 창고에서 발송된 상품과 추적 없는 배송에 대한 인보이스 메모(선택 사항)
 • 화면과 인보이스 모두 17개 언어 지원: 영어, 독일어, 프랑스어, 스페인어, 이탈리아어, 포르투갈어, 네덜란드어, 폴란드어, 체코어, 슬로바키아어, 헝가리어, 루마니아어, 우크라이나어, 러시아어, 튀르키예어, 일본어, 한국어. 인보이스 언어는 화면 표시 언어와 별도로 설정할 수 있습니다.

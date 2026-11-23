@@ -15,16 +15,16 @@
       <label class="grow"><span data-i18n="inv.title"></span>
         <input id="title" type="text">
       </label>
-      <label><span data-i18n="inv.number"></span>
+      <label id="numberWrap"><span data-i18n="inv.number"></span>
         <input id="number" type="text">
       </label>
-      <label><span data-i18n="inv.date"></span>
+      <label id="dateWrap"><span data-i18n="inv.date"></span>
         <input id="docDate" type="date">
       </label>
       <label id="docTypeWrap" hidden><span data-i18n="inv.docType"></span>
         <select id="docType"><option value="invoice" data-i18n="inv.typeInvoice"></option><option value="credit" data-i18n="inv.typeCredit"></option></select>
       </label>
-      <label><span data-i18n="inv.bank"></span>
+      <label id="bankWrap"><span data-i18n="inv.bank"></span>
         <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> <span id="bankCur">€</span></span>
       </label>
       <label><span data-i18n="opt.language"></span>
@@ -44,6 +44,8 @@
       <span class="spacer"></span>
       <span id="version" class="version" data-i18n-title="versionTitle"></span>
       <button id="settings" type="button" class="btn" data-i18n="inv.settings"></button>
+      <button id="csv" type="button" class="btn" data-i18n="inv.exportCsv" data-i18n-title="inv.exportCsvTitle"></button>
+      <button id="isdoc" type="button" class="btn" data-i18n="inv.exportIsdoc" data-i18n-title="inv.exportIsdocTitle"></button>
       <button id="print" type="button" class="btn primary" data-i18n="inv.print"></button>
     </div>
     <div class="tb-row show-row">
@@ -56,14 +58,16 @@
     </div>
     <div id="check" class="check"></div>
     <ul id="warnings" class="warnings"></ul>
-    <p class="hint" data-i18n="inv.hint"></p>
+    <p id="hint" class="hint" data-i18n="inv.hint"></p>
   </header>
 
-  <main id="doc" class="doc"></main>
+  <main id="doc"></main>
 
   <script src="core.js"></script>
   <script src="settings.js"></script>
   <script src="i18n.js"></script>
+  <script src="documents.js"></script>
+  <script src="export.js"></script>
   <script src="invoice.js"></script>
 </body>
 </html>

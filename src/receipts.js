@@ -55,12 +55,23 @@
 
   // drafts of the last invoices: each invoice tab reads its own (?draft=<id>), older ones are removed
   const MAX_DRAFTS = 30;
+  // chrome.storage.local holds 10 MB; a page with many invoices is a large draft, so the oldest drafts go first
+  const MAX_DRAFT_CHARS = 6000000;
 
   async function storeDraft(id, draft) {
     const all = await chrome.storage.local.get(null);
-    const old = Object.keys(all).filter((k) => k.startsWith('alifa.draft.'))
-      .sort((a, b) => String(all[b].createdAt).localeCompare(String(all[a].createdAt)))
-      .slice(MAX_DRAFTS - 1);
+    const keys = Object.keys(all).filter((k) => k.startsWith('alifa.draft.'))
+      .sort((a, b) => String(all[b].createdAt).localeCompare(String(all[a].createdAt)));
+    // the new draft is stored twice: under its own key and as the last draft
+    let size = 2 * JSON.stringify(draft).length;
+    let full = false;
+    const old = [];
+    keys.forEach((k, i) => {
+      size += JSON.stringify(all[k]).length;
+      // newest first: once a draft is over the count or the size, it and all older ones go
+      full = full || i >= MAX_DRAFTS - 1 || size > MAX_DRAFT_CHARS;
+      if (full) old.push(k);
+    });
     if (old.length) await chrome.storage.local.remove(old);
     await chrome.storage.local.set({ ['alifa.draft.' + id]: draft, 'alifa.draft': draft });
   }

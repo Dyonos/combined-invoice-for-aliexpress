@@ -276,6 +276,7 @@
             </div>
             <ul class="alifa-batch-list"></ul>
             <button type="button" class="alifa-btn alifa-primary alifa-batch-all" hidden>${esc(I.t('batch.createAll'))}</button>
+            <button type="button" class="alifa-btn alifa-batch-one" title="${esc(I.t('batch.createOneTitle'))}" hidden>${esc(I.t('batch.createOne'))}</button>
           </div>
         </details>
         <div class="${esc(statusClass)}" role="status">${statusHtml}</div>
@@ -361,9 +362,8 @@
     });
     panel.querySelector('.alifa-batch-find').addEventListener('click', findBatch);
     panel.querySelector('.alifa-range-load').addEventListener('click', loadRange);
-    panel.querySelector('.alifa-batch-all').addEventListener('click', () => {
-      createBatch(state.batch.map((b, i) => (b.status === 'found' || b.status === 'ambiguous' ? i : -1)).filter((i) => i >= 0));
-    });
+    panel.querySelector('.alifa-batch-all').addEventListener('click', () => createBatch(readyIndexes()));
+    panel.querySelector('.alifa-batch-one').addEventListener('click', () => createCombined(readyIndexes()));
     panel.querySelector('.alifa-batch-list').addEventListener('click', (e) => {
       const select = e.target.closest('[data-batch-select]');
       if (select) selectBatch(Number(select.dataset.batchSelect));
@@ -739,6 +739,11 @@
 
   const hasOrders = (b) => b.orders.length > 0 && b.status !== 'notFound';
 
+  /** Payments of the batch whose orders were found and whose invoices were not created yet. */
+  function readyIndexes() {
+    return state.batch.map((b, i) => (b.status === 'found' || b.status === 'ambiguous' ? i : -1)).filter((i) => i >= 0);
+  }
+
   function batchResult(b) {
     if (b.status === 'noAmount') return I.t('batch.noAmount');
     if (b.status === 'searching') return I.t('batch.searching');
@@ -764,9 +769,13 @@
       return `<li class="alifa-b-${cls}" title="${esc(b.error || b.line)}"><span class="alifa-b-head">${esc(head)}</span>` +
         `<span class="alifa-b-res">${esc(batchResult(b))}</span>${buttons}</li>`;
     }).join('');
+    const ready = readyIndexes().length;
     const all = panel.querySelector('.alifa-batch-all');
-    all.hidden = !state.batch.some((b) => b.status === 'found' || b.status === 'ambiguous');
+    all.hidden = !ready;
     all.disabled = state.busy;
+    const one = panel.querySelector('.alifa-batch-one');
+    one.hidden = ready < 2;
+    one.disabled = state.busy;
     panel.querySelector('.alifa-batch-find').disabled = state.busy;
     panel.querySelector('.alifa-range-load').disabled = state.busy;
     for (const btn of list.querySelectorAll('button')) btn.disabled = state.busy;
@@ -839,11 +848,8 @@
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  /**
-   * Loads the receipts of the orders, stores them as a draft and opens the invoice page in a new tab
-   * (in the background for several payments). Returns false when a receipt could not be loaded.
-   */
-  async function openInvoice(list, bankCents, prefix, background) {
+  /** Loads the receipts of the orders; returns null after showing the ones that could not be loaded. */
+  async function loadReceipts(list, prefix) {
     const receipts = [];
     const failed = [];
     for (let i = 0; i < list.length; i++) {
@@ -858,15 +864,29 @@
     if (failed.length) {
       const report = failed.every((f) => USER_ERRORS.has(f.code)) ? '' : reportLink();
       setStatus(esc(prefix + I.t('st.loadFailed')) + '<br>' + failed.map((f) => `${esc(f.order.store || f.order.id)}: ${esc(f.error)}`).join('<br>') + report, 'bad');
-      return false;
+      return null;
     }
-    await R.openDraft({
-      createdAt: new Date().toISOString(),
+    return receipts;
+  }
+
+  /** Data of one invoice for the invoice page: receipts, bank amount, and the amounts and statuses from the list. */
+  function invoiceData(list, bankCents, receipts) {
+    return {
       bankCents,
       receipts,
       listTotals: Object.fromEntries(list.map((o) => [o.id, o.cents])),
       listStatus: Object.fromEntries(list.map((o) => [o.id, o.status || ''])),
-    }, background);
+    };
+  }
+
+  /**
+   * Loads the receipts of the orders, stores them as a draft and opens the invoice page in a new tab
+   * (in the background for several payments). Returns false when a receipt could not be loaded.
+   */
+  async function openInvoice(list, bankCents, prefix, background) {
+    const receipts = await loadReceipts(list, prefix);
+    if (!receipts) return false;
+    await R.openDraft(Object.assign({ createdAt: new Date().toISOString() }, invoiceData(list, bankCents, receipts)), background);
     return true;
   }
 
@@ -907,6 +927,39 @@
         renderBatch();
       }
       setStatus(esc(I.plural(opened, 'plural.invoicesOpened')), 'ok');
+    } catch (e) {
+      setStatus(contextError(e) + reportFor(e), 'bad');
+    } finally {
+      state.busy = false;
+      renderPanel();
+    }
+  }
+
+  /**
+   * All invoices of the given payments on one invoice page (oldest payment first), each starting on a new printed
+   * page, so printing the page gives one PDF.
+   */
+  async function createCombined(indexes) {
+    if (state.busy) return;
+    const items = indexes.map((i) => state.batch[i]).filter((b) => b && hasOrders(b))
+      .sort((a, b) => String(a.foundDate || a.date || '').localeCompare(String(b.foundDate || b.date || '')));
+    if (items.length < 2) return;
+    state.busy = true;
+    renderPanel();
+    try {
+      const invoices = [];
+      for (let k = 0; k < items.length; k++) {
+        const list = items[k].orders.slice().sort(byDate);
+        const receipts = await loadReceipts(list, I.t('batch.progress', { i: k + 1, n: items.length }) + ' ');
+        if (!receipts) return;
+        invoices.push(invoiceData(list, items[k].cents, receipts));
+        if (k < items.length - 1) await sleep(300);
+      }
+      await R.openDraft({ createdAt: new Date().toISOString(), invoices }, false);
+      for (const b of items) b.status = 'opened';
+      saveBatch();
+      renderBatch();
+      setStatus(esc(I.plural(items.length, 'plural.invoicesOnePage')), 'ok');
     } catch (e) {
       setStatus(contextError(e) + reportFor(e), 'bad');
     } finally {

@@ -14,6 +14,8 @@ One AliExpress checkout often becomes several orders from different stores, but 
 
 - **Tick orders** on the AliExpress "My orders" page or let the extension **find them by the bank amount** (and optionally the payment date, also 1 to 3 days earlier because banks post card payments later). It loads older orders by itself.
 - **Several payments at once**: paste the amounts and dates of your bank statement (one payment per line); the extension finds the orders of each payment and opens one invoice per payment.
+- **One PDF for many invoices**: all invoices of several payments or of a period on one page, each starting on a new printed page, so one print gives one PDF.
+- **Export for accounting**: download the shown invoices as CSV (lines and totals) or as ISDOC electronic invoices (the Czech and Slovak standard that accounting software imports).
 - **Credit notes** for refunded orders, from the same order receipts.
 - **One click per order**: an Invoice button next to every order and on the order detail page, or invoices for a whole period, one per day or per order.
 - **Your choice of details**: company logo, product images, stores, order status and order dates on the invoice, each optional.
@@ -33,14 +35,14 @@ One AliExpress checkout often becomes several orders from different stores, but 
 1. Open [My orders](https://www.aliexpress.com/p/order/index.html) on AliExpress. A panel appears in the bottom right corner.
 2. Choose the company the invoice is for (first fill it in under *Edit*).
 3. Enter the amount from your bank statement and, optionally, the payment date, then click *Find orders by amount*, or tick the orders yourself.
-4. Click *Create invoice*, check it and use *Print / Save PDF*.
+4. Click *Create invoice*, check it and use *Print / Save PDF*, or download it as CSV or ISDOC.
 
 The version shown in the panel header tells you which version is loaded.
 
 ## Development
 
 ```
-npm test                          # unit tests (totals, receipts, translations, settings)
+npm test                          # unit tests (totals, receipts, translations, settings, export)
 npm run check                     # files and commits: no personal data or e-mail addresses
 node tools/build-store.js         # Chrome Web Store package -> dist/*.zip
 node tools/make-store-images.js   # store screenshots with demo data (needs Chrome)
@@ -54,6 +56,7 @@ npm run locales                   # _locales (name and description for Chrome)
 - `src/page-bridge.js` - reads order receipts through the AliExpress page's own request library
 - `src/orders.js`, `src/orders.css` - panel and checkboxes on "My orders"
 - `src/invoice.*` - the invoice page
+- `src/documents.js`, `src/export.js` - the invoices of the invoice page and their CSV and ISDOC export (run in Node too)
 - `src/options.*`, `src/settings.js` - settings, backup and restore
 - `src/i18n.js` - translations; `test/i18n.test.js` checks that no language misses a text
 - `store/` - Chrome Web Store listing texts, privacy answers, screenshots and the publishing guide

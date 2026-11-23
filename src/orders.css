@@ -235,8 +235,8 @@
 #alifa-panel .alifa-b-ok .alifa-b-res { color: #1a7f37; }
 #alifa-panel .alifa-b-warn .alifa-b-res { color: #9a6700; }
 #alifa-panel .alifa-b-bad .alifa-b-res { color: #c4320a; }
-#alifa-panel .alifa-batch-all[hidden] { display: none; }
-#alifa-panel .alifa-batch-find, #alifa-panel .alifa-batch-all { height: auto; min-height: 34px; padding-top: 6px; padding-bottom: 6px; }
+#alifa-panel .alifa-batch-all[hidden], #alifa-panel .alifa-batch-one[hidden] { display: none; }
+#alifa-panel .alifa-batch-find, #alifa-panel .alifa-batch-all, #alifa-panel .alifa-batch-one { height: auto; min-height: 34px; padding-top: 6px; padding-bottom: 6px; }
 
 /* invoice of one order straight from its row */
 .alifa-one {
