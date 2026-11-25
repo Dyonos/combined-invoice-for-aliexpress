@@ -38,6 +38,7 @@ FEATURES
 • One-click invoice for a single order, also on the order detail page, and invoices for a whole period (one per day or per order)
 • All invoices of several payments or of a period in one PDF, each starting on a new page
 • Your logo, product images, stores, order status and dates on the invoice, each optional
+• Change quantities, prices and amounts right on the invoice, or add items and fees by hand: totals and VAT are calculated again
 • Add a missing order by its number from the confirmation e-mail
 • Items, shipping and discounts as separate lines, or spread into item prices (handy for stock records)
 • Export for accounting: CSV with lines and totals, and ISDOC electronic invoices (Czech and Slovak standard)
@@ -80,6 +81,7 @@ FUNKCIE
 • Faktúra k jednej objednávke jedným kliknutím, aj na stránke s detailom objednávky, a faktúry za celé obdobie (jedna na deň alebo na objednávku)
 • Všetky faktúry z viacerých platieb alebo za obdobie v jednom PDF, každá začína na novej strane
 • Vlastné logo, obrázky produktov, obchody, stav a dátum objednávok na faktúre, každé sa dá zapnúť zvlášť
+• Úprava množstiev, cien a súm priamo na faktúre alebo ručné pridanie položiek a poplatkov: súčty a DPH sa prepočítajú
 • Pridanie chýbajúcej objednávky podľa jej čísla z potvrdzujúceho e-mailu
 • Položky, doprava a zľavy v samostatných riadkoch alebo rozpočítané do cien položiek (hodí sa na skladovú evidenciu)
 • Export pre účtovníctvo: CSV s riadkami a súčtami a elektronické faktúry ISDOC (český a slovenský štandard)
@@ -117,6 +119,7 @@ FUNKCE
 • Faktura k jedné objednávce jedním kliknutím, i na stránce s detailem objednávky, a faktury za celé období (jedna na den nebo na objednávku)
 • Všechny faktury z více plateb nebo za období v jednom PDF, každá začíná na nové straně
 • Vlastní logo, obrázky produktů, obchody, stav a datum objednávek na faktuře, každé lze zapnout zvlášť
+• Úprava množství, cen a částek přímo na faktuře nebo ruční přidání položek a poplatků: součty a DPH se přepočítají
 • Přidání chybějící objednávky podle jejího čísla z potvrzovacího e-mailu
 • Položky, doprava a slevy na samostatných řádcích nebo rozpočítané do cen položek (hodí se pro skladovou evidenci)
 • Export pro účetnictví: CSV s řádky a součty a elektronické faktury ISDOC (český a slovenský standard)
@@ -154,6 +157,7 @@ FUNKCIÓK
 • Számla egyetlen rendelésről egy kattintással, a rendelés részleteinek oldalán is, valamint számlák egy teljes időszakra (naponta vagy rendelésenként egy)
 • Több fizetés vagy egy időszak összes számlája egyetlen PDF-ben, mindegyik új oldalon kezdődik
 • Saját logó, termékképek, boltok, a rendelések állapota és dátuma a számlán, mindegyik külön bekapcsolható
+• Mennyiségek, árak és összegek módosítása közvetlenül a számlán vagy tételek és díjak kézi hozzáadása: a végösszegek és az áfa újraszámolódnak
 • Hiányzó rendelés hozzáadása a visszaigazoló e-mailben szereplő száma alapján
 • Tételek, szállítás és kedvezmények külön sorban vagy a tételárakba osztva (hasznos a készletnyilvántartáshoz)
 • Exportálás a könyveléshez: CSV a tételsorokkal és a végösszegekkel, valamint ISDOC elektronikus számlák (cseh és szlovák szabvány)
@@ -191,6 +195,7 @@ FUNKCJE
 • Faktura do jednego zamówienia jednym kliknięciem, także na stronie szczegółów zamówienia, oraz faktury za cały okres (jedna na dzień lub na zamówienie)
 • Wszystkie faktury z kilku płatności lub za okres w jednym PDF, każda zaczyna się na nowej stronie
 • Własne logo, zdjęcia produktów, sklepy, status i data zamówień na fakturze, każdy element można włączyć osobno
+• Edycja ilości, cen i kwot bezpośrednio na fakturze lub ręczne dodawanie pozycji i opłat: sumy i VAT są przeliczane ponownie
 • Dodanie brakującego zamówienia według jego numeru z e-maila potwierdzającego
 • Pozycje, wysyłka i rabaty w osobnych wierszach albo rozliczone w cenach pozycji (przydatne w ewidencji magazynowej)
 • Eksport do księgowości: CSV z wierszami i sumami oraz faktury elektroniczne ISDOC (standard czeski i słowacki)
@@ -228,6 +233,7 @@ FUNKTIONEN
 • Rechnung für eine einzelne Bestellung mit einem Klick, auch auf der Detailseite der Bestellung, und Rechnungen für einen ganzen Zeitraum (eine pro Tag oder pro Bestellung)
 • Alle Rechnungen mehrerer Zahlungen oder eines Zeitraums in einem PDF, jede beginnt auf einer neuen Seite
 • Ihr Logo, Produktbilder, Shops, Bestellstatus und Bestelldatum auf der Rechnung, jeweils optional
+• Mengen, Preise und Beträge direkt auf der Rechnung ändern oder Positionen und Gebühren manuell hinzufügen: Summen und MwSt. werden neu berechnet
 • Hinzufügen einer fehlenden Bestellung über ihre Nummer aus der Bestätigungs-E-Mail
 • Positionen, Versand und Rabatte als getrennte Zeilen oder auf die Positionspreise verteilt (praktisch für die Lagerbuchhaltung)
 • Export für die Buchhaltung: CSV mit Positionen und Summen sowie elektronische Rechnungen im ISDOC-Format (tschechischer und slowakischer Standard)
@@ -265,6 +271,7 @@ FUNCȚII
 • Factură pentru o singură comandă cu un singur clic, inclusiv pe pagina cu detaliile comenzii, și facturi pentru o perioadă întreagă (câte una pe zi sau pe comandă)
 • Toate facturile mai multor plăți sau ale unei perioade într-un singur PDF, fiecare începând pe o pagină nouă
 • Logoul dumneavoastră, imaginile produselor, magazinele, starea și datele comenzilor pe factură, fiecare opțional
+• Modificarea cantităților, prețurilor și sumelor direct pe factură sau adăugarea manuală a articolelor și taxelor: totalurile și TVA-ul se recalculează
 • Adăugarea unei comenzi lipsă după numărul ei din e-mailul de confirmare
 • Articole, transport și reduceri pe rânduri separate sau repartizate în prețurile articolelor (util pentru evidența stocurilor)
 • Export pentru contabilitate: CSV cu rândurile și totalurile, precum și facturi electronice ISDOC (standard ceh și slovac)
@@ -302,6 +309,7 @@ FUNCIONES
 • Factura de un solo pedido con un clic, también en la página de detalles del pedido, y facturas de todo un período (una por día o por pedido)
 • Todas las facturas de varios pagos o de todo un período en un solo PDF, cada una en una página nueva
 • Tu logotipo, imágenes de productos, tiendas, estado y fecha de los pedidos en la factura, cada uno opcional
+• Modificar cantidades, precios e importes directamente en la factura o añadir artículos y tasas a mano: los totales y el IVA se recalculan
 • Añadir un pedido que falta por su número del correo de confirmación
 • Artículos, envío y descuentos en líneas separadas o repartidos en los precios de los artículos (práctico para el control de existencias)
 • Exportación para la contabilidad: CSV con las líneas y los totales, y facturas electrónicas ISDOC (estándar checo y eslovaco)
@@ -339,6 +347,7 @@ FONCTIONNALITÉS
 • Facture d’une seule commande en un clic, également sur la page de détail de la commande, et factures pour toute une période (une par jour ou par commande)
 • Toutes les factures de plusieurs paiements ou d’une période dans un seul PDF, chacune sur une nouvelle page
 • Votre logo, les images des produits, les boutiques, le statut et la date des commandes sur la facture, chacun en option
+• Modification des quantités, prix et montants directement sur la facture, ou ajout manuel d’articles et de frais : les totaux et la TVA sont recalculés
 • Ajout d’une commande manquante grâce à son numéro figurant dans l’e-mail de confirmation
 • Articles, livraison et remises sur des lignes séparées ou répartis dans les prix des articles (pratique pour la gestion des stocks)
 • Export pour la comptabilité : CSV avec les lignes et les totaux, et factures électroniques ISDOC (norme tchèque et slovaque)
@@ -376,6 +385,7 @@ FUNCIONALIDADES
 • Fatura de uma só encomenda com um clique, também na página de detalhes da encomenda, e faturas de todo um período (uma por dia ou por encomenda)
 • Todas as faturas de vários pagamentos ou de todo um período num só PDF, cada uma numa nova página
 • O seu logótipo, imagens dos produtos, lojas, estado e data das encomendas na fatura, cada um opcional
+• Alterar quantidades, preços e valores diretamente na fatura ou adicionar artigos e taxas manualmente: os totais e o IVA são recalculados
 • Adicionar uma encomenda em falta pelo número indicado no e-mail de confirmação
 • Artigos, envio e descontos em linhas separadas ou repartidos pelos preços dos artigos (prático para a gestão de stocks)
 • Exportação para a contabilidade: CSV com as linhas e os totais, e faturas eletrónicas ISDOC (norma checa e eslovaca)
@@ -413,6 +423,7 @@ Esta extensão não está associada ao AliExpress nem ao Alibaba. A fatura é el
 • Счёт для одного заказа в один клик, в том числе на странице заказа, и счета за целый период (по одному на день или на заказ)
 • Все счета по нескольким платежам или за целый период в одном PDF, каждый с новой страницы
 • Ваш логотип, фото товаров, магазины, статус и даты заказов в счёте (каждый элемент по желанию)
+• Изменение количества, цен и сумм прямо в счёте, а также добавление товаров и сборов вручную: итоги и НДС пересчитываются
 • Добавление недостающего заказа по его номеру из письма-подтверждения
 • Товары, доставка и скидки отдельными строками или с распределением по ценам товаров (удобно для складского учёта)
 • Экспорт для бухгалтерии: CSV с позициями и итогами, а также электронные счета ISDOC (чешский и словацкий стандарт)
@@ -450,6 +461,7 @@ FUNZIONALITÀ
 • Fattura di un singolo ordine con un clic, anche dalla pagina di dettaglio dell’ordine, e fatture per un intero periodo (una al giorno o una per ordine)
 • Tutte le fatture di più pagamenti o di un intero periodo in un unico PDF, ciascuna su una nuova pagina
 • Il tuo logo, le immagini dei prodotti, i negozi, lo stato e le date degli ordini in fattura, ognuno facoltativo
+• Modifica di quantità, prezzi e importi direttamente in fattura oppure aggiunta a mano di articoli e commissioni: i totali e l’IVA vengono ricalcolati
 • Aggiunta di un ordine mancante tramite il numero indicato nell’e-mail di conferma
 • Articoli, spedizione e sconti su righe separate oppure ripartiti nei prezzi degli articoli (comodo per la gestione del magazzino)
 • Esportazione per la contabilità: CSV con righe e totali e fatture elettroniche ISDOC (standard ceco e slovacco)
@@ -487,6 +499,7 @@ FUNCTIES
 • Met één klik een factuur voor één bestelling, ook op de pagina met de bestelgegevens, en facturen voor een hele periode (één per dag of per bestelling)
 • Alle facturen van meerdere betalingen of van een periode in één pdf, elk op een nieuwe pagina
 • Je logo, productafbeeldingen, winkels, bestelstatus en datums op de factuur, elk optioneel
+• Aantallen, prijzen en bedragen direct op de factuur aanpassen of artikelen en toeslagen met de hand toevoegen: de totalen en de btw worden opnieuw berekend
 • Een ontbrekende bestelling toevoegen met het nummer uit de bevestigingsmail
 • Artikelen, verzending en kortingen op aparte regels of verdeeld over de artikelprijzen (handig voor de voorraadadministratie)
 • Export voor de boekhouding: CSV met regels en totalen, en elektronische ISDOC-facturen (Tsjechische en Slowaakse standaard)
@@ -524,6 +537,7 @@ Tüm tutarlar, sayfada ne yazdığına dair tahminlerden değil, her siparişin 
 • Tek bir sipariş için tek tıkla fatura (sipariş ayrıntıları sayfasında da) ve bütün bir dönem için faturalar (gün veya sipariş başına bir fatura)
 • Birkaç ödemenin veya bütün bir dönemin tüm faturaları tek bir PDF’te, her biri yeni bir sayfada başlayacak şekilde
 • Faturada logonuz, ürün görselleri, mağazalar, sipariş durumu ve tarihleri, her biri isteğe bağlı
+• Miktarları, fiyatları ve tutarları doğrudan fatura üzerinde düzenleme ya da ürün ve ücretleri elle ekleme: toplamlar ve KDV yeniden hesaplanır
 • Eksik bir siparişi onay e-postasındaki numarasıyla ekleme
 • Ürünler, kargo ve indirimler ayrı satırlarda ya da ürün fiyatlarına dağıtılmış olarak (stok kayıtları için kullanışlı)
 • Muhasebe için dışa aktarma: kalemleri ve toplamları içeren CSV ile ISDOC elektronik faturaları (Çek ve Slovak standardı)
@@ -561,6 +575,7 @@ Bu uzantının AliExpress veya Alibaba ile bir bağlantısı yoktur. Faturayı A
 • Рахунок для одного замовлення одним кліком, зокрема на сторінці замовлення, і рахунки за цілий період (по одному на день або на замовлення)
 • Усі рахунки з кількох платежів або за період в одному PDF, кожен починається з нової сторінки
 • Ваш логотип, фото товарів, магазини, статус і дати замовлень у рахунку (кожен елемент за бажанням)
+• Зміна кількості, цін і сум безпосередньо в рахунку, а також додавання товарів і зборів вручну: підсумки й ПДВ перераховуються
 • Додавання відсутнього замовлення за його номером із листа-підтвердження
 • Товари, доставка та знижки окремими рядками або розподілені між цінами товарів (зручно для складського обліку)
 • Експорт для бухгалтерії: CSV з рядками й підсумками та електронні рахунки ISDOC (чеський і словацький стандарт)
@@ -598,6 +613,7 @@ AliExpressで複数の注文を一度に支払い、経理処理用に請求書�
 • 1件の注文の請求書をワンクリックで作成（注文詳細ページからも可能）、期間を指定して請求書をまとめて作成（1日ごとまたは注文ごとに1件）
 • 複数の支払い分、または期間内のすべての請求書を1つのPDFにまとめて出力（各請求書は新しいページから開始）
 • 自社のロゴ、商品画像、ストア、注文状況、注文日を請求書に表示（それぞれ任意）
+• 数量、価格、金額を請求書上で直接編集、または商品や手数料を手動で追加：合計と付加価値税は自動で再計算
 • 一覧にない注文を、確認メールに記載の注文番号で追加
 • 商品、送料、割引を別々の行に表示、または商品価格に配分（在庫管理に便利）
 • 経理処理向けのエクスポート：明細行と合計を含むCSV、ISDOC形式の電子請求書（チェコとスロバキアの標準規格）
@@ -635,6 +651,7 @@ AliExpress에서 여러 주문을 한 번에 결제했는데 장부 정리를 �
 • 클릭 한 번으로 주문 하나의 인보이스 생성(주문 상세 페이지에서도 가능), 기간을 지정해 인보이스 일괄 생성(날짜별 또는 주문별로 1건씩)
 • 여러 결제 또는 특정 기간의 모든 인보이스를 PDF 하나로 생성(각 인보이스는 새 페이지에서 시작)
 • 회사 로고, 상품 이미지, 스토어, 주문 상태, 주문일을 인보이스에 표시(각각 선택 사항)
+• 수량, 가격, 금액을 인보이스에서 바로 수정하거나 상품과 수수료를 직접 추가: 합계와 부가세 자동 재계산
 • 목록에 없는 주문을 확인 이메일의 주문 번호로 추가
 • 상품, 배송비, 할인을 별도 행으로 표시하거나 상품 가격에 배분(재고 관리에 유용)
 • 회계용 내보내기: 품목과 합계를 담은 CSV, ISDOC 전자 인보이스(체코 및 슬로바키아 표준)

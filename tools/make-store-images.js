@@ -144,9 +144,17 @@ const PROMO = `<!doctype html><html><head><meta charset="utf-8"><style>
   <div><h1>Combined Invoice</h1><h2>for AliExpress</h2><p>One invoice for one bank payment.<br>The total matches to the cent.</p></div>
 </body></html>`;
 
+// the invoice with a change typed on it: one lot of the first order as 2 pieces at half the price, so the total
+// still matches the bank amount
+const EDITED_DRAFT = Object.assign({}, require(path.join(ROOT, 'test/fixtures/receipts.js')).demoDraft, {
+  edited: { names: {}, numbers: {}, changes: { '1000000000010001': { items: { 0: { qty: 2, unitCents: 408 } } } } },
+});
+const withDraft = (html, draft) => html.replace('<script src="core.js"></script>',
+  `<script>window.ALIFA_DEMO = ${JSON.stringify(draft)};</script>\n  <script src="core.js"></script>`);
+
 const JOBS = [
   { name: 'screenshots/1-orders-en.png', file: '_shot-1.html', html: ordersPage(Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
-  { name: 'screenshots/2-invoice-en.png', file: '_shot-2.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
+  { name: 'screenshots/2-invoice-en.png', file: '_shot-2.html', html: withDraft(page('invoice.html', Object.assign({}, DEMO, { lang: 'en' })), EDITED_DRAFT), size: '1280,800' },
   { name: 'screenshots/3-invoice-de-allocated.png', file: '_shot-3.html', html: page('invoice.html', Object.assign({}, DEMO, { lang: 'de', invoiceLang: 'de', mode: 'allocated' })), size: '1280,800' },
   { name: 'screenshots/4-settings-en.png', file: '_shot-4.html', html: page('options.html', Object.assign({}, DEMO, { lang: 'en' })), size: '1280,800' },
   { name: 'screenshots/5-batch-en.png', file: '_shot-5.html', html: ordersPage(Object.assign({}, DEMO, { lang: 'en' }), ORDERS.map((o) => Object.assign({}, o, { pick: false })), null, BATCH_DEMO), size: '1280,800' },
