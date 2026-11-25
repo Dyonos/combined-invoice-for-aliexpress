@@ -2,6 +2,13 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.18.0 - 2026-11-25
+
+- Changes right on the invoice: click a quantity, a unit price or the amount of a shipping, discount or fee line and type a new value. The line, the order total, the VAT (at the rate of the order) and the check against the bank amount are calculated again; the invoice number stays.
+- Lines added by hand: "+ Item" and "+ Fee" under every order (a discount is a fee with a minus sign). They can be named and removed again, and shipping and fee lines can be renamed like item names.
+- Changes stay with the invoice tab, also after a reload, and are in the CSV and ISDOC export. "Undo changes" puts everything back as on the receipts.
+- The panel of the invoice page can be on the side (the default in wide windows), at the top or hidden. When it is hidden or scrolled away, a small bar with printing stays.
+
 ## 1.17.0 - 2026-11-23
 
 - Several invoices in one PDF: under "Several payments at once", also for all orders of a period, "All invoices in one PDF" opens all prepared invoices on one page. Each invoice starts on a new printed page and keeps its own number and dates, the toolbar options apply to all of them, and the invoice numbers can be edited right on the invoices.

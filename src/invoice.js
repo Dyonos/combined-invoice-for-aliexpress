@@ -36,11 +36,12 @@
   // ---------------------------------------------------------------- data
 
   let draft = null;
+  let draftKey = '';
   if (hasExt) {
     // each invoice tab reads its own draft (?draft=<id>); without it the last one
     const draftId = new URLSearchParams(location.search).get('draft');
-    const key = draftId ? 'alifa.draft.' + draftId : 'alifa.draft';
-    draft = (await chrome.storage.local.get(key))[key] || null;
+    draftKey = draftId ? 'alifa.draft.' + draftId : 'alifa.draft';
+    draft = (await chrome.storage.local.get(draftKey))[draftKey] || null;
   } else {
     // preview outside the extension (file opened directly in the browser): ?demo=multi shows several invoices,
     // window.ALIFA_DEMO can also be a draft itself
@@ -71,8 +72,52 @@
     date: '', // date of issue typed in the toolbar ('' = automatic), one invoice only
     show: Object.assign({ logo: true, images: false, stores: true, status: false, dates: false }, settings.show),
   };
-  const edits = {}; // edited item names: "orderId:index" -> text
-  const numbers = {}; // typed document numbers: "invoice:<k>" / "credit:<k>" -> text
+  // changes typed on the invoice are kept with the draft, so they stay after a reload of the tab
+  const saved = draft && draft.edited && typeof draft.edited === 'object' ? draft.edited : {};
+  const objectOf = (v) => (v && typeof v === 'object' && !Array.isArray(v) ? Object.assign({}, v) : {});
+  const edits = objectOf(saved.names); // edited texts: item names "orderId:ref", charge labels "orderId:c:key"
+  const numbers = objectOf(saved.numbers); // typed document numbers: "invoice:<k>" / "credit:<k>" -> text
+  const changes = objectOf(saved.changes); // quantities, prices, amounts and added lines by order ID (A.applyOrderChanges)
+  // the orders as on their receipts, to compare a typed value with the original one
+  const receiptOrders = new Map();
+  for (const p of parts) for (const o of p.orders) receiptOrders.set(o.orderId, o);
+
+  let saveTimer = null;
+  function persist() {
+    if (!hasExt || !draft || !draftKey) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const value = Object.assign({}, draft, { edited: { names: edits, numbers, changes } });
+      chrome.storage.local.set({ [draftKey]: value }).catch(() => {});
+    }, 300);
+  }
+
+  // ---------------------------------------------------------------- where the panel is
+
+  /** 'side' or 'top' as set; without a choice on the side in wide windows (it then has room next to the invoice). */
+  function panelPlace() {
+    if (settings.panel === 'side' || settings.panel === 'top') return settings.panel;
+    return window.innerWidth >= 1200 ? 'side' : 'top';
+  }
+
+  function applyPanel() {
+    const place = panelPlace();
+    const hidden = !!settings.panelHidden;
+    const cls = document.body.classList;
+    cls.toggle('panel-side', !hidden && place === 'side');
+    cls.toggle('panel-top', !hidden && place === 'top');
+    cls.toggle('panel-hidden', hidden);
+    for (const b of document.querySelectorAll('[data-panel]')) {
+      b.setAttribute('aria-pressed', String(b.dataset.panel === 'hidden' ? hidden : !hidden && b.dataset.panel === place));
+    }
+  }
+
+  async function setPanel(place, hidden) {
+    if (place) settings.panel = place;
+    settings.panelHidden = hidden;
+    applyPanel();
+    await S.save(settings);
+  }
 
   // ---------------------------------------------------------------- panel above the invoice
 
@@ -99,8 +144,14 @@
     $('docLang').innerHTML = I.langOptions(docLang);
     const ver = version();
     $('version').textContent = I.t('brand') + ' ' + (ver ? 'v' + ver : I.t('demo'));
-    if (multi) $('hint').textContent = I.t('inv.hintMulti');
     fillProfiles();
+  }
+
+  /** What can be done on the invoice; in the allocated view where quantities and prices are changed. */
+  function updateHint() {
+    const text = [I.t(multi ? 'inv.hintMulti' : 'inv.hint')];
+    if (ui.mode === 'allocated' && ui.docType !== 'credit') text.push(I.t('inv.hintAllocated'));
+    $('hint').textContent = text.join(' ');
   }
 
   function bankText(cents) {
@@ -108,6 +159,7 @@
   }
 
   applyTexts();
+  applyPanel();
   $('title').value = ui.title;
   $('eu').checked = ui.euWarehouse;
   $('ship').checked = ui.shipNote;
@@ -186,41 +238,239 @@
   });
   $('docDate').addEventListener('input', (e) => { ui.date = e.target.value; render(); });
   $('print').addEventListener('click', () => window.print());
+  $('print2').addEventListener('click', () => window.print());
   $('csv').addEventListener('click', downloadCsv);
   $('isdoc').addEventListener('click', downloadIsdoc);
   $('settings').addEventListener('click', () => {
     if (hasExt && chrome.runtime && chrome.runtime.openOptionsPage) chrome.runtime.openOptionsPage();
     else window.open('options.html', '_blank');
   });
-  // edits in the invoice text: item names, and with several invoices also their numbers
+
+  // the panel: on the side, at the top or hidden; at the top it scrolls away with the page and the small bar
+  // with printing appears instead
+  for (const b of document.querySelectorAll('[data-panel]')) {
+    b.addEventListener('click', () => (b.dataset.panel === 'hidden' ? setPanel('', true) : setPanel(b.dataset.panel, false)));
+  }
+  $('showPanel').addEventListener('click', () => {
+    if (settings.panelHidden) setPanel('', false);
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  window.addEventListener('resize', applyPanel);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => document.body.classList.toggle('toolbar-away', !entry.isIntersecting))
+      .observe($('toolbar'));
+  }
+
+  // undo the changes typed on the invoice: the first click asks, the second one undoes
+  let resetTimer = null;
+  $('reset').addEventListener('click', () => {
+    const btn = $('reset');
+    if (!btn.classList.contains('armed')) {
+      btn.classList.add('armed');
+      btn.textContent = I.t('inv.resetConfirm');
+      resetTimer = setTimeout(() => { btn.classList.remove('armed'); btn.textContent = I.t('inv.resetEdits'); }, 4000);
+      return;
+    }
+    clearTimeout(resetTimer);
+    btn.classList.remove('armed');
+    btn.textContent = I.t('inv.resetEdits');
+    for (const k of Object.keys(changes)) delete changes[k];
+    for (const k of Object.keys(edits)) delete edits[k];
+    persist();
+    render();
+  });
+
+  // ---------------------------------------------------------------- changes right on the invoice
+
+  // texts: item names, labels of shipping and fee lines, and with several invoices their numbers
   $('doc').addEventListener('input', (e) => {
-    const title = e.target.closest && e.target.closest('.title[data-key]');
-    if (title) edits[title.dataset.key] = title.textContent;
+    const text = e.target.closest && e.target.closest('[data-key]');
+    if (text) {
+      edits[text.dataset.key] = text.textContent;
+      persist();
+    }
     const no = e.target.closest && e.target.closest('[data-num]');
     if (no) {
       numbers[no.dataset.num] = no.textContent.trim();
       document.title = pageTitle(documents());
+      persist();
     }
   });
-  // a number is one line: Enter ends the editing
+  // one line each: Enter ends the editing; Escape puts back a number being typed
   $('doc').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.closest && e.target.closest('[data-num]')) {
+    const el = e.target.closest && e.target.closest('[data-num], [data-key], [data-edit]');
+    if (!el) return;
+    if (e.key === 'Enter') {
       e.preventDefault();
-      e.target.blur();
+      el.blur();
+    } else if (e.key === 'Escape' && el.dataset.edit) {
+      el.dataset.cancel = '1';
+      el.blur();
     }
+  });
+  // a quantity, price or amount is selected when it gets the focus, so typing replaces it
+  $('doc').addEventListener('focusin', (e) => {
+    const el = e.target.closest && e.target.closest('[data-edit]');
+    if (el) setTimeout(() => { if (document.activeElement === el) selectAll(el); }, 0);
+  });
+  // leaving the field applies the typed value: the line, the order and the invoice are calculated again
+  $('doc').addEventListener('focusout', (e) => {
+    const el = e.target.closest && e.target.closest('[data-edit]');
+    if (!el) return;
+    const next = selectorOf(e.relatedTarget);
+    if (!el.dataset.cancel) applyTyped(el);
+    render();
+    // Tab to the next field keeps working after the invoice is drawn again
+    const target = next && $('doc').querySelector(next);
+    if (target) target.focus();
+  });
+  // lines added by hand. Pressing the mouse on a button keeps the focus in the field being typed into, so the invoice
+  // is not drawn again under the mouse; the click applies the typed value first.
+  $('doc').addEventListener('mousedown', (e) => {
+    if (e.target.closest && e.target.closest('[data-add], [data-del]')) e.preventDefault();
+  });
+  $('doc').addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('[data-add], [data-del]');
+    if (!btn) return;
+    const active = document.activeElement;
+    if (active && active !== btn && active.dataset && active.dataset.edit && $('doc').contains(active)) {
+      applyTyped(active);
+      active.dataset.cancel = '1'; // applied already
+      active.blur();
+    }
+    if (btn.dataset.add) addLine(btn.dataset.order, btn.dataset.add);
+    else removeLine(btn.dataset.order, btn.dataset.del);
   });
   // the footer of each invoice depends on its printed height: images change it when they load
   $('doc').addEventListener('load', updatePageCss, true);
   window.addEventListener('beforeprint', updatePageCss);
   if (hasExt && chrome.storage.onChanged) {
-    chrome.storage.onChanged.addListener(async (changes, area) => {
-      if (area !== 'local' || !changes[S.KEY]) return;
+    chrome.storage.onChanged.addListener(async (changed, area) => {
+      if (area !== 'local' || !changed[S.KEY]) return;
       settings = await S.load();
       if (settings.lang !== I.lang()) I.setLang(settings.lang);
       docLang = docLangOf(settings);
       applyTexts();
+      applyPanel();
       render();
     });
+  }
+
+  function selectAll(el) {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  /** CSS selector of an editable field of the invoice, to find it again after the invoice is drawn again. */
+  function selectorOf(el) {
+    if (!el || !el.dataset || !$('doc').contains(el)) return '';
+    const attr = (name) => (el.dataset[name] !== undefined ? `[data-${name}="${CSS.escape(el.dataset[name])}"]` : '');
+    if (el.dataset.edit) return attr('edit') + attr('order') + attr('ref') + attr('charge');
+    if (el.dataset.key) return attr('key');
+    if (el.dataset.num) return attr('num');
+    if (el.dataset.add) return attr('add') + attr('order');
+    if (el.dataset.del) return attr('del') + attr('order');
+    return '';
+  }
+
+  const changesOf = (orderId) => changes[orderId] || (changes[orderId] = {});
+
+  /** Removes what no longer changes anything, so an order without changes is printed as on its receipt. */
+  function tidy(orderId) {
+    const ch = changes[orderId];
+    if (!ch) return;
+    for (const k of ['items', 'charges']) if (ch[k] && !Object.keys(ch[k]).length) delete ch[k];
+    if (ch.added && !ch.added.length) delete ch.added;
+    if (!Object.keys(ch).length) delete changes[orderId];
+  }
+
+  /** Quantity typed on the invoice: a whole number from 1. */
+  function typedQty(text) {
+    const m = String(text).match(/\d+/);
+    const n = m ? parseInt(m[0], 10) : 0;
+    return n >= 1 && n <= 99999 ? n : null;
+  }
+
+  /** Amount typed on the invoice in cents (any usual format: 12.5, 12,50, €12.50, -3), or null. */
+  function typedCents(text) {
+    const m = A.parseMoney(text);
+    return m && Math.abs(m.cents) < 1e9 ? m.cents : null;
+  }
+
+  /** Applies a quantity, unit price or amount typed into the field el. Values equal to the receipt are no change. */
+  function applyTyped(el) {
+    const orderId = el.dataset.order;
+    const receipt = receiptOrders.get(orderId);
+    if (!receipt) return;
+    const field = el.dataset.edit;
+    const text = el.textContent.trim();
+    const ch = changesOf(orderId);
+    if (field === 'qty' || field === 'unit') {
+      const ref = el.dataset.ref;
+      const value = field === 'qty' ? typedQty(text) : typedCents(text);
+      if (value === null || (field === 'unit' && value < 0)) return;
+      const prop = field === 'qty' ? 'qty' : 'unitCents';
+      if (ref.startsWith('m')) {
+        const line = (ch.added || []).find((a) => 'm' + a.id === ref);
+        if (line) line[prop] = value;
+      } else {
+        const item = receipt.items[Number(ref)];
+        if (!item) return;
+        ch.items = ch.items || {};
+        const now = Object.assign({ qty: item.qty, unitCents: item.unitCents }, ch.items[ref], { [prop]: value });
+        if (now.qty === item.qty && now.unitCents === item.unitCents) delete ch.items[ref];
+        else ch.items[ref] = now;
+      }
+    } else if (field === 'charge') {
+      const key = el.dataset.charge;
+      let cents = typedCents(text);
+      if (cents === null) return;
+      const line = key.startsWith('m') ? (ch.added || []).find((a) => 'm' + a.id === key) : null;
+      if (line) {
+        line.cents = cents;
+      } else {
+        const charge = receipt.charges.find((c) => c.key === key);
+        if (!charge) return;
+        // a discount stays a discount when the number is typed without the minus sign
+        if (charge.cents < 0 && cents > 0 && !/[-−]/.test(text)) cents = -cents;
+        ch.charges = ch.charges || {};
+        if (cents === charge.cents) delete ch.charges[key];
+        else ch.charges[key] = cents;
+      }
+    }
+    tidy(orderId);
+    persist();
+  }
+
+  /** Adds an item or a fee to an order; its name is ready for typing. */
+  function addLine(orderId, kind) {
+    let max = 0;
+    for (const ch of Object.values(changes)) for (const a of ch.added || []) max = Math.max(max, Number(a.id) || 0);
+    const id = String(max + 1);
+    const ch = changesOf(orderId);
+    ch.added = ch.added || [];
+    ch.added.push(kind === 'item' ? { id, kind: 'item', qty: 1, unitCents: 0 } : { id, kind: 'fee', cents: 0 });
+    persist();
+    render();
+    const name = $('doc').querySelector(`[data-key="${CSS.escape(kind === 'item' ? `${orderId}:m${id}` : `${orderId}:c:m${id}`)}"]`);
+    if (name) {
+      name.focus();
+      selectAll(name);
+    }
+  }
+
+  function removeLine(orderId, id) {
+    const ch = changes[orderId];
+    if (!ch || !ch.added) return;
+    ch.added = ch.added.filter((a) => a.id !== id);
+    delete edits[`${orderId}:m${id}`];
+    delete edits[`${orderId}:c:m${id}`];
+    tidy(orderId);
+    persist();
+    render();
   }
 
   /** Warning from the calculations ({ code, ... }) as text in the interface language. */
@@ -260,6 +510,7 @@
       today: todayIso(),
       edits,
       numbers,
+      changes,
     });
   }
 
@@ -319,6 +570,14 @@
         </div>
       </div>`;
 
+    // a quantity, price or amount that can be typed over (the view with separate lines of an invoice)
+    const field = (o, l, kind, text) => `<span class="ed${(kind === 'charge' ? l.changed : (l.changedFields || []).includes(kind)) ? ' changed' : ''}" contenteditable="plaintext-only" spellcheck="false"` +
+      ` data-edit="${kind}" data-order="${esc(o.orderId)}"` +
+      (kind === 'charge' ? ` data-charge="${esc(l.key)}"` : ` data-ref="${esc(l.ref)}"`) + `>${esc(text)}</span>`;
+    const del = (o, l) => (l.manual && l.editable
+      ? `<button type="button" class="line-del no-print" data-del="${esc(l.manual)}" data-order="${esc(o.orderId)}" title="${esc(I.t('inv.removeLine'))}" aria-label="${esc(I.t('inv.removeLine'))}">×</button>`
+      : '');
+
     let n = 0;
     const bodies = d.orders.map((o) => {
       const orderHead = `<tr class="order-head"><td colspan="5">${esc(T('doc.orderNo'))} <b>${esc(o.orderId)}</b>${o.extra.length ? ` (${esc(o.extra.join(', '))})` : ''}</td></tr>`;
@@ -333,16 +592,33 @@
           n++;
           const unit = Number.isInteger(l.unitCents) ? money(l.unitCents) : I.moneyIn(docLang, l.unitCents, d.currency, 4);
           const img = d.images && imgSrc(l.img) ? `<img class="item-img" src="${esc(imgSrc(l.img))}" alt="">` : '';
-          return `<tr class="item"><td class="num">${n}.</td>` +
+          // "2 pcs": only the number is typed over, the unit follows it
+          const qty = esc(I.pluralIn(docLang, l.qty, 'doc.pcs'));
+          const qtyHtml = l.editable ? qty.replace(String(l.qty), field(o, l, 'qty', String(l.qty))) : qty;
+          return `<tr class="item${l.manual ? ' manual' : ''}"><td class="num">${n}.</td>` +
             `<td>${img}<div class="title" contenteditable="plaintext-only" spellcheck="false" data-key="${esc(l.key)}">${esc(l.text)}</div>` +
             `${l.sku ? `<div class="sku">${esc(l.sku)}</div>` : ''}</td>` +
-            `<td class="qty">${esc(I.pluralIn(docLang, l.qty, 'doc.pcs'))}</td><td class="unit">${esc(unit)}</td><td class="sum">${esc(money(l.lineCents))}</td></tr>`;
+            `<td class="qty">${qtyHtml}</td><td class="unit">${l.editable ? field(o, l, 'unit', unit) : esc(unit)}</td>` +
+            `<td class="sum">${esc(money(l.lineCents))}${del(o, l)}</td></tr>`;
+        }
+        if (l.kind === 'charge') {
+          // shipping, discounts and fees: label and amount can be changed
+          return `<tr class="charge${l.manual ? ' manual' : ''}"><td class="num"></td>` +
+            `<td><div class="label" contenteditable="plaintext-only" spellcheck="false" data-key="${esc(l.nameKey)}">${esc(l.text)}</div></td>` +
+            `<td class="qty"></td><td class="unit"></td>` +
+            `<td class="sum">${l.editable ? field(o, l, 'charge', money(l.lineCents)) : esc(money(l.lineCents))}${del(o, l)}</td></tr>`;
         }
         // receipt sub-lines (customs duty and benefit breakdowns) are not printed on the invoice, only the main lines
         return `<tr class="${l.kind}"><td class="num"></td><td>${esc(l.text)}</td><td class="qty"></td><td class="unit"></td><td class="sum">${esc(money(l.lineCents))}</td></tr>`;
       }).join('');
+      // adding an item or a fee to the order (screen only)
+      const add = d.editable
+        ? `<tr class="add-row no-print"><td class="num"></td><td colspan="4">` +
+          `<button type="button" class="add-btn" data-add="item" data-order="${esc(o.orderId)}" title="${esc(I.t('inv.addItemTitle'))}">${esc(I.t('inv.addItem'))}</button>` +
+          `<button type="button" class="add-btn" data-add="fee" data-order="${esc(o.orderId)}" title="${esc(I.t('inv.addFeeTitle'))}">${esc(I.t('inv.addFee'))}</button></td></tr>`
+        : '';
       const total = d.credit ? '' : `<tr class="order-total"><td class="num"></td><td colspan="3">${esc(T('doc.orderTotal'))}</td><td class="sum">${esc(money(o.totalCents))}</td></tr>`;
-      return `<tbody>${orderHead}${allocation}${rows}${total}</tbody>`;
+      return `<tbody>${orderHead}${allocation}${rows}${add}${total}</tbody>`;
     }).join('');
 
     const table = `
@@ -424,13 +700,22 @@
       for (const w of inv.warnings) warnings.push(ofInvoice(warnText(w)));
       for (const o of inv.orders) {
         for (const w of o.warnings.concat(o.notes)) warnings.push(I.t('inv.warnOrder', { id: o.orderId, text: warnText(w) }));
+        // the order list against the receipt, not against lines changed on the invoice page
+        const receiptTotal = o.receiptTotalCents !== undefined ? o.receiptTotalCents : o.totalCents;
         const listed = d.part.listTotals[o.orderId];
-        if (Number.isInteger(listed) && listed !== o.totalCents) {
-          warnings.push(I.t('inv.warnListTotal', { id: o.orderId, list: uiMoney(listed, d.currency), receipt: uiMoney(o.totalCents, d.currency) }));
+        if (Number.isInteger(listed) && listed !== receiptTotal) {
+          warnings.push(I.t('inv.warnListTotal', { id: o.orderId, list: uiMoney(listed, d.currency), receipt: uiMoney(receiptTotal, d.currency) }));
         }
       }
     }
     $('warnings').innerHTML = warnings.map((w) => `<li>${esc(w)}</li>`).join('');
+
+    // changes typed on the invoice, and the check in the small bar of a hidden panel
+    $('edited').hidden = !docs.some((d) => d.changed) && !Object.keys(edits).length;
+    const mini = $('miniCheck');
+    mini.className = 'mini-check' + (check.classList.contains('ok') ? ' ok' : check.classList.contains('bad') ? ' bad' : '');
+    mini.textContent = check.classList.contains('ok') ? '✓' : check.classList.contains('bad') ? '✗' : '';
+    mini.title = check.textContent;
   }
 
   function pageTitle(docs) {
@@ -480,11 +765,14 @@
   function render() {
     const main = $('doc');
     main.lang = docLang;
+    updateHint();
     const docs = documents();
     if (!docs.length) {
       main.innerHTML = `<article class="doc"><p class="empty">${esc(I.t('inv.empty'))}</p></article>`;
       $('check').textContent = '';
       $('warnings').innerHTML = '';
+      $('edited').hidden = true;
+      $('miniCheck').textContent = '';
       document.title = pageTitle(docs);
       return;
     }

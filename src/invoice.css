@@ -6,6 +6,7 @@
   --muted: #6b6b70;
   --line: #d9d9de;
   --soft: #f5f5f7;
+  --side: 360px;
 }
 
 * { box-sizing: border-box; }
@@ -17,18 +18,32 @@ body {
   font: 13px/1.45 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* ---------------------------------------------------------------- panel above the invoice */
+/* ---------------------------------------------------------------- panel (at the top by default) */
 
 .toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding: 12px 20px 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "fields langs head"
+    "options actions actions"
+    "show show show"
+    "status status status";
+  gap: 8px 16px;
+  align-items: end;
+  padding: 10px 20px 10px;
   background: #fff;
   border-bottom: 1px solid var(--line);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
-.tb-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 8px; }
+.tb-head { grid-area: head; display: flex; align-items: center; gap: 10px; align-self: start; justify-content: flex-end; }
+.tb-fields { grid-area: fields; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; }
+.tb-langs { grid-area: langs; display: flex; gap: 10px; align-items: flex-end; }
+.tb-options { grid-area: options; }
+.tb-actions { grid-area: actions; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.tb-show { grid-area: show; }
+.tb-status { grid-area: status; }
+.toolbar [hidden] { display: none !important; }
+
 .toolbar label { display: grid; gap: 3px; font-size: 12px; font-weight: 600; color: var(--muted); }
 .toolbar .grow { flex: 1; min-width: 160px; }
 .toolbar input[type="text"], .toolbar input[type="date"], .toolbar select {
@@ -43,12 +58,12 @@ body {
 .toolbar .grow input { width: 100%; }
 .money-input { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 400; }
 .money-input input { width: 110px; text-align: right; }
-.mode { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; border: 0; }
+.mode { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 0; border: 0; }
 .mode label { display: flex; align-items: center; gap: 6px; font-weight: 400; color: var(--ink); font-size: 13px; }
 .mode .eu { padding-left: 14px; border-left: 1px solid var(--line); }
 .mode .eu + .eu { padding-left: 0; border-left: 0; }
-.spacer { flex: 1; }
-.version { align-self: center; color: var(--muted); font-size: 12px; }
+.opt-hint { color: var(--muted); }
+.version { color: var(--muted); font-size: 12px; white-space: nowrap; }
 .btn {
   height: 34px;
   padding: 0 14px;
@@ -60,14 +75,91 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
+.btn:hover { border-color: #9d9da3; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.primary:hover { background: #c4320a; }
+.show-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13px; color: #444; }
+.show-row label { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; color: #444; font-size: 13px; }
 .check { font-size: 14px; font-weight: 600; }
 .check.ok { color: #1a7f37; }
 .check.bad { color: #c4320a; }
+.edited { margin-top: 4px; color: #8a5a00; font-size: 12.5px; }
+.link-btn { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+.link-btn.armed { color: #fff; background: var(--accent); padding: 1px 6px; border-radius: 5px; text-decoration: none; }
 .warnings { margin: 6px 0 0; padding: 0 0 0 18px; color: #8a5a00; }
 .warnings:empty { display: none; }
 .hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+
+/* where the panel is */
+.panel-modes { display: inline-flex; border: 1px solid #c9c9ce; border-radius: 8px; overflow: hidden; }
+.pm { display: grid; place-items: center; width: 32px; height: 28px; padding: 0; border: 0; background: #fff; color: #55555a; cursor: pointer; }
+.pm + .pm { border-left: 1px solid #e1e1e5; }
+.pm:hover { background: var(--soft); color: var(--ink); }
+.pm[aria-pressed="true"] { background: #fdeee9; color: var(--accent); }
+.pm svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.pm svg .fill { fill: currentColor; stroke: none; opacity: 0.85; }
+
+/* printing and the way back to the panel when it is hidden (or scrolled away at the top) */
+.mini-bar {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 14px;
+  z-index: 20;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+.panel-hidden .mini-bar, .panel-top.toolbar-away .mini-bar { display: flex; }
+.panel-hidden .toolbar { display: none; }
+.mini-check { padding: 0 4px 0 6px; font-size: 15px; font-weight: 700; }
+.mini-check.ok { color: #1a7f37; }
+.mini-check.bad { color: #c4320a; }
+.mini-check:empty { display: none; }
+
+/* the panel on the side, when the window has room for it next to the invoice */
+@media (min-width: 1200px) {
+  .panel-side .toolbar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    width: var(--side);
+    overflow-y: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "fields" "actions" "status" "options" "show" "langs";
+    align-content: start;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px 16px 18px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+  }
+  .panel-side #doc { margin-left: var(--side); }
+  .panel-side .tb-head { justify-content: space-between; }
+  .panel-side .tb-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .panel-side .tb-fields .f-wide { grid-column: 1 / -1; }
+  .panel-side .tb-fields input, .panel-side .tb-fields select, .panel-side .tb-langs select { width: 100%; min-width: 0; }
+  .panel-side .money-input input { flex: 1; width: auto; min-width: 0; }
+  .panel-side .tb-langs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; border-top: 1px solid #ececf0; }
+  .panel-side .tb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .panel-side .tb-actions .btn { width: 100%; padding: 0 8px; }
+  .panel-side #print { grid-column: 1 / -1; order: -1; height: 40px; font-size: 14px; }
+  .panel-side #settings { grid-column: 1 / -1; }
+  .panel-side .tb-options { flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid #ececf0; }
+  .panel-side .tb-options label { align-items: flex-start; }
+  .panel-side .tb-options input { margin-top: 2px; }
+  .panel-side .mode .eu { padding-left: 0; border-left: 0; }
+  .panel-side .opt-hint { display: block; font-size: 12px; }
+  .panel-side .tb-show { padding-top: 12px; border-top: 1px solid #ececf0; }
+  .panel-side .tb-show > span { flex-basis: 100%; font-size: 12px; font-weight: 600; color: var(--muted); }
+}
 
 /* ---------------------------------------------------------------- invoice */
 
@@ -95,7 +187,6 @@ body {
 .party .name { font-weight: 700; font-size: 11pt; }
 .party p { margin: 0; white-space: pre-line; }
 
-
 table.items { width: 100%; border-collapse: collapse; }
 table.items th {
   padding: 2mm 1.5mm;
@@ -110,7 +201,7 @@ table.items td { padding: 1.6mm 1.5mm; vertical-align: top; border-bottom: 1px s
 table.items .num { width: 7mm; color: var(--muted); }
 table.items .qty { width: 17mm; text-align: right; white-space: nowrap; }
 table.items .unit { width: 26mm; text-align: right; white-space: nowrap; }
-table.items .sum { width: 26mm; text-align: right; white-space: nowrap; }
+table.items .sum { position: relative; width: 26mm; text-align: right; white-space: nowrap; }
 table.items th.qty, table.items th.unit, table.items th.sum { text-align: right; }
 table.items tbody { break-inside: avoid; }
 tr.order-head td {
@@ -121,13 +212,49 @@ tr.order-head td {
 }
 tr.order-head b { color: var(--ink); }
 td .title { font-weight: 600; }
-td .title[contenteditable]:hover, .doc-no-val[contenteditable]:hover { background: #fff6dd; }
-td .title[contenteditable]:focus, .doc-no-val[contenteditable]:focus { outline: 1px dashed var(--accent); background: #fffaf0; }
 td .sku { color: var(--muted); font-size: 8.5pt; }
 tr.charge td, tr.diff td { color: #333; }
 tr.diff td { color: #9a3412; }
 tr.order-total td { font-weight: 700; border-bottom: 1px solid var(--line); }
 tr.alloc-note td { color: var(--muted); font-size: 8.5pt; border-bottom: 0; padding-top: 0; }
+
+/* changes right on the invoice (screen only): names, quantities, prices and amounts */
+[contenteditable] { border-radius: 3px; outline: none; }
+[contenteditable]:hover { background: #fff6dd; }
+[contenteditable]:focus { outline: 1px dashed var(--accent); outline-offset: 1px; background: #fffaf0; }
+.ed { display: inline-block; min-width: 1.6em; padding: 0 2px; border-bottom: 1px dotted #b8b8be; cursor: text; }
+.ed.changed { background: #fff1c2; border-bottom-color: #d4a017; }
+td .label { display: inline-block; min-width: 3em; }
+.line-del {
+  position: absolute;
+  top: 50%;
+  right: -9mm;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: #9d9da3;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.line-del:hover { border-color: #f0b4a4; background: #fdeee9; color: var(--accent); }
+tr.add-row td { padding-top: 1mm; padding-bottom: 1mm; border-bottom: 1px solid #ececf0; }
+.add-btn {
+  margin-right: 6px;
+  padding: 2px 9px;
+  border: 1px dashed #c9c9ce;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+  font: inherit;
+  font-size: 9pt;
+  cursor: pointer;
+}
+.add-btn:hover { border-color: var(--accent); color: var(--accent); background: #fffaf8; }
 
 .totals { display: flex; justify-content: flex-end; margin-top: 6mm; }
 .totals table { min-width: 86mm; border-collapse: collapse; font-size: 10pt; }
@@ -135,10 +262,11 @@ tr.alloc-note td { color: var(--muted); font-size: 8.5pt; border-bottom: 0; padd
 .totals td:last-child { text-align: right; padding-left: 8mm; white-space: nowrap; }
 .totals .grand td { padding-top: 2.5mm; border-top: 1.5px solid var(--ink); font-size: 13pt; font-weight: 800; }
 .totals .muted td { color: var(--muted); font-size: 9pt; }
-.totals .bank td { font-weight: 600; }
-.totals .bank.bad td { color: #c4320a; }
 .doc-foot { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); color: var(--muted); font-size: 8pt; }
 
+.doc-logo { display: block; max-width: 240px; max-height: 64px; margin-bottom: 10px; object-fit: contain; }
+.doc-ref { margin-top: 2px; color: #555; font-size: 12px; }
+.item-img { float: left; width: 36px; height: 36px; margin-right: 8px; border-radius: 4px; object-fit: cover; }
 
 /* ---------------------------------------------------------------- print */
 
@@ -162,16 +290,9 @@ tr.alloc-note td { color: var(--muted); font-size: 8.5pt; border-bottom: 0; padd
 @media print {
   body { background: #fff; }
   .no-print { display: none !important; }
+  #doc { margin: 0 !important; }
   .doc { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
   /* several invoices on one page: each starts on a new page */
   .doc + .doc { break-before: page; }
-  td .title[contenteditable]:hover, .doc-no-val[contenteditable]:hover { background: none; }
+  [contenteditable], .ed, .ed.changed { min-width: 0; background: none !important; border-bottom: 0; padding: 0; outline: none; }
 }
-
-/* document type, date of issue and what the invoice shows */
-.toolbar [hidden] { display: none !important; }
-.show-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13px; color: #444; }
-.show-row label { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; }
-.doc-logo { display: block; max-width: 240px; max-height: 64px; margin-bottom: 10px; object-fit: contain; }
-.doc-ref { margin-top: 2px; color: #555; font-size: 12px; }
-.item-img { float: left; width: 36px; height: 36px; margin-right: 8px; border-radius: 4px; object-fit: cover; }

@@ -209,6 +209,29 @@ test('ISDOC: invoice with VAT, structure in the order of the schema, amounts add
   assert.equal(value(item, 'ClassifiedTaxCategory/VATCalculationMethod').text, '1');
 });
 
+test('ISDOC and CSV of an invoice changed on the page: changed and added lines, amounts add up', () => {
+  const changes = {
+    '1000000000010001': { items: { 0: { qty: 2 } }, charges: { shippingFee: 0 } },
+    '1000000000010002': { added: [{ id: '1', kind: 'item', qty: 3, unitCents: 199 }, { id: '2', kind: 'fee', cents: -150 }] },
+  };
+  const [d] = build(F.demoDraft, { changes, edits: { '1000000000010002:m1': 'Spare filter', '1000000000010002:c:m2': 'Coupon' } });
+  assert.equal(d.changed, true);
+  const inv = parseXml(E.toIsdoc(d, { system: 'Combined Invoice for AliExpress', locale: 'en-GB' }));
+  checkOrder(inv);
+  checkSums(inv);
+  assert.equal(cents(inv, 'LegalMonetaryTotal/TaxInclusiveAmount'), d.totalCents);
+  assert.equal(cents(inv, 'TaxTotal/TaxAmount'), d.vatCents);
+  assert.equal(cents(inv, 'PaymentMeans/Payment/PaidAmount'), d.paidCents);
+  const lines = children(child(inv, 'InvoiceLines'), 'InvoiceLine');
+  const filter = lines.find((l) => value(l, 'Item/Description').text === 'Spare filter');
+  assert.equal(value(filter, 'InvoicedQuantity').text, '3');
+  assert.equal(cents(filter, 'LineExtensionAmountTaxInclusive'), 597);
+  assert.equal(cents(lines.find((l) => value(l, 'Item/Description').text === 'Coupon'), 'LineExtensionAmountTaxInclusive'), -150);
+  const csv = E.toCsv([d], D.csvLabels('en'), '.');
+  assert.match(csv, /Spare filter/);
+  assert.match(csv, /Coupon/);
+});
+
 test('ISDOC: the same document always gets the same UUID, another number another one', () => {
   const [d] = build(F.demoDraft);
   const uuid = (doc) => value(parseXml(E.toIsdoc(doc, {})), 'UUID').text;

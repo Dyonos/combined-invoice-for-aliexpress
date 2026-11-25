@@ -85,6 +85,8 @@
 
   /** VAT rate of an order: a whole percentage when it is one, otherwise with two decimals. */
   function orderVatPercent(o) {
+    // an order changed on the invoice page keeps the rate of its receipt
+    if (o.taxRate !== undefined && o.taxRate !== null && o.includedTaxCents) return o.taxRate;
     if (!o.includedTaxCents || o.totalCents <= o.includedTaxCents) return null;
     const rate = A.vatRate(o.totalCents, o.includedTaxCents);
     return rate !== null ? rate : Math.round((o.includedTaxCents / (o.totalCents - o.includedTaxCents)) * 10000) / 100;
@@ -107,7 +109,9 @@
    *   lang (invoice language), settings, profileId, title (title field of the toolbar), mode ('detail' | 'allocated'),
    *   euWarehouse, shipNote (the two checkboxes), docType ('invoice' | 'credit'), show ({ logo, images, stores, status, dates }),
    *   date (typed date of issue, '' = automatic), today ('YYYY-MM-DD'),
-   *   edits (edited item names by "orderId:index"), numbers (typed numbers by "invoice:<k>" and "credit:<k>")
+   *   edits (edited texts: item names by "orderId:ref", charge labels by "orderId:c:key"),
+   *   numbers (typed numbers by "invoice:<k>" and "credit:<k>"),
+   *   changes (quantities, prices, amounts and added lines by order ID, see A.applyOrderChanges)
    * }
    * A credit note is made only for an invoice with refunded orders. Every line of a document belongs to an order;
    * the lines of an order add up to its total and the orders to the total of the document.
@@ -120,6 +124,9 @@
     const show = opts.show || {};
     const edits = opts.edits || {};
     const numbers = opts.numbers || {};
+    const changes = opts.changes || {};
+    // quantities, prices and amounts are changed and lines added in the view with separate lines of an invoice
+    const editable = opts.docType !== 'credit' && opts.mode !== 'allocated';
     const credit = opts.docType === 'credit';
     const type = credit ? 'credit' : 'invoice';
     const prefix = settings.numberPrefix || 'AE';
@@ -136,12 +143,14 @@
     const docs = [];
 
     parts.forEach((part, k) => {
-      const inv = A.combine(part.orders, { bankCents: part.bankCents, mode: opts.mode });
+      const inv = A.combine(part.orders.map((o) => A.applyOrderChanges(o, changes[o.orderId])), { bankCents: part.bankCents, mode: opts.mode });
       const cur = inv.currency;
       const money = (c) => I.moneyIn(lang, c, cur);
       // combined orders are paid on one day: issue date = payment date = order date; a credit note is issued today
       const docDate = inv.lastPaidDate || inv.firstPaidDate || opts.today;
-      const autoInvoiceNo = invoiceNo(`${prefix}-${docDate.replace(/-/g, '')}-${inv.paidCents}`);
+      // the automatic number has the amount paid by the receipts (the bank payment), also after changes in the lines
+      const receiptPaidCents = part.orders.reduce((sum, o) => sum + o.paidCents, 0);
+      const autoInvoiceNo = invoiceNo(`${prefix}-${docDate.replace(/-/g, '')}-${receiptPaidCents}`);
       const refunded = inv.orders.filter((o) => o.refund && o.refund.cents);
       if (credit && !refunded.length) return;
       const refundCents = refunded.reduce((sum, o) => sum + o.refund.cents, 0);
@@ -173,31 +182,59 @@
         allocation,
         lines,
         totalCents: credit ? -o.refund.cents : o.totalCents,
+        // the total of the receipt, also when lines were changed on the invoice page
+        receiptTotalCents: o.receiptTotalCents !== undefined ? o.receiptTotalCents : o.totalCents,
+        changed: !!o.changed,
         vatCents: o.includedTaxCents,
         vatPercent: orderVatPercent(o),
       });
       const itemLine = (o, l, idx) => {
-        const key = o.orderId + ':' + idx;
-        const eu = euText && !l.sku.toLowerCase().includes(euText.toLowerCase()) ? euText : '';
+        const ref = l.ref !== undefined ? l.ref : idx;
+        const key = o.orderId + ':' + ref;
+        const eu = euText && !l.manual && !l.sku.toLowerCase().includes(euText.toLowerCase()) ? euText : '';
         return {
           kind: 'item',
           key,
-          text: edits[key] !== undefined ? edits[key] : l.title,
+          ref,
+          text: edits[key] !== undefined ? edits[key] : l.manual ? T('doc.newItem') : l.title,
           sku: [l.sku, eu].filter(Boolean).join(', '),
           qty: l.qty,
           // allocated mode: the unit price is often not a whole number of cents
           unitCents: opts.mode === 'allocated' ? l.lineCents / l.qty : l.unitCents,
           lineCents: l.lineCents,
           img: l.img || '',
+          editable,
+          manual: l.manual || '',
+          changed: !!l.changed,
+          // which of the quantity ('qty') and the unit price ('unit') were changed
+          changedFields: l.changedFields || [],
+        };
+      };
+      // shipping, discount and fee lines; their labels can be edited like item names
+      const chargeLine = (o, l) => {
+        const nameKey = `${o.orderId}:c:${l.key}`;
+        return {
+          kind: 'charge',
+          key: l.key || '',
+          nameKey,
+          text: edits[nameKey] !== undefined ? edits[nameKey] : l.manual ? T('doc.newFee') : labelFor(l),
+          sku: '',
+          qty: null,
+          unitCents: null,
+          lineCents: l.lineCents,
+          img: '',
+          editable,
+          manual: l.manual || '',
+          changed: !!l.changed,
         };
       };
       // a credit note has one line per refunded order
       const orders = credit
         ? refunded.map((o) => orderOf(o, [{ kind: 'refund', key: '', text: T('doc.refundFor', { id: o.orderId }), sku: '', qty: null, unitCents: null, lineCents: -o.refund.cents, img: '' }], ''))
-        : inv.orders.map((o) => orderOf(o, o.lines.map((l, idx) => (l.kind === 'item'
-          ? itemLine(o, l, idx)
+        : inv.orders.map((o) => orderOf(o, o.lines.map((l, idx) => (l.kind === 'item' ? itemLine(o, l, idx)
+          : l.kind === 'charge' ? chargeLine(o, l)
           // receipt sub-lines (customs duty and benefit breakdowns) are not printed, only the main lines
-          : { kind: l.kind, key: l.key || '', text: labelFor(l), sku: '', qty: null, unitCents: null, lineCents: l.lineCents, img: '' })),
+            : { kind: l.kind, key: l.key || '', text: labelFor(l), sku: '', qty: null, unitCents: null, lineCents: l.lineCents, img: '' })),
         opts.mode === 'allocated' ? allocationOf(o) : ''));
 
       const vatKnown = !credit && inv.includedTaxCents !== null && inv.includedTaxComplete;
@@ -229,6 +266,9 @@
         refundCents,
         bankCents: inv.bankCents,
         bankDiffCents: inv.bankDiffCents,
+        // quantities, prices or lines changed on the invoice page
+        changed: inv.orders.some((o) => o.changed),
+        editable,
         note,
         // for the checks and warnings on the page
         inv,

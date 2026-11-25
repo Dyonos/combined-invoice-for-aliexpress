@@ -19,6 +19,8 @@ One AliExpress checkout often becomes several orders from different stores, but 
 - **Credit notes** for refunded orders, from the same order receipts.
 - **One click per order**: an Invoice button next to every order and on the order detail page, or invoices for a whole period, one per day or per order.
 - **Your choice of details**: company logo, product images, stores, order status and order dates on the invoice, each optional.
+- **Changes right on the invoice**: click a quantity, a unit price or a shipping, discount or fee amount and type a new one; the line, the order total and the VAT are calculated again. Add items and fees by hand, rename lines, and undo all changes with one click.
+- **Panel where you want it**: on the side next to the invoice, at the top, or hidden with just a print button left.
 - **Accurate totals** from the official order receipt (the data behind AliExpress's "Receipt" button): items, shipping, discounts, fees and VAT. Summary lines shown twice, symbolic shipping that is not charged and orders skipped in the order list are handled.
 - **Missing orders**: add an order by its number from the confirmation e-mail. With a payment date the extension also fills in orders that AliExpress skipped in the list.
 - **Invoice** in any of the 17 languages, set separately from the interface: items, shipping and discounts as separate lines, or spread into item prices. Several customer companies (company ID, tax ID, VAT ID), optional notes for goods from an EU warehouse and for shipping without tracking, print or save as PDF without browser header and footer.
@@ -35,7 +37,7 @@ One AliExpress checkout often becomes several orders from different stores, but 
 1. Open [My orders](https://www.aliexpress.com/p/order/index.html) on AliExpress. A panel appears in the bottom right corner.
 2. Choose the company the invoice is for (first fill it in under *Edit*).
 3. Enter the amount from your bank statement and, optionally, the payment date, then click *Find orders by amount*, or tick the orders yourself.
-4. Click *Create invoice*, check it and use *Print / Save PDF*, or download it as CSV or ISDOC.
+4. Click *Create invoice*, check it (names, quantities, prices and amounts can be changed right on the invoice) and use *Print / Save PDF*, or download it as CSV or ISDOC.
 
 The version shown in the panel header tells you which version is loaded.
 

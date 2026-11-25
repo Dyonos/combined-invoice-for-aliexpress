@@ -360,21 +360,24 @@
    */
   function orderLines(order, mode) {
     const lines = [];
+    // marks of lines changed or added on the invoice page (see applyOrderChanges)
+    const marks = (x) => Object.assign({}, x.ref !== undefined ? { ref: x.ref } : {}, x.manual ? { manual: x.manual } : {},
+      x.changed ? { changed: true } : {}, x.changedFields ? { changedFields: x.changedFields } : {});
     if (mode === 'allocated' && order.items.length) {
       const extra = order.totalCents - order.items.reduce((a, i) => a + i.lineCents, 0);
       const shares = allocate(extra, order.items.map((i) => i.lineCents));
       order.items.forEach((it, k) => {
-        lines.push({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, origUnitCents: it.unitCents, lineCents: it.lineCents + shares[k] });
+        lines.push(Object.assign({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, origUnitCents: it.unitCents, lineCents: it.lineCents + shares[k] }, marks(it)));
       });
     } else {
       for (const it of order.items) {
-        lines.push({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, unitCents: it.unitCents, lineCents: it.lineCents });
+        lines.push(Object.assign({ kind: 'item', title: it.title, sku: it.sku, img: it.img, qty: it.qty, unitCents: it.unitCents, lineCents: it.lineCents }, marks(it)));
       }
       if (order.itemsDiffCents) {
         lines.push({ kind: 'diff', key: 'items', label: 'Item price adjustment', lineCents: order.itemsDiffCents });
       }
       for (const c of order.charges) {
-        lines.push({ kind: 'charge', key: c.key, label: c.label, lineCents: c.cents, children: c.children });
+        lines.push(Object.assign({ kind: 'charge', key: c.key, label: c.label, lineCents: c.cents, children: c.children }, marks(c)));
       }
       if (order.residualCents) {
         lines.push({ kind: 'diff', key: 'other', label: 'Other adjustment', lineCents: order.residualCents });
@@ -395,6 +398,75 @@
     return Math.abs(rate - rounded) <= 0.6 ? rounded : null;
   }
 
+  // ---------------------------------------------------------------- changes typed on the invoice page
+
+  /**
+   * An order with the changes typed on the invoice page. changes: {
+   *   items: { [item index]: { qty, unitCents } }   quantity and unit price of a receipt item,
+   *   charges: { [charge key]: cents }             amount of a shipping, discount or fee line,
+   *   added: [{ id, kind: 'item', qty, unitCents } | { id, kind: 'fee', cents }]   lines added by hand
+   * }
+   * Line amounts, the order total and the paid amount follow the changes, and the VAT included in the total is
+   * calculated again at the rate of the receipt, so the totals stay exact. Items get `ref` (their index, or "m" + id
+   * of a line added by hand) and changed lines `changed`. An order without a real change is returned as it is,
+   * with the amounts of the receipt.
+   */
+  function applyOrderChanges(order, changes) {
+    const ch = changes || {};
+    const itemChanges = ch.items || {};
+    const chargeChanges = ch.charges || {};
+    const added = (Array.isArray(ch.added) ? ch.added : []).filter((a) => a && (a.kind === 'item' || a.kind === 'fee'));
+    let changed = added.length > 0;
+    const items = order.items.map((it, i) => {
+      const c = itemChanges[i] || {};
+      const qty = Number.isInteger(c.qty) && c.qty > 0 ? c.qty : it.qty;
+      const unitCents = Number.isInteger(c.unitCents) ? c.unitCents : it.unitCents;
+      if (qty === it.qty && unitCents === it.unitCents) return Object.assign({}, it, { ref: i });
+      changed = true;
+      const fields = [qty !== it.qty ? 'qty' : '', unitCents !== it.unitCents ? 'unit' : ''].filter(Boolean);
+      return Object.assign({}, it, { ref: i, qty, unitCents, lineCents: unitCents * qty, changed: true, changedFields: fields });
+    });
+    const charges = order.charges.map((c) => {
+      const cents = chargeChanges[c.key];
+      if (!Number.isInteger(cents) || cents === c.cents) return c;
+      changed = true;
+      return Object.assign({}, c, { cents, children: [], changed: true });
+    });
+    if (!changed) return order;
+    for (const a of added) {
+      const id = String(a.id);
+      if (a.kind === 'item') {
+        const qty = Number.isInteger(a.qty) && a.qty > 0 ? a.qty : 1;
+        const unitCents = Number.isInteger(a.unitCents) ? a.unitCents : 0;
+        items.push({ title: '', sku: '', seller: '', unitCents, qty, lineCents: unitCents * qty, img: '', ref: 'm' + id, manual: id });
+      } else {
+        charges.push({ key: 'm' + id, label: '', cents: Number.isInteger(a.cents) ? a.cents : 0, flexible: false, children: [], manual: id });
+      }
+    }
+    const itemsTotalCents = items.reduce((a, it) => a + it.lineCents, 0) + order.itemsDiffCents;
+    const totalCents = itemsTotalCents + charges.reduce((a, c) => a + c.cents, 0) + order.residualCents;
+    // the prices include VAT: the VAT of the new total at the rate of the receipt
+    let includedTaxCents = order.includedTaxCents;
+    let taxRate = null;
+    if (includedTaxCents && order.totalCents > includedTaxCents) {
+      const whole = vatRate(order.totalCents, includedTaxCents);
+      const rate = whole !== null ? whole : (includedTaxCents / (order.totalCents - includedTaxCents)) * 100;
+      includedTaxCents = Math.round((totalCents * rate) / (100 + rate));
+      taxRate = whole !== null ? whole : Math.round(rate * 100) / 100;
+    }
+    return Object.assign({}, order, {
+      items,
+      charges,
+      itemsTotalCents,
+      totalCents,
+      includedTaxCents,
+      taxRate,
+      paidCents: order.paidCents + totalCents - order.totalCents,
+      receiptTotalCents: order.totalCents,
+      changed: true,
+    });
+  }
+
   /** Combines orders into one invoice and compares it with the bank payment. */
   function combine(orders, opts) {
     const o = opts || {};
@@ -405,7 +477,9 @@
     const totalCents = sorted.reduce((a, x) => a + x.totalCents, 0);
     const taxKnown = sorted.filter((x) => x.includedTaxCents !== null);
     const includedTaxCents = taxKnown.length ? taxKnown.reduce((a, x) => a + x.includedTaxCents, 0) : null;
-    const rates = [...new Set(taxKnown.map((x) => vatRate(x.totalCents, x.includedTaxCents)))];
+    // an order changed on the invoice page keeps the rate of its receipt
+    const rateOf = (x) => (Number.isInteger(x.taxRate) ? x.taxRate : vatRate(x.totalCents, x.includedTaxCents));
+    const rates = [...new Set(taxKnown.map(rateOf))];
     const bonusCents = sorted.reduce((a, x) => a + x.bonusCents, 0);
     const paidCents = sorted.reduce((a, x) => a + x.paidCents, 0);
     const bankCents = Number.isInteger(o.bankCents) ? o.bankCents : null;
@@ -506,6 +580,7 @@
     normalizeReceipt,
     allocate,
     orderLines,
+    applyOrderChanges,
     combine,
     vatRate,
     subsetSums,

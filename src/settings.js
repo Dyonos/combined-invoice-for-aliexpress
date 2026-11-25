@@ -29,6 +29,9 @@
     shipNoteOn: false,
     // what the invoice shows besides the items (remembers the last setting from the invoice page)
     show: { logo: true, images: false, stores: true, status: false, dates: false },
+    // panel of the invoice page: 'side', 'top' or '' (on the side in wide windows, otherwise at the top), and hidden
+    panel: '',
+    panelHidden: false,
     profileId: 'p1',
     profiles: [
       { id: 'p1', name: '', street: '', city: '', country: '', ico: '', dic: '', icdph: '' },

@@ -7,12 +7,27 @@
   <style id="pageCss"></style>
 </head>
 <body>
-  <header class="toolbar no-print">
-    <div class="tb-row">
-      <label><span data-i18n="inv.invoiceTo"></span>
+  <!-- the panel: on the side, at the top or hidden (body class panel-side / panel-top / panel-hidden) -->
+  <header id="toolbar" class="toolbar no-print">
+    <div class="tb-head">
+      <span id="version" class="version" data-i18n-title="versionTitle"></span>
+      <div class="panel-modes" role="group" data-i18n-aria="inv.panel">
+        <button type="button" class="pm" data-panel="side" data-i18n-title="inv.panelSide" data-i18n-aria="inv.panelSide">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><rect class="fill" x="2" y="3" width="4.5" height="10"/></svg>
+        </button>
+        <button type="button" class="pm" data-panel="top" data-i18n-title="inv.panelTop" data-i18n-aria="inv.panelTop">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><rect class="fill" x="2" y="3" width="12" height="3.5"/></svg>
+        </button>
+        <button type="button" class="pm" data-panel="hidden" data-i18n-title="inv.panelHide" data-i18n-aria="inv.panelHide">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3.5h10M8 13V7M5 9.5 8 6.5l3 3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="tb-fields">
+      <label class="f-wide"><span data-i18n="inv.invoiceTo"></span>
         <select id="profile"></select>
       </label>
-      <label class="grow"><span data-i18n="inv.title"></span>
+      <label class="f-wide grow"><span data-i18n="inv.title"></span>
         <input id="title" type="text">
       </label>
       <label id="numberWrap"><span data-i18n="inv.number"></span>
@@ -27,6 +42,8 @@
       <label id="bankWrap"><span data-i18n="inv.bank"></span>
         <span class="money-input"><input id="bank" type="text" inputmode="decimal" data-i18n-placeholder="panel.amountPlaceholder"> <span id="bankCur">€</span></span>
       </label>
+    </div>
+    <div class="tb-langs">
       <label><span data-i18n="opt.language"></span>
         <select id="lang"></select>
       </label>
@@ -34,21 +51,19 @@
         <select id="docLang"></select>
       </label>
     </div>
-    <div class="tb-row">
-      <fieldset class="mode">
-        <label><input type="radio" name="mode" value="detail"> <span data-i18n="inv.modeDetail"></span></label>
-        <label><input type="radio" name="mode" value="allocated"> <span data-i18n="inv.modeAllocated"></span></label>
-        <label class="eu"><input type="checkbox" id="eu"> <span data-i18n="inv.eu"></span> <span id="euHint"></span></label>
-        <label class="eu"><input type="checkbox" id="ship"> <span data-i18n="inv.ship"></span> <span id="shipHint"></span></label>
-      </fieldset>
-      <span class="spacer"></span>
-      <span id="version" class="version" data-i18n-title="versionTitle"></span>
+    <fieldset class="tb-options mode">
+      <label><input type="radio" name="mode" value="detail"> <span data-i18n="inv.modeDetail"></span></label>
+      <label><input type="radio" name="mode" value="allocated"> <span data-i18n="inv.modeAllocated"></span></label>
+      <label class="eu"><input type="checkbox" id="eu"> <span><span data-i18n="inv.eu"></span> <span id="euHint" class="opt-hint"></span></span></label>
+      <label class="eu"><input type="checkbox" id="ship"> <span><span data-i18n="inv.ship"></span> <span id="shipHint" class="opt-hint"></span></span></label>
+    </fieldset>
+    <div class="tb-actions">
       <button id="settings" type="button" class="btn" data-i18n="inv.settings"></button>
       <button id="csv" type="button" class="btn" data-i18n="inv.exportCsv" data-i18n-title="inv.exportCsvTitle"></button>
       <button id="isdoc" type="button" class="btn" data-i18n="inv.exportIsdoc" data-i18n-title="inv.exportIsdocTitle"></button>
       <button id="print" type="button" class="btn primary" data-i18n="inv.print"></button>
     </div>
-    <div class="tb-row show-row">
+    <div class="tb-show show-row">
       <span data-i18n="inv.show"></span>
       <label><input type="checkbox" data-show="logo"> <span data-i18n="inv.showLogo"></span></label>
       <label><input type="checkbox" data-show="images"> <span data-i18n="inv.showImages"></span></label>
@@ -56,10 +71,20 @@
       <label><input type="checkbox" data-show="status"> <span data-i18n="inv.showStatus"></span></label>
       <label><input type="checkbox" data-show="dates"> <span data-i18n="inv.showDates"></span></label>
     </div>
-    <div id="check" class="check"></div>
-    <ul id="warnings" class="warnings"></ul>
-    <p id="hint" class="hint" data-i18n="inv.hint"></p>
+    <div class="tb-status">
+      <div id="check" class="check"></div>
+      <div id="edited" class="edited" hidden><span data-i18n="inv.edited"></span> <button id="reset" type="button" class="link-btn" data-i18n="inv.resetEdits"></button></div>
+      <ul id="warnings" class="warnings"></ul>
+      <p id="hint" class="hint"></p>
+    </div>
   </header>
+
+  <!-- with the panel hidden or scrolled away: printing and the way back to the panel -->
+  <div id="miniBar" class="mini-bar no-print">
+    <span id="miniCheck" class="mini-check"></span>
+    <button id="showPanel" type="button" class="btn" data-i18n="inv.panelShow"></button>
+    <button id="print2" type="button" class="btn primary" data-i18n="inv.print"></button>
+  </div>
 
   <main id="doc"></main>
 
