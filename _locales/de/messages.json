@@ -3,7 +3,7 @@
     "message": "Sammelrechnung für AliExpress"
   },
   "extDescription": {
-    "message": "Fasst ausgewählte AliExpress-Bestellungen zu einer Rechnung zusammen, deren Betrag mit der Bankzahlung übereinstimmt."
+    "message": "AliExpress-Rechnung für eine oder mehrere Bestellungen: eine Sammelrechnung, die zur Bankzahlung passt, als PDF, CSV oder ISDOC."
   },
   "actionTitle": {
     "message": "Sammelrechnung für AliExpress - Meine Bestellungen öffnen"

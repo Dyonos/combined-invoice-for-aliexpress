@@ -88,6 +88,10 @@ body {
 .link-btn.armed { color: #fff; background: var(--accent); padding: 1px 6px; border-radius: 5px; text-decoration: none; }
 .warnings { margin: 6px 0 0; padding: 0 0 0 18px; color: #8a5a00; }
 .warnings:empty { display: none; }
+.rate { margin-top: 8px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); font-size: 12.5px; line-height: 1.45; }
+.rate-actions { display: flex; gap: 16px; align-items: baseline; margin-top: 5px; }
+.rate a { color: var(--accent); font-weight: 600; }
+.rate .link-btn { color: var(--muted); font-weight: 400; }
 .hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
 
 /* where the panel is */

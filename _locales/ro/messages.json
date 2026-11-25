@@ -3,7 +3,7 @@
     "message": "Factură combinată pentru AliExpress"
   },
   "extDescription": {
-    "message": "Combină comenzile AliExpress selectate într-o singură factură al cărei total corespunde cu plata bancară."
+    "message": "Factură AliExpress pentru una sau mai multe comenzi: o factură combinată, cu totalul egal cu plata bancară, în PDF, CSV sau ISDOC."
   },
   "actionTitle": {
     "message": "Factură combinată pentru AliExpress - deschideți Comenzile mele"

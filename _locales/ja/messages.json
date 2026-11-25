@@ -3,7 +3,7 @@
     "message": "AliExpress用まとめ請求書"
   },
   "extDescription": {
-    "message": "選択したAliExpressの注文を、合計が銀行明細の金額と一致する1つの請求書にまとめます。"
+    "message": "AliExpressの請求書を作成。1件または複数の注文を、合計が銀行明細の金額と一致する1つの請求書にまとめ、PDF・CSV・ISDOC形式で出力できます。"
   },
   "actionTitle": {
     "message": "AliExpress用まとめ請求書 - 「私の注文」を開く"

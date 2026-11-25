@@ -3,7 +3,7 @@
     "message": "AliExpress için Birleşik Fatura"
   },
   "extDescription": {
-    "message": "Seçilen AliExpress siparişlerini, toplamı banka ödemesiyle eşleşen tek bir faturada birleştirir."
+    "message": "AliExpress faturası: bir veya birden fazla sipariş için, toplamı banka ödemesiyle eşleşen tek bir fatura (PDF, CSV veya ISDOC)."
   },
   "actionTitle": {
     "message": "AliExpress için Birleşik Fatura - Siparişlerim sayfasını aç"

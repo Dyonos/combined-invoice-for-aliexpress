@@ -287,6 +287,9 @@
     'inv.resetConfirm': 'Click again to undo all changes',
     'doc.newItem': 'Item',
     'doc.newFee': 'Fee',
+    'inv.rate': 'Did this extension save you some work? A rating in the Chrome Web Store helps others find it.',
+    'inv.rateLink': 'Rate it',
+    'inv.rateNo': 'No, thanks',
   };
 
   S.sk = {
@@ -543,6 +546,9 @@
     'inv.resetConfirm': 'Klikni znova a všetky úpravy sa zrušia',
     'doc.newItem': 'Položka',
     'doc.newFee': 'Poplatok',
+    'inv.rate': 'Ušetril ti doplnok prácu? Hodnotenie v Chrome Web Store pomôže, aby ho našli aj ďalší.',
+    'inv.rateLink': 'Ohodnotiť',
+    'inv.rateNo': 'Nie, ďakujem',
   };
 
   S.cs = {
@@ -799,6 +805,9 @@
     'inv.resetConfirm': 'Klikněte znovu a všechny úpravy se zruší',
     'doc.newItem': 'Položka',
     'doc.newFee': 'Poplatek',
+    'inv.rate': 'Ušetřil vám doplněk práci? Hodnocení v Chrome Web Store pomůže, aby ho našli i další.',
+    'inv.rateLink': 'Ohodnotit',
+    'inv.rateNo': 'Ne, děkuji',
   };
 
   S.hu = {
@@ -1055,6 +1064,9 @@
     'inv.resetConfirm': 'Kattints újra az összes módosítás visszavonásához',
     'doc.newItem': 'Tétel',
     'doc.newFee': 'Díj',
+    'inv.rate': 'Megspórolt neked ez a bővítmény egy kis munkát? Egy értékelés a Chrome Web Store-ban segít, hogy mások is megtalálják.',
+    'inv.rateLink': 'Értékelés',
+    'inv.rateNo': 'Nem, köszönöm',
   };
 
   S.pl = {
@@ -1311,6 +1323,9 @@
     'inv.resetConfirm': 'Kliknij ponownie, aby cofnąć wszystkie zmiany',
     'doc.newItem': 'Pozycja',
     'doc.newFee': 'Opłata',
+    'inv.rate': 'Czy to rozszerzenie zaoszczędziło ci trochę pracy? Ocena w Chrome Web Store pomaga innym je znaleźć.',
+    'inv.rateLink': 'Oceń',
+    'inv.rateNo': 'Nie, dziękuję',
   };
 
   S.de = {
@@ -1567,6 +1582,9 @@
     'inv.resetConfirm': 'Erneut klicken, um alle Änderungen rückgängig zu machen',
     'doc.newItem': 'Position',
     'doc.newFee': 'Gebühr',
+    'inv.rate': 'Hat Ihnen diese Erweiterung etwas Arbeit erspart? Eine Bewertung im Chrome Web Store hilft anderen, sie zu finden.',
+    'inv.rateLink': 'Bewerten',
+    'inv.rateNo': 'Nein, danke',
   };
 
   S.es = {
@@ -1823,6 +1841,9 @@
     'inv.resetConfirm': 'Haz clic de nuevo para deshacer todos los cambios',
     'doc.newItem': 'Artículo',
     'doc.newFee': 'Tasa',
+    'inv.rate': '¿Te ha ahorrado algo de trabajo esta extensión? Una valoración en Chrome Web Store ayuda a que otros la encuentren.',
+    'inv.rateLink': 'Valorar',
+    'inv.rateNo': 'No, gracias',
   };
 
   S.fr = {
@@ -2079,6 +2100,9 @@
     'inv.resetConfirm': 'Cliquez à nouveau pour annuler toutes les modifications',
     'doc.newItem': 'Article',
     'doc.newFee': 'Frais',
+    'inv.rate': 'Cette extension vous a-t-elle épargné un peu de travail ? Une évaluation sur le Chrome Web Store aide d’autres personnes à la trouver.',
+    'inv.rateLink': 'Évaluer',
+    'inv.rateNo': 'Non, merci',
   };
 
   S.pt = {
@@ -2335,6 +2359,9 @@
     'inv.resetConfirm': 'Clique novamente para anular todas as alterações',
     'doc.newItem': 'Artigo',
     'doc.newFee': 'Taxa',
+    'inv.rate': 'Esta extensão poupou-lhe algum trabalho? Uma avaliação na Chrome Web Store ajuda outras pessoas a encontrá-la.',
+    'inv.rateLink': 'Avaliar',
+    'inv.rateNo': 'Não, obrigado',
   };
 
   S.ru = {
@@ -2591,6 +2618,9 @@
     'inv.resetConfirm': 'Нажмите ещё раз, чтобы отменить все изменения',
     'doc.newItem': 'Товар',
     'doc.newFee': 'Сбор',
+    'inv.rate': 'Это расширение избавило вас от лишней работы? Оценка в Chrome Web Store помогает другим найти его.',
+    'inv.rateLink': 'Оценить',
+    'inv.rateNo': 'Нет, спасибо',
   };
 
   S.ro = {
@@ -2847,6 +2877,9 @@
     'inv.resetConfirm': 'Faceți clic din nou pentru a anula toate modificările',
     'doc.newItem': 'Articol',
     'doc.newFee': 'Taxă',
+    'inv.rate': 'V-a scutit această extensie de ceva muncă? O evaluare în Chrome Web Store îi ajută și pe alții să o găsească.',
+    'inv.rateLink': 'Evaluați',
+    'inv.rateNo': 'Nu, mulțumesc',
   };
 
   S.it = {
@@ -3103,6 +3136,9 @@
     'inv.resetConfirm': 'Fai di nuovo clic per annullare tutte le modifiche',
     'doc.newItem': 'Articolo',
     'doc.newFee': 'Commissione',
+    'inv.rate': 'Questa estensione ti ha fatto risparmiare un po’ di lavoro? Una valutazione sul Chrome Web Store aiuta altre persone a trovarla.',
+    'inv.rateLink': 'Valutala',
+    'inv.rateNo': 'No, grazie',
   };
 
   S.nl = {
@@ -3359,6 +3395,9 @@
     'inv.resetConfirm': 'Klik nogmaals om alle wijzigingen ongedaan te maken',
     'doc.newItem': 'Artikel',
     'doc.newFee': 'Toeslag',
+    'inv.rate': 'Heeft deze extensie je wat werk uit handen genomen? Een beoordeling in de Chrome Web Store helpt anderen de extensie te vinden.',
+    'inv.rateLink': 'Beoordelen',
+    'inv.rateNo': 'Nee, bedankt',
   };
 
   S.tr = {
@@ -3615,6 +3654,9 @@
     'inv.resetConfirm': 'Tüm değişiklikleri geri almak için tekrar tıklayın',
     'doc.newItem': 'Ürün',
     'doc.newFee': 'Ücret',
+    'inv.rate': 'Bu uzantı işinizi kolaylaştırdı mı? Chrome Web Store’da vereceğiniz bir puan, başkalarının da uzantıyı bulmasına yardımcı olur.',
+    'inv.rateLink': 'Puan ver',
+    'inv.rateNo': 'Hayır, teşekkürler',
   };
 
   S.uk = {
@@ -3871,6 +3913,9 @@
     'inv.resetConfirm': 'Натисніть ще раз, щоб скасувати всі зміни',
     'doc.newItem': 'Товар',
     'doc.newFee': 'Збір',
+    'inv.rate': 'Чи полегшило вам це розширення роботу? Оцінка в Chrome Web Store допомагає іншим знайти його.',
+    'inv.rateLink': 'Оцінити',
+    'inv.rateNo': 'Ні, дякую',
   };
 
   S.ja = {
@@ -4127,6 +4172,9 @@
     'inv.resetConfirm': 'すべての変更を元に戻すには、もう一度クリックしてください',
     'doc.newItem': '商品',
     'doc.newFee': '手数料',
+    'inv.rate': 'この拡張機能で手間が省けましたか？Chrome Web Storeで評価していただけると、ほかの方も見つけやすくなります。',
+    'inv.rateLink': '評価する',
+    'inv.rateNo': 'いいえ、結構です',
   };
 
   S.ko = {
@@ -4383,6 +4431,9 @@
     'inv.resetConfirm': '모든 수정 사항을 되돌리려면 다시 클릭하세요',
     'doc.newItem': '상품',
     'doc.newFee': '수수료',
+    'inv.rate': '이 확장 프로그램이 수고를 덜어 드렸나요? Chrome Web Store에 평점을 남겨 주시면 다른 분들이 찾는 데 도움이 됩니다.',
+    'inv.rateLink': '평가하기',
+    'inv.rateNo': '아니요, 괜찮습니다',
   };
 
   // ---------------------------------------------------------------- API

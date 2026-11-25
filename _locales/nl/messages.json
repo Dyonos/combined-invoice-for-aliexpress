@@ -3,7 +3,7 @@
     "message": "Verzamelfactuur voor AliExpress"
   },
   "extDescription": {
-    "message": "Voegt geselecteerde AliExpress-bestellingen samen tot één factuur waarvan het totaal overeenkomt met de bankbetaling."
+    "message": "AliExpress-factuur voor één of meer bestellingen: één verzamelfactuur die klopt met je bankbetaling, als PDF, CSV of ISDOC."
   },
   "actionTitle": {
     "message": "Verzamelfactuur voor AliExpress - Mijn bestellingen openen"

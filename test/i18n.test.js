@@ -92,3 +92,17 @@ test('amount field in the number format of the interface language', () => {
   I.setLang('en');
   assert.equal(I.amount(123456), '1234.56');
 });
+
+test('extension names and short descriptions fit the Chrome Web Store limits', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const dir = path.join(__dirname, '..', '_locales');
+  const codes = fs.readdirSync(dir);
+  assert.equal(codes.length, 17);
+  for (const code of codes) {
+    const m = JSON.parse(fs.readFileSync(path.join(dir, code, 'messages.json'), 'utf8'));
+    assert.ok([...m.extName.message].length <= 75, code + ': name too long');
+    assert.ok([...m.extDescription.message].length <= 132, code + ': short description too long');
+    assert.ok(m.extDescription.message.includes('AliExpress'), code + ': short description without AliExpress');
+  }
+});

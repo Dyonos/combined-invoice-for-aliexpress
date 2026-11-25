@@ -3,7 +3,7 @@
     "message": "Összesítő számla AliExpresshez"
   },
   "extDescription": {
-    "message": "A kiválasztott AliExpress-rendeléseket egy számlába egyesíti, amelynek összege egyezik a banki fizetéssel."
+    "message": "AliExpress-számla egy vagy több rendelésről: egyetlen összesítő számla a banki fizetés összegével, PDF, CSV vagy ISDOC formátumban."
   },
   "actionTitle": {
     "message": "Összesítő számla AliExpresshez - Rendeléseim megnyitása"

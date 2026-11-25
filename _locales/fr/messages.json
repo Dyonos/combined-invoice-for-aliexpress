@@ -3,7 +3,7 @@
     "message": "Facture groupée pour AliExpress"
   },
   "extDescription": {
-    "message": "Regroupe les commandes AliExpress sélectionnées en une facture dont le total correspond au paiement bancaire."
+    "message": "Facture AliExpress pour une ou plusieurs commandes : une facture groupée au montant du paiement bancaire, en PDF, CSV ou ISDOC."
   },
   "actionTitle": {
     "message": "Facture groupée pour AliExpress - ouvrir Mes commandes"

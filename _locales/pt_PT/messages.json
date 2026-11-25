@@ -3,7 +3,7 @@
     "message": "Fatura conjunta para AliExpress"
   },
   "extDescription": {
-    "message": "Junta as encomendas selecionadas do AliExpress numa fatura cujo total corresponde ao pagamento bancário."
+    "message": "Fatura do AliExpress: uma ou mais encomendas numa só fatura cujo total corresponde ao pagamento bancário, em PDF, CSV ou ISDOC."
   },
   "actionTitle": {
     "message": "Fatura conjunta para AliExpress - abrir As minhas encomendas"

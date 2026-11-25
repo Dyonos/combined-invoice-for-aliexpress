@@ -3,7 +3,7 @@
     "message": "Souhrnná faktura pro AliExpress"
   },
   "extDescription": {
-    "message": "Spojí vybrané objednávky z AliExpressu do jedné faktury, jejíž částka sedí s platbou z banky."
+    "message": "Faktura z AliExpressu za jednu i více objednávek: jedna faktura, jejíž částka sedí s platbou z banky, v PDF, CSV i ISDOC."
   },
   "actionTitle": {
     "message": "Souhrnná faktura pro AliExpress - otevřít Moje objednávky"

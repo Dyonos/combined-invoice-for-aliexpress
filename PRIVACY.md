@@ -13,7 +13,7 @@ Combined Invoice for AliExpress ("the extension") is a browser extension that co
 
 All data stays in your browser:
 
-- settings and the last created invoice in the extension's local storage (`chrome.storage.local`),
+- settings, recently created invoices and the number of printed invoices (for a one-time request to rate the extension) in the extension's local storage (`chrome.storage.local`),
 - the current order selection in the session storage of the AliExpress tab.
 
 Product images, if you switch them on for the invoice, are loaded from the AliExpress image servers, the same way the AliExpress website loads them.
@@ -26,7 +26,7 @@ Product images, if you switch them on for the invoice, are loaded from the AliEx
 
 ## Permissions
 
-- `storage`: saves your settings and the last invoice locally in the browser.
+- `storage`: saves your settings and recent invoices locally in the browser.
 - Access to the AliExpress "My orders" page and order detail page (`aliexpress.com/p/order/index.html`, `aliexpress.com/p/order/detail.html`): adds the selection panel and an invoice button and reads your order receipts.
 
 ## Deleting your data

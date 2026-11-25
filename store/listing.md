@@ -15,7 +15,7 @@ description come from the extension itself (`_locales`), in 17 languages.
 
 **Name:** Combined Invoice for AliExpress
 
-**Short description (from the extension):** Combines selected AliExpress orders into one invoice whose total matches the bank payment.
+**Short description (from the extension):** AliExpress invoice for one or more orders: one combined invoice that matches your bank payment, as PDF, CSV or ISDOC.
 
 **Description:**
 

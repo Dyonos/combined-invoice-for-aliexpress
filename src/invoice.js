@@ -246,6 +246,39 @@
     else window.open('options.html', '_blank');
   });
 
+  // An installation from the Chrome Web Store asks once, from the third printed invoice on, for a rating there.
+  // Only a count in the browser, nothing is sent anywhere; "Rate it" or "No, thanks" ends the request for good.
+  // A copy loaded unpacked (no update_url) never asks.
+  const RATE_KEY = 'alifa.rate';
+  const RATE_AFTER = 3;
+  const fromStore = !!(hasExt && chrome.runtime && chrome.runtime.getManifest && chrome.runtime.getManifest().update_url);
+  let rate = null;
+  let printedHere = false;
+  const showRate = () => { $('rate').hidden = !rate || rate.done || rate.prints < RATE_AFTER; };
+  const saveRate = () => chrome.storage.local.set({ [RATE_KEY]: rate }).catch(() => {});
+  const endRate = () => {
+    if (!rate) return;
+    rate.done = true;
+    saveRate();
+    showRate();
+  };
+  if (fromStore) {
+    $('rateLink').href = `https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews`;
+    $('rateLink').addEventListener('click', endRate);
+    $('rateNo').addEventListener('click', endRate);
+    chrome.storage.local.get(RATE_KEY)
+      .then((r) => { rate = Object.assign({ prints: 0, done: false }, r[RATE_KEY]); showRate(); })
+      .catch(() => {});
+    // the print dialog of a page is counted once, also when it was closed without printing
+    window.addEventListener('afterprint', () => {
+      if (!rate || printedHere) return;
+      printedHere = true;
+      rate.prints += 1;
+      saveRate();
+      showRate();
+    });
+  }
+
   // the panel: on the side, at the top or hidden; at the top it scrolls away with the page and the small bar
   // with printing appears instead
   for (const b of document.querySelectorAll('[data-panel]')) {

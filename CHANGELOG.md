@@ -2,6 +2,11 @@
 
 The version is in `manifest.json` and is shown in the panel header, on the invoice page and in the settings.
 
+## 1.19.0 - 2026-11-25
+
+- New short description in Chrome and the Chrome Web Store, in all 17 languages. It starts with the words people search for, such as "AliExpress invoice".
+- After the third printed invoice, an installation from the Chrome Web Store asks once for a rating there. "Rate it" or "No, thanks" ends the request for good. Only the number of printed invoices is kept in the browser, and nothing is sent anywhere.
+
 ## 1.18.0 - 2026-11-25
 
 - Changes right on the invoice: click a quantity, a unit price or the amount of a shipping, discount or fee line and type a new value. The line, the order total, the VAT (at the rate of the order) and the check against the bank amount are calculated again; the invoice number stays.
